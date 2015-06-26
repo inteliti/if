@@ -10,8 +10,9 @@ class Sys extends _If_Controller {
 	}
 	
 	public function index()
-	{		
-		if(!empty($this->input->post('md5')))
+	{	
+		$md5 = $this->input->post('md5');
+		if(!empty($md5))
 		{		
 			$this->_validar();
 		}
