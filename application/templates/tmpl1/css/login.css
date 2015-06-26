@@ -1,0 +1,23 @@
+/* 
+    Document   : login
+    Created on : 09/01/2014, 09:51:21 AM
+    Author     : Jesus
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+body {
+	background-color: #fafafa;
+}
+
+
+#wrapper-login{
+	width: 350px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+#footer{
+	font-size: .8em;
+	color: lightgray;
+}

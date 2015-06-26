@@ -1,0 +1,65 @@
+#ifAvatar .avatar img{
+	background: #fff;
+	border: 1px solid #e0e0e3;
+	float: left;
+	padding: 2px;
+	margin: 0 10px 0 0;
+	width: 150px; height: 150px;
+}
+#ifAvatar #file
+{
+	float: left;
+}
+
+/** icon **/
+#ifAvatar #msg i{
+	background: url('uploading.gif') no-repeat 0 50%;
+	display: block;
+	float: left;
+	margin: 2px 5px 0 0;
+	width: 16px; height: 16px;
+}
+#ifAvatar #msg i.uploading{
+	
+}
+#ifAvatar #msg i.success{
+	background-image: url('tick.png');
+}
+
+/*************************************
+UPLOAD
+*************************************/
+#ifAvatar #upl input{
+	border: 1px solid #e0e0e3;
+	color: #fff;
+	margin-bottom: 5px;
+	width: 275px;
+	height: 30px;
+}
+
+/*************************************
+CAM HTML5
+*************************************/
+#ifAvatar #html5Cam{
+	margin: 10px 0 0 0;
+}
+
+#ifAvatar #html5Cam .foto{
+	border: 1px solid #e0e0e3;
+	padding: 2px;
+	margin: 0 10px 0 0;
+}
+#ifAvatar #html5Cam #canvas{
+	height: 150px;
+	border: 1px solid #e0e0e3;
+	padding: 2px;
+}
+
+#ifAvatar #html5Cam .mark{
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	left: 25px;
+	border-left: white dashed 1px;
+	border-right: white dashed 1px;
+}
