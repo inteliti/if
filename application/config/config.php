@@ -21,7 +21,7 @@ $config['base_url'] = '/if/';
 
 /*
  |------------------------------------------------------------------------- 
- | Template used (Intéliti Framework)
+ | Template used (inteliti framework)
  |-------------------------------------------------------------------------
  |	
  | Nombre de la carpeta dentro de templates/ de la plantilla usada, 
