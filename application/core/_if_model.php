@@ -176,11 +176,11 @@ class _If_Model extends CI_Model
 	 */
 	public function getWhere($where='1=1', $order=NULL , $limit_begin=0 , $limit_offset=18446744073709551615)
 	{
+		$order_clause = !empty($order) ? $order : $this->primary_key . " ASC";
+		
 		//Si el procedimientos almacenado get existe es llamado 
 		if(array_key_exists('get', $this->sp_methods))
 		{
-			$order_clause = !empty($order) ? $order : $this->primary_key . " ASC";
-			
 			return $this->call($this->sp_methods['get'], 
 					array($this->db->escape($where) ,
 								"'{$order_clause}'" ,
@@ -190,7 +190,28 @@ class _If_Model extends CI_Model
 		//Sino se hace de la manera tradicional
 		else
 		{
-			return $this->db->get($this->_table)->result(); //sin el where
+			//si en el modelo se define un query
+			if($this->query)
+			{
+				//return $this->db->query($this->query, array($where, $order_clause, $limit_begin, $limit_offset)); 
+				return $this->db->query(sprintf($this->query,$where,
+						$order_clause, $limit_begin, $limit_offset))->result(); 
+			}
+			//sino se utiliza active record de codeigniter
+			else
+			{
+				$this->db->where($where, NULL, FALSE);
+				
+				$order_clause_sep = explode(' ', $order_clause);
+				$_orderby = $order_clause_sep[0];
+				$direction = $order_clause_sep[1];
+				$orderby = explode('.',$_orderby);
+				
+				$this->db->order_by(end($orderby),$direction); 
+				
+				return $this->db->get($this->_table, $limit_offset, $limit_begin)->result();
+			}
+			
 		}
 	}
 	
