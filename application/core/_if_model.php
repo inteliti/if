@@ -105,8 +105,10 @@ class _If_Model extends CI_Model
 		$this->load->helper('mysqli');
 		
 		if($param !== '')
+		{
 			$param = implode(',', $param);
-		
+		}
+			
 		$r = $this->db->query("CALL sp_{$sp}({$param})");
 		
 		//Es necesario haber cargado mysqli_helper
@@ -125,7 +127,9 @@ class _If_Model extends CI_Model
 	protected function func($f, $param = '')
 	{
 		if($param !== '')
+		{
 			$param = implode(',', $param);
+		}
 		
 		$r = $this->db->query("SELECT f_{$f}({$param}) AS r")->row();
 		return $r ? $r->r : NULL;

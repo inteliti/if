@@ -57,7 +57,7 @@ class _If_Controller extends CI_Controller
 	 */
 	protected function jqgrid(&$model, $additionalWhere = NULL)
 	{
-		$in = & $_POST;
+		$in = & $this->input->post();
 
 		$sort	= empty($in['sidx'])	? NULL		: $in['sidx'];
 		$dir	= empty($in['sord'])	? NULL		: $in['sord'];
@@ -162,17 +162,6 @@ class _If_Controller extends CI_Controller
 	*********************************************************/	
 	
 	/**
-	 * Metodo para cargar el template relacionado al login en la aplicacion
-	 * 
-	 * $D: datos para la vista
-	 */
-	protected function login($D = NULL)
-	{
-		$D = (object) $D;
-		$this->load->view('../templates/'.$this->config->item('tmpl').'/login', $D);
-	}
-	
-	/**
 	 * Metodo para cargar el template principal
 	 * 
 	 * $view: vista para cargar en el template
@@ -205,14 +194,12 @@ class _If_Controller extends CI_Controller
 	
 	/*
 	 * Este metodo permite ejecutar funciones de validacion en el modelo
-	 *  para la clase validation de codeigniter.
+	 * para la clase validation de codeigniter.
 	 * 
 	 * ADVERTENCIA:
 	 * 
 	 * HAY QUE VALIDAR QUE NO SE PUEDA ACCEDER A ESTE METODO 
-	 * DESDE FUERA DE LA APLICACION, 
-	 * YA QUE ESTA EN UN CONTROLADOR Y ES PUBLICO
-	 * 
+	 * DESDE FUERA DE LA APLICACION, YA QUE ESTA EN UN CONTROLADOR Y ES PUBLICO
 	 * 
 	 * http://ellislab.com/forums/viewthread/205469/
 	 * external_callbacks method handles form validation callbacks that are not located
@@ -266,7 +253,6 @@ class _If_Controller extends CI_Controller
 		}
 
 		return $callback_result;
-	}
 
-	/** FIN EXTERNAL CALLBACK ***/ 
+	}//fin_external_callbacks
 }

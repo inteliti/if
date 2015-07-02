@@ -24,7 +24,7 @@ class Usuario_Model extends _If_Model
 		FROM if_usuarios usu 
 		WHERE %s
 		ORDER BY %s
-		LIMIT%d,%d";
+		LIMIT %d,%d";
 	
 	public $query_count = "
 		SELECT COUNT(*) AS c
@@ -32,7 +32,8 @@ class Usuario_Model extends _If_Model
 		WHERE %s";
 	
     public $sp_methods = array(
-		//'get'		=> 'get_usuario',
+		'login'		=> 'sp_login',
+		'get'		=> 'sp_get_usuario',
 		//'count'	=> 'count_usuarios',
     );
 	
@@ -61,11 +62,11 @@ class Usuario_Model extends _If_Model
 	{
 		$o = new stdClass();
 		
-		$r = $this->getWhere("
-				usuario = '{$this->sanitize($usuario)}' AND 
-				clave = '{$this->sanitize($clave)}'
-			");
+		$usuario = $this->sanitize($usuario);
+		$clave = $this->sanitize($clave);
 		
+		$r = $this->call($usuario, $clave);
+
 		d($usuario.' - '.$clave);
 		d($r);exit;		
 				

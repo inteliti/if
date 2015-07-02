@@ -40,16 +40,15 @@
 						   required autofocus />
 				</div>
 				
-				<div class="form-group">
+				<!--<div class="form-group">
 					<input type="password" id="pass" 
 						   class="form-control input-lg" 
 						   placeholder="Contraseña" 
 						   required 
 						   autocomplete="off" />
-				</div>
-				
+				</div>-->
 			</div>
-			<input type="hidden" id="md5" name="md5" value="" />
+			<!--<input type="hidden" id="md5" name="md5" value="" />-->
 		</form>
 		
 		<button type="button" 
@@ -75,10 +74,10 @@
 		
 		function submit()
 		{
-			var md5 = hex_md5( $('#pass').val() );
+			/*var md5 = hex_md5( $('#pass').val() );
 
 			$('#md5').val(md5);
-			$('#pass').val('');
+			$('#pass').val('');*/
 			$('#form-login').submit();
 			
 			return false;
