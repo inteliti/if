@@ -1,9 +1,16 @@
+<?php if( ! extension_loaded( 'fileinfo' )): ?>
+	<?php if( SHOW_DEBUG_BACKTRACE ): ?>
+	<p class="danger">Debe cargar la extensión de PHP fileinfo.</p>
+	<?php else: ?>
+	<p class="danger">Hubo un problema.</p>
+	<?php endif; ?>
+<?php else: ?>
 <?php
 
 	$PLG_URL = isset($PLG_URL) ? $PLG_URL : PLUGINS_URL . 'if.upload/';
 	$PLG_PATH = isset($PLG_PATH) ? $PLG_PATH :  PLUGINS_PATH . 'if.upload/';
 	$UPLOAD_FILE_TYPES = isset($UPLOAD_FILE_TYPES) ? $UPLOAD_FILE_TYPES : array('image/jpeg','image/png','image/gif','application/pdf');
-	$UPLOAD_FILE_SIZE_MAX = isset($UPLOAD_FILE_SIZE_MAX) ? $UPLOAD_FILE_SIZE_MAX : 1000000; //EN BYTES esto es igual a 1 MB
+	$UPLOAD_FILE_SIZE_MAX = isset($UPLOAD_FILE_SIZE_MAX) ? $UPLOAD_FILE_SIZE_MAX : 10000000; //EN BYTES esto es igual a 10 MB
 	$UPLOAD_PATH = isset($UPLOAD_PATH) ? $UPLOAD_PATH : NULL;
 	$FILES_ARRAY = isset($FILES_ARRAY) ? $FILES_ARRAY : array();
 	$TITTLE = isset($TITTLE) ? $TITTLE : 'Imágenes y archivos';
@@ -24,12 +31,11 @@
 	
 	<input type="hidden" name="upload_path" value="<?= $UPLOAD_PATH ?>" class="exclude" />
 	
-	<duv id="if-upload-input-<?= md5($UPLOAD_PATH) ?>">
-		<label>
-			<?= $TITTLE ?>
-		</label>
-		<input name="if-upload-image-file" id="if-upload-image-file" type="file" class="exclude" />
-	</duv>
+	
+	<label>
+		<?= $TITTLE ?>
+	</label>
+	
 	
 	<div id="if-upload-output-<?= md5($UPLOAD_PATH) ?>">
 		<p class=""><p>
@@ -48,44 +54,33 @@
 							</a>
 						</p>
 						<p>
-							<?php if( finfo_file($finfo, getcwd(). '/' . substr($UPLOAD_PATH . $FILE, strlen($base_dir)))=='image/jpeg' ||
-								finfo_file($finfo, getcwd(). '/' . substr($UPLOAD_PATH . $FILE, strlen($base_dir)))=='image/png' ||
-								finfo_file($finfo, getcwd(). '/' . substr($UPLOAD_PATH . $FILE, strlen($base_dir)))=='image/gif' ): ?>
-							<a 
-							   class="label label-info ver-img-btn" 
-							   title="Ver imágen">
-								Ver
+							<a onclick="IF_UPLOAD.desplazarIzq('<?= $FILE_NAME; ?>')" 
+							   class="label label-info" 
+							   title="Desplazar izquierda">
+								<
 							</a>
-							<?php else: ?>
-							<a 
-							   class="label label-info des-fil-btn" 
-							   href="<?= $UPLOAD_PATH . $FILE ?>"
-							   target="_blank"
-							   title="Descargar" >
-								Descargar
+							<a	onclick="IF_UPLOAD.desplazarDer('<?= $FILE_NAME; ?>')" 
+								class="label label-info" 
+								title="Desplazar derecha">
+								>
 							</a>
-							<?php endif; ?>
 						</p>
 					</div>
-					<?php if( finfo_file($finfo, getcwd(). '/' . substr($UPLOAD_PATH . $FILE, strlen($base_dir)))=='image/jpeg' ||
-							finfo_file($finfo, getcwd(). '/' . substr($UPLOAD_PATH . $FILE, strlen($base_dir)))=='image/png' ||
-							finfo_file($finfo, getcwd(). '/' . substr($UPLOAD_PATH . $FILE, strlen($base_dir)))=='image/gif' ): ?>
 					<img 
 						class="img-thumbnail"
 						alt="<?= $FILE_NAME; ?>" 
 						src="<?= $UPLOAD_PATH . 'thumb_' . $FILE .'?'.time()   ?>">
-					<?php else: ?>
-					<img 
-						class="img-thumbnail"
-						alt="PDF" 
-						src="<?= $PLG_URL . 'img/PDF-Icon.jpg'  ?>">
-					<?php endif; ?>
 				</div>
 			</div>
 			<?php endif; ?>
 			<?php endforeach; ?>
-			<div id="if-upload-image-loader" class="col-md-2 hidden">
-				
+			
+			<div id="if-upload-image-loader" class="col-md-2">
+				<div class="if-upload-image-new">
+					<div id="if-upload-input-<?= md5($UPLOAD_PATH) ?>" class="fileUpload">
+						<input type="file" id="if-upload-image-file" class="upload" class="exclude" />
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -114,3 +109,4 @@
 	
 </script>
 
+<?php endif; ?>

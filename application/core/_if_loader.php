@@ -23,7 +23,7 @@
 <?php
 //PLUGINS
 $plgns = array(
-	
+	'if.upload',
 );
 foreach($plgns as $v)
 {

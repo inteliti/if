@@ -75,12 +75,12 @@ if(isset($_POST))
 			{
 				$ExplodeName = explode('-', $v);
 				$TrailName = $ExplodeName[1];
-				$NewFileName = $prev_k . '-' . $TrailName;
+				$NewImageName = $prev_k . '-' . $TrailName;
 				$NewThumbName = $ThumbPrefix . $prev_k . '-' . $TrailName;
 
 				$r_image = rename(
 					$UploadPath . '/' . $v,
-					$UploadPath . '/' . $NewFileName);
+					$UploadPath . '/' . $NewImageName);
 				
 				if($r_image)
 				{
@@ -90,7 +90,7 @@ if(isset($_POST))
 					
 					if($r_thumb)
 					{
-						$ImagesShifted[$prev_k] = $NewFileName;
+						$ImagesShifted[$prev_k] = $NewImageName;
 					}
 				}
 			}

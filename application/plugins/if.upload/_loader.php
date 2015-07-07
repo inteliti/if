@@ -1,5 +1,6 @@
 <?php
 $PATH = PLUGINS_URL . 'if.upload/';
+;
 ?>
 <!-- if.upload loader -->
 <link rel="stylesheet" type="text/css" href="<?= $PATH; ?>css.css" />

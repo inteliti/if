@@ -6,8 +6,9 @@ $r->success = TRUE;
 if(isset($_POST))
 {
 	############ Edit settings ##############
-	$ThumbSquareSize 		= 220; //Thumbnail will be 200x200
-	$BigImageMaxSize 		= 1900; //Image Maximum height or width
+	//$ThumbSquareSize 		= 230; //Thumbnail will be 200x200
+	$ThumbMaxSize			= 230;
+	$BigImageMaxSize 		= 1024; //Image Maximum height or width
 	$ThumbPrefix			= "thumb_"; //Normal thumb Prefix
 	$DestinationDirectory	= $uploadPath = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . 
 								rtrim($_POST['upload_path'], '/') . '/'; //specify upload directory ends with / (slash)
@@ -32,14 +33,14 @@ if(isset($_POST))
 	// Random number will be added after image name
 	$RandomNumber 	= rand(0, 9999999999); 
 
-	$FileName 		=	str_replace(' ','-',strtolower($_POST['name'])) . '.' .
+	$ImageName 		=	str_replace(' ','-',strtolower($_POST['name'])) . '.' .
 						end(explode('/',$_FILES['contents']['type'])); //get image name
 	//$ImageSize 	= $_FILES['contents']['size']; // get original image size
 	$TempSrc	 	= $_FILES['contents']['tmp_name']; // Temp name of image file stored in PHP tmp folder
-	$FileType	 	= $_FILES['contents']['type']; //get file type, returns "image/png", image/jpeg, text/plain etc.
+	$ImageType	 	= $_FILES['contents']['type']; //get file type, returns "image/png", image/jpeg, text/plain etc.
 
 	//Let's check allowed $ImageType, we use PHP SWITCH statement here
-	switch(strtolower($FileType))
+	switch(strtolower($ImageType))
 	{
 		case 'image/png':
 			//Create a new image from file 
@@ -52,102 +53,151 @@ if(isset($_POST))
 		case 'image/pjpeg':
 			$CreatedImage = imagecreatefromjpeg($_FILES['contents']['tmp_name']);
 			break;
-		case 'application/pdf':
-			//$CreatedImage = imagecreatefromjpeg($_FILES['contents']['tmp_name']);
-			break;
 		default:
 			die('Unsupported File!'); //output error and exit
 	}
 	
+	//PHP getimagesize() function returns height/width from image file stored in PHP tmp folder.
+	//Get first two values from image, width and height. 
+	//list assign svalues to $CurWidth,$CurHeight
+	list($CurWidth,$CurHeight)=getimagesize($TempSrc);
+	
 	//Get file extension from Image name, this will be added after random name
-	$FileExt = substr($FileName, strrpos($FileName, '.'));
-	$FileExt = str_replace('.','',$FileExt);
-
+	$ImageExt = substr($ImageName, strrpos($ImageName, '.'));
+  	$ImageExt = str_replace('.','',$ImageExt);
+	
 	//remove extension from filename
-	$FileName 		= preg_replace("/\\.[^.\\s]{3,4}$/", "", $FileName); 
-
+	$ImageName 		= preg_replace("/\\.[^.\\s]{3,4}$/", "", $ImageName); 
+	
 	//Construct a new name with random number and extension.
-	$NewFileName = $FileName.'-'.$RandomNumber.'.'.$FileExt;
+	$NewImageName = $ImageName.'-'.$RandomNumber.'.'.$ImageExt;
 	//$NewImageName = $ImageName.'.'.$ImageExt;
+	
+	/*
+	$existing_images = glob($DestinationDirectory . $ImageName . '*');
+	$existing_thumbs = glob($DestinationDirectory . $ThumbPrefix .$ImageName . '*');
+	
+	if (count($existing_images)>0)
+	{
+		unlink($existing_images[0]);
+	}
+	
+	if (count($existing_thumbs)>0)
+	{
+		unlink($existing_thumbs[0]);
+	}*/
 	
 	if (!file_exists($DestinationDirectory))
 	{
-		mkdir($DestinationDirectory, 0777, true);
-	}
-
-	if(strtolower($FileType)!='application/pdf')
-	{
-		//PHP getimagesize() function returns height/width from image file stored in PHP tmp folder.
-		//Get first two values from image, width and height. 
-		//list assign svalues to $CurWidth,$CurHeight
-		list($CurWidth,$CurHeight)=getimagesize($TempSrc);
-		
-		/*
-		$existing_images = glob($DestinationDirectory . $ImageName . '*');
-		$existing_thumbs = glob($DestinationDirectory . $ThumbPrefix .$ImageName . '*');
-
-		if (count($existing_images)>0)
-		{
-			unlink($existing_images[0]);
-		}
-
-		if (count($existing_thumbs)>0)
-		{
-			unlink($existing_thumbs[0]);
-		}*/
-		
-		//set the Destination Image
-		$thumb_DestRandImageName 	= $DestinationDirectory.$ThumbPrefix.$NewFileName; //Thumbnail name with destination directory
-		$DestRandImageName 			= $DestinationDirectory.$NewFileName; // Image with destination directory
-		//
-		//Resize image to Specified Size by calling resizeImage function.
-		if(resizeImage($CurWidth,$CurHeight,$BigImageMaxSize,$DestRandImageName,$CreatedImage,$Quality,$FileType))
-		{
-			//Create a square Thumbnail right after, this time we are using cropImage() function
-			if(!cropImage($CurWidth,$CurHeight,$ThumbSquareSize,$thumb_DestRandImageName,$CreatedImage,$Quality,$FileType))
-			{
-				$r->error = 'Error Creating thumbnail';
-				//echo 'Error Creating thumbnail';
-			}
-
-			$r->name = $_POST['name'];
-			$r->filename = $NewFileName;
-			
-			echo json_encode($r);
-
-		}
-		else
+		//echo $DestinationDirectory;
+		if(!mkdir($DestinationDirectory, 0777, true))
 		{
 			$r->success = FALSE;
-			$r->error = 'Resize Error';
+			$r->error = 'ERROR CREATING DIRECTORY';
 			die(json_encode($r));
-			//die('Resize Error'); //output error
 		}
+	}
+	
+	//set the Destination Image
+	$thumb_DestRandImageName 	= $DestinationDirectory.$ThumbPrefix.$NewImageName; //Thumbnail name with destination directory
+	$DestRandImageName 			= $DestinationDirectory.$NewImageName; // Image with destination directory
+	
+
+	
+	//Resize image to Specified Size by calling resizeImage function.
+	if(resizeImage($CurWidth,$CurHeight,$BigImageMaxSize,$DestRandImageName,$CreatedImage,$Quality,$ImageType))
+	{
+             
+		//Create a square Thumbnail right after, this time we are using cropImage() function
+		if(!resizeWidthImage($CurWidth,$CurHeight,$ThumbMaxSize,$thumb_DestRandImageName,$CreatedImage,$Quality,$ImageType))
+		//if(!cropImage($CurWidth,$CurHeight,$ThumbSquareSize,$thumb_DestRandImageName,$CreatedImage,$Quality,$ImageType))
+		{
+                    
+			$r->error = 'Error Creating thumbnail';
+			//echo 'Error Creating thumbnail';
+		}
+		
+		$r->name = $_POST['name'];
+		$r->filename = $NewImageName;
+		
+		//sleep(8);
+		
+		echo json_encode($r);
+		
 	}
 	else
 	{
-		$DestRandFilePDFName 	= $DestinationDirectory.$NewFileName; // Image with destination directory
-		if(move_uploaded_file($TempSrc,$DestRandFilePDFName))
-		{
-			$r->name = $_POST['name'];
-			$r->filename = $NewFileName;
-			
-			echo json_encode($r);
-
-		}
-		else
-		{
-			$r->success = FALSE;
-			die(json_encode($r));
-		}
+		$r->success = FALSE;
+		$r->error = 'Resize Error';
+		die(json_encode($r));
+		//die('Resize Error'); //output error
 	}
-
 }
 else
 {
 	$r->success = FALSE;
 	$r->error = 'NO POST';
 	die(json_encode($r)); // output error when above checks fail.
+}
+
+
+// This function will proportionally resize image 
+function resizeWidthImage($CurWidth,$CurHeight,$MaxSize,$DestFolder,$SrcImage,$Quality,$ImageType)
+{
+        
+	//Check Image size is not 0
+	if($CurWidth <= 0 || $CurHeight <= 0) 
+	{
+
+		return false;
+	}
+	
+        
+        
+	//Construct a proportional size of new image
+	$ImageScale      	= $MaxSize/$CurWidth; 
+        if($CurWidth <= $MaxSize)
+        {
+            $NewWidth  			= $CurWidth;
+            $NewHeight 			= $CurHeight;
+        }
+        else
+        {
+            $NewWidth  			= ceil($ImageScale*$CurWidth);
+            $NewHeight 			= ceil($ImageScale*$CurHeight);
+        }
+	$NewCanves 			= imagecreatetruecolor($NewWidth, $NewHeight);
+	 
+	// Resize Image
+	if(imagecopyresampled($NewCanves, $SrcImage,0, 0, 0, 0, $NewWidth, $NewHeight, $CurWidth, $CurHeight))
+	{
+             
+            switch(strtolower($ImageType))
+            {
+                    case 'image/png':
+                            imagepng($NewCanves,$DestFolder);
+                            break;
+                    case 'image/gif':
+                            imagegif($NewCanves,$DestFolder);
+                            break;			
+                    case 'image/jpeg':
+                    case 'image/pjpeg':
+                            imagejpeg($NewCanves,$DestFolder,$Quality);
+                            break;
+                    default:
+                            return false;
+            }
+             
+            //Destroy image, frees memory	
+            if(is_resource($NewCanves))
+            {
+                 
+                imagedestroy($NewCanves);
+                
+            } 
+            return true;
+	}
+        
 }
 
 
@@ -237,4 +287,6 @@ function cropImage($CurWidth,$CurHeight,$iSize,$DestFolder,$SrcImage,$Quality,$I
 	}
 	  
 }
+
+
 

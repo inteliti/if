@@ -56,6 +56,8 @@ IF_UPLOAD.prototype = {
 		if(this._isFullCountFiles())
 		{
 			$(this.UPLOAD_AREA + ' #if-upload-input').hide();
+			$(this.UPLOAD_AREA + ' #btn-upload-file').hide();
+			$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').removeClass('if-upload-image-new');
 		}
 	}
 	,
@@ -77,28 +79,12 @@ IF_UPLOAD.prototype = {
 	_initControls : function()
 	{
 		var that = this;
+		
 		$(this.UPLOAD_AREA + ' .eli-img-btn').on('click',function(){
 			var filename = $(this).parent().parent().parent().parent().data('filename');
 			that.removeImage(filename);
 		});
 		
-		$(this.UPLOAD_AREA + ' .ver-img-btn').on('click',function(){
-			
-			var file = $(this).parent().parent().parent().parent().data('file');
-			var upload_path = $(this).parent().parent().parent().parent().parent().parent().siblings('input[name=upload_path]').val();
-			
-			var cnf = {
-				controller : 'expediente/digi_modal',
-				data : {
-					file: file,
-					upload_path : upload_path 
-				}
-			}
-			
-			IF_MODAL.ajaxCntrllr(cnf);
-		});
-		
-		/*
 		$(this.UPLOAD_AREA + ' .izq-img-btn').on('click',function(){
 
 			var filename = $(this).parent().parent().parent().parent().data('filename');
@@ -111,7 +97,7 @@ IF_UPLOAD.prototype = {
 			var filename = $(this).parent().parent().parent().parent().data('filename');
 			console.log(filename);
 			that.desplazarDer(filename);
-		});*/
+		});
 		
 	}
 	
@@ -143,28 +129,21 @@ IF_UPLOAD.prototype = {
 					break;
 				}	
 			}
-				//SI PASA TODO EL CICLO Y QUEDA COMO TRUE ENTONCES HAY QUE INTERRUMPIR EJECUCION DE CARGA DE ARCHIVO
+			//SI PASA TODO EL CICLO Y QUEDA COMO TRUE ENTONCES HAY QUE INTERRUMPIR EJECUCION DE CARGA DE ARCHIVO
 			if(ftype_flag)
 			{
 				$(this.UPLOAD_AREA_OUTPUT+' > p').html(
 						"<b>"+ftype+"</b> tipo de archivo no soportado!");
 				return false
 			}
-			/*CODIGO VIEJO
-			 *switch(ftype)
-			{
-				case 'image/png': case 'image/gif': case 'image/jpeg': case 'image/pjpeg':
-					break;
-				default:
-					$(this.UPLOAD_AREA_OUTPUT+' > p').html(
-							"<b>"+ftype+"</b> tipo de archivo no soportado!");
-					return false
-			}FIN CODIGO VIEJO*/
 			
 			if(fsize>this.UPLOAD_FILE_SIZE_MAX) 
 			{
+				
 				$(this.UPLOAD_AREA_OUTPUT+' > p').html("<b>"+this._bytesToSize(fsize) +
-					"</b> muy grande! <br />por favor reduzca el tamano del archivo.");
+					"</b> muy grande! <br />por favor reduzca el tamano del archivo."+
+					"<br /> El límite es: " +
+					this._bytesToSize(this.UPLOAD_FILE_SIZE_MAX));
 				return false
 			}
 								
@@ -200,7 +179,8 @@ IF_UPLOAD.prototype = {
 					}
 				}
 				xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-				$(this.UPLOAD_AREA + ' #if-upload-image-loader').removeClass('hidden');
+				$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').addClass('if-loading');
+				$(this.UPLOAD_AREA_INPUT).hide();
 				xhr.send(fd);
 			}
 			else
@@ -223,7 +203,9 @@ IF_UPLOAD.prototype = {
 	,
 	_insertFile: function(name,filename,ftype)
 	{
-		$(this.UPLOAD_AREA + ' #if-upload-image-loader').addClass('hidden');
+		$(this.UPLOAD_AREA + ' #if-upload-image-loader').removeClass('if-loading');
+		console.log($(this.UPLOAD_AREA_INPUT));
+		$(this.UPLOAD_AREA_INPUT).show();
 		
 		if($(this.UPLOAD_AREA + " input[name="+name+"]").length>0)
 		{
@@ -244,39 +226,23 @@ IF_UPLOAD.prototype = {
 		}
 		
 		var file_str = '';
-		var ver_des_str = '';
+		var desp_str = '';
 		
-		if(ftype=='image/jpeg' || ftype=='image/png' || ftype=='image/gif')
-		{
-			file_str = 	'<img '+
-						'class="img-thumbnail"'+
-						'alt="' + name + '"'+
-						'src="' + this.UPLOAD_PATH + 'thumb_' + filename + '?' + hex_md5(Math.random()) + '">';
-			ver_des_str = 	'<a '+
-								' class="label label-info ver-img-btn"'+
-								' title="Ver imágen">'+
-									'Ver'+
-								'</a>';
-			
-		}
-		else
-		{
-			
-			file_str = '<img '+
-						'class="img-thumbnail"'+
-						'alt="PDF" '+
-						'src="'+this.PLG_URL+'img/PDF-Icon.jpg">';
-			ver_des_str = 	'<a '+
-								' class="label label-info ver-img-btn"'+
-								' href="'+this.UPLOAD_PATH + filename +'"'+
-								'target="_blank"'+
-								' title="Ver imágen">'+
-									'Descargar'+
-								'</a>';
-		}
 		
-
-	 
+		file_str = 	'<img '+
+					'class="img-thumbnail"'+
+					'alt="' + name + '"'+
+					'src="' + this.UPLOAD_PATH + 'thumb_' + filename + '?' + hex_md5(Math.random()) + '">';
+		desp_str = 	'<a onclick="IF_UPLOAD.desplazarIzq(\''+name+'\')" '+
+						' class="label label-info" '+
+						' title="Desplazar izquierda">'+
+						'<'+
+					'</a>'+
+					'<a	onclick="IF_UPLOAD.desplazarDer(\''+name+'\')" '+
+						'class="label label-info" '+
+						'title="Desplazar derecha">'+
+						'>'+
+					'</a>';
 		
 		//Colocar la imagen despues del input que guarda ruta de la imagen
 		$(this.UPLOAD_AREA + " input[name="+name+"]").after(
@@ -291,7 +257,7 @@ IF_UPLOAD.prototype = {
 								'</a>'+
 							'</p>'+
 							'<p>'+
-								ver_des_str +
+								desp_str +
 							'</p>'+
 						'</div>'+
 						file_str +
@@ -303,17 +269,25 @@ IF_UPLOAD.prototype = {
 		//console.log(this.FILES);
 		if(this._isFullCountFiles())
 		{
-			$(this.UPLOAD_AREA + ' #if-upload-input').hide();
+			console.log($(this.UPLOAD_AREA_INPUT));
+			$(this.UPLOAD_AREA_INPUT).hide();
+			$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').removeClass('if-upload-image-new');
 		}
 	}
 	,
 	removeImage: function(img)
 	{
+		var that = this;
 		//La eliminacion es local, no se puede borrar del sistema 
 		//de archivos hasta tanto no se actualice la bd
-		
-		this._shiftImages(img);
-		
+		IF_MODAL.confirm('¿Esta usted seguro de eliminar este archivo?',
+			function(r){
+				if(r)
+				{
+					that._shiftImages(img);
+				}
+				
+		});
 	}
 	,
 	//recibe como parametro la imagen que se borro,
