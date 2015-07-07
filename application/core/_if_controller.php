@@ -43,11 +43,14 @@ class _If_Controller extends CI_Controller
 			show_error('Acceso no autorizado!!!');
 			return FALSE;
 		}
+		
+		//$this->session->set_userdata('ultima_actividad',time());
 	}
 	
-	/*********************************************************
-	* JQGRID
-	*********************************************************/	
+	
+	// ------------------------------------------------------------------------
+	//JQGRID
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Metodo jqgrid que permite traerse los datos para alimentar el maestro jqgrid.
@@ -157,9 +160,10 @@ class _If_Controller extends CI_Controller
 		return empty($where)? '1=1' : implode(' AND ', $where);
 	}
 	
-	/*********************************************************
-	* LOAD VIEWS
-	*********************************************************/	
+	
+	// ------------------------------------------------------------------------
+	//LOAD VIEWS
+	// ------------------------------------------------------------------------
 	
 	/**
 	 * Metodo para cargar el template principal
@@ -188,9 +192,10 @@ class _If_Controller extends CI_Controller
 		$this->load->view('../templates/'.$this->config->item('tmpl').'/generic', $D);
 	}
 	
-	/*********************************************************
-	* DATA VALIDATION
-	*********************************************************/	
+	
+	// ------------------------------------------------------------------------
+	//DATA VALIDATION
+	// ------------------------------------------------------------------------
 	
 	/*
 	 * Este metodo permite ejecutar funciones de validacion en el modelo

@@ -42,7 +42,7 @@ var IF_MAIN = {
 		$(IF_MAIN.CANVAS_SELECTOR).height(bodyH);
 	}
 
-	,	ajax: function(cnf)
+	, ajax: function(cnf)
 	{
 		cnf.type = 'POST';
 		if (!cnf.dataType)

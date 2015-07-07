@@ -69,7 +69,7 @@
 	<script type="text/javascript">
 		
 		$('input').keyup(function(e){
-			if(e.which==13) submit();
+			if(e.which === 13) submit();
 		});
 		
 		function submit()

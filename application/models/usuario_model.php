@@ -58,6 +58,34 @@ class Usuario_Model extends _If_Model
 		return parent::store($D, $skip_validation);
 	}
 	
+	// ------------------------------------------------------------------------
+	
+	/*
+	 * validate_user_name
+	 * 
+	 * Validamos que el nombre de usuario pasado
+	 * por paramentro existe en la base de datos
+	 * 
+	 * Si no existe retorna FALSE
+	 * Si existe devuelve el usuario
+	 */
+	public function validate_user_name($usuario)
+	{
+		$r = $this->db->get_where(
+				'usuarios', 
+				array('usuario' => $usuario)
+			);
+		
+		return count($r->row()) <= 0 
+				? FALSE 
+				: $r->row();
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	/*
+	 * 
+	 */
     function validateLogin($usuario, $clave)
 	{
 		$o = new stdClass();
