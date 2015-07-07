@@ -38,16 +38,24 @@ class _If_Sys extends _If_Controller {
 	/*
 	 * login
 	 * 
-	 * Metodo publico qeu llama a la vista login y recibe datos a autenticar
+	 * Metodo publico que llama a la vista login y recibe datos 
+	 * para autenticar
 	 */
 	public function login()
 	{
+		$D = new stdClass();
+		
 		if(!empty($this->input->post('usuario')))
 		{
 			$usuario = $this->input->post('usuario');
+			$D->usuario = $usuario;
+		}
+		else
+		{
+			
 		}
 		
-		$this->_login();
+		$this->_login($D);
 		
 		/*if(empty())
 		{

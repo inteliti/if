@@ -33,6 +33,8 @@
 		<form id="form-login" method="post" action="./">
 			<div class="form-group">
 				
+				<?php if(empty($usuario)): ?>
+				
 				<div class="form-group">
 					<input type="text" id="" name="usuario" 
 						   class="form-control input-lg" 
@@ -40,15 +42,23 @@
 						   required autofocus />
 				</div>
 				
-				<!--<div class="form-group">
+				<?php else: ?>
+				
+				<input type="hidden" id="usuario" name="usuario" value="<?php $usuario; ?>" />
+				
+				<div class="form-group">
 					<input type="password" id="pass" 
 						   class="form-control input-lg" 
 						   placeholder="Contraseña" 
 						   required 
 						   autocomplete="off" />
-				</div>-->
+				</div>
+				
+				<?php endif; ?>
+				
 			</div>
 			<!--<input type="hidden" id="md5" name="md5" value="" />-->
+			
 		</form>
 		
 		<button type="button" 
