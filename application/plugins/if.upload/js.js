@@ -71,8 +71,7 @@ IF_UPLOAD.prototype = {
 		//si esta full la carga de archivos se oculta la opcion de carga al usuario
 		if(this._isFullCountFiles())
 		{
-			$(this.UPLOAD_AREA + ' #if-upload-input').hide();
-			$(this.UPLOAD_AREA + ' #btn-upload-file').hide();
+			$(this.UPLOAD_AREA_INPUT).hide();
 			$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').removeClass('if-upload-image-new');
 		}
 	}
