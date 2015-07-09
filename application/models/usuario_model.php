@@ -17,6 +17,14 @@ class Usuario_Model extends _If_Model
                'label' => 'clave',
                'rules' => 'required',
                'default' => ''),
+		array( 'field' => 'rol_id',
+               'label' => 'rol_id',
+               'rules' => 'required',
+               'default' => ''),
+		array( 'field' => 'ctrl_intentos',
+               'label' => 'ctrl_intentos',
+               'rules' => '',
+               'default' => ''),
     );
 	
 	public $query = "
@@ -61,24 +69,41 @@ class Usuario_Model extends _If_Model
 	// ------------------------------------------------------------------------
 	
 	/*
-	 * validate_user_name
+	 * validar
 	 * 
-	 * Validamos que el nombre de usuario pasado
-	 * por paramentro existe en la base de datos
+	 * Validamos que el usuario existe
 	 * 
 	 * Si no existe retorna FALSE
 	 * Si existe devuelve el usuario
+	 * 
+	 * $usuario: nombre del usuario a validar (si se pasa 
+	 * solo este parametro se valida que exista un usuario 
+	 * con ese nombre)
+	 * $clave: clave de usuario a validar
 	 */
-	public function validate_user_name($usuario)
+	public function validar($usuario, $clave = NULL)
 	{
-		$r = $this->db->get_where(
-				'usuarios', 
-				array('usuario' => $usuario)
-			);
+		$D = new stdClass();	//DATA
 		
-		return count($r->row()) <= 0 
-				? FALSE 
-				: $r->row();
+		if(!empty($usuario))
+		{
+			$usuario = $this->sanitize($usuario);
+			$D = array('usuario' => $usuario);
+			 
+			if(!empty($clave))
+			{
+				$clave = $this->sanitize($clave);
+				$D = array_merge($D, array('clave', $clave));
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+		
+		$r = $this->db->get_where('usuarios', $D);	//result
+		
+		return count($r->row()) <= 0 ? FALSE : $r->row();
 	}
 	
 	// ------------------------------------------------------------------------

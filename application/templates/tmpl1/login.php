@@ -44,8 +44,6 @@
 				
 				<?php else: ?>
 				
-				<input type="hidden" id="usuario" name="usuario" value="<?php $usuario; ?>" />
-				
 				<div class="form-group">
 					<input type="password" id="pass" 
 						   class="form-control input-lg" 
@@ -54,10 +52,12 @@
 						   autocomplete="off" />
 				</div>
 				
+				<input type="hidden" id="usuario" name="usuario" value="<?php $usuario; ?>" />
+				<input type="hidden" id="md5" name="md5" value="" />
+				
 				<?php endif; ?>
 				
 			</div>
-			<!--<input type="hidden" id="md5" name="md5" value="" />-->
 			
 		</form>
 		
@@ -84,10 +84,13 @@
 		
 		function submit()
 		{
-			/*var md5 = hex_md5( $('#pass').val() );
-
-			$('#md5').val(md5);
-			$('#pass').val('');*/
+			if($('#pass').val())
+			{
+				var md5 = hex_md5( $('#pass').val() );
+				$('#md5').val(md5);
+				$('#pass').val('');
+			}
+			
 			$('#form-login').submit();
 			
 			return false;

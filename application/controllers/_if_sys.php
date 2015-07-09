@@ -1,17 +1,15 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /******************************************************************
- *
- * Class _If_Sys
+ * Clase _If_Sys
  * 
- * Clase que define funciones de sistema como la autenticacion 
+ * Clase que define funciones de sistema como: autenticacion 
  * de usuarios (Login), registro de usuarios (SignIn), gestión 
- * de variables de configuración y otras.
+ * de variables de configuración y mas.
  * 
  * Dependecias: Clase _If_Controller.
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
- * 
  *****************************************************************/
 
 include APPPATH . 'core/_if_controller.php';
@@ -23,51 +21,36 @@ class _If_Sys extends _If_Controller {
 		parent::__construct();
 	}
 	
-	// ------------------------------------------------------------------------
+	//-----------------------------------------------------------------
 	
 	/*
-	 * index en _If_Sys
+	 * index
 	 * 
-	 * Es la funcion inicial (main) desde donde se carga la vista principal. 
-	 * 
-	 * Por ejemplo: si el sistema requiere autenticación se llama a la 
-	 * funcion publica login definida en esta clase sino se llama a la 
-	 * vista correspondiente a traves de la funcion tmpl de _If_Controller.
+	 * Función principal (main) desde donde se carga la vista inicial. 
+	 * Ej.: si el sistema requiere autenticación se llama a la funcion 
+	 * publica login (definida en esta clase) sino se llama a la 
+	 * vista correspondiente a traves de la funcion tmpl de la clase 
+	 * _If_Controller.
 	 * 
 	 * No recibe parametros
-	 * 
 	 */
 	public function index()
 	{
 		$this->login();
 	}
 	
-	// ------------------------------------------------------------------------
-	
-	/*
-	 * _login
-	 * 
-	 * Metodo privado para cargar el template relacionado al login 
-	 * en la aplicacion
-	 * 
-	 * $D: datos para la vista
-	 */
-	private function _login($D = NULL)
-	{
-		$D = (object) $D;
-		$this->load->view(
-			'../templates/'.$this->config->item('tmpl').'/login', 
-			$D
-		);
-	}
-	
-	// ------------------------------------------------------------------------
+	//-----------------------------------------------------------------
+	//LOGIN
+	//-----------------------------------------------------------------
 	
 	/*
 	 * login
 	 * 
-	 * Metodo publico que llama a la vista login y recibe datos 
-	 * para la autenticacion de usuarios del sistema
+	 * Funcion publica que llama a la vista login. Recupera las
+	 * varibles enviadas a traves del metodo post y delega la 
+	 * validacion de usuarios en el sistema.
+	 * 
+	 * No recibe parametros
 	 */
 	public function login()
 	{
@@ -80,38 +63,55 @@ class _If_Sys extends _If_Controller {
 		}
 		else
 		{
-			if(!empty($in->post('usuario')))
+			if(!empty($in->post('usuario')) && empty($in->post('md5')))
 			{
 				$D->usuario = $in->post('usuario');
+				
+				$r = $this->USUARIO->validar($D->usuario);
+				
+				$D->is_usuario = !$r ? FALSE : TRUE;
+				//intentos
 			}
 			else
 			{
-
+				echo $in->post('md5');
 			}
 			
 			$this->_login($D);
 		}
 		
-		
-		
-		
-		/*if(empty())
-		{
-			$this->_login();
-		}
-		else
-		{
-			d($this->input->post());
-		}*/
 	}
 	
+	//-----------------------------------------------------------------
+	
 	/*
-	 * función donde validamos el ingreso de usuarios al sistema
+	 * _login
 	 * 
+	 * Metodo privado para cargar el template relacionado al login 
+	 * en la aplicacion
 	 * 
-	 * 
+	 * $D: datos para la vista
 	 */
-	private function _validar()
+	private function _login($D = NULL)
+	{
+		$this->load->view(
+			'../templates/'.$this->config->item('tmpl').'/login', 
+				(object) $D
+		);
+	}
+	
+	//-----------------------------------------------------------------
+
+	/*
+	 * _validar
+	 *  
+	 * Funcion privada que valida el acceso de usuarios.
+	 * 
+	 * $usuario: nombre de usuario del sistema.
+	 * $clave: clave de acceso del usuario. Si no es pasada por 
+	 * parametro solo se valida el nombre de usuario.
+	 */
+	private function _validar($usuario, $clave = NULL)
 	{
 		$this->load->model('Usuario_Model', 'USR');
 		
@@ -119,6 +119,17 @@ class _If_Sys extends _If_Controller {
 		
 		$r = $this->usuario->validate_user_name($usuario);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private function _set_session($usuario)
 	{	
