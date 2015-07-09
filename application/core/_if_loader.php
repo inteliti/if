@@ -9,6 +9,8 @@
 <script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.ui.min.js'></script>
 <script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
 <script type='text/javascript' src='<?=SHARED_URL; ?>js/third/md5.js'></script>
+<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.min.js'></script>
+<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.additional-methods.min.js'></script>
 
 <!-- BEGIN IF LOADER -->
 <link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/if/all.css' />
@@ -23,7 +25,7 @@
 <?php
 //PLUGINS
 $plgns = array(
-	'if.upload',
+	'if.modal','if.upload',
 );
 foreach($plgns as $v)
 {
@@ -35,7 +37,7 @@ $libs = array(
 	//thirdparty
 	
 	//app
-	
+	'app/upload_demo'
 );
 foreach($libs as $l)
 {

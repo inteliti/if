@@ -203,6 +203,11 @@ var IF_MAIN = {
 			curr = arr[i];
 			$curr = $(curr);
 
+			if ($(curr).hasClass('exclude'))
+			{
+				continue;
+			}
+
 			//just ignore not checked radios and checkboxes
 			if ((curr.type == 'radio' || curr.type == 'checkbox') && !curr.checked)
 			{

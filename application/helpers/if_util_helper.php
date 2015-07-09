@@ -253,3 +253,64 @@ function seoUrl($string) {
     $string = preg_replace("/[\s_]/", "-", $string);
     return $string;
 }
+/*
+ * Corrige un path dependiendo del SO donde corra el sistema
+ */
+function correctPath($path) {
+	return str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+}
+
+/*
+ * 
+ */
+function moveDirectory($_src,$_dst)
+{
+	$r = new stdClass();
+	
+	$src = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . rtrim($_src, '/') ;
+	$dst = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . rtrim($_dst, '/') ;
+	
+	echo getcwd();
+	
+	if (is_dir($src))
+	{
+		$r = rename($src,$dst);
+	}
+
+	return TRUE;
+}
+
+/*
+ * 
+ */
+function getUploadURL($D)
+{
+	$upload_url = NULL;
+	
+	if(isset($D->upload_url))
+	{
+		$upload_url = $D->upload_url;
+	}
+	
+	return $upload_url;
+}
+
+/*
+ * 
+ */
+function updateUploadURL($upload,$upload_url=NULL,$main_upload_url=NULL)
+{
+	if($upload->success)
+	{
+		if(!empty($upload_url))
+		{
+			//obtiene la posicion donde empieza el directorio especifico del objeto
+			// de archivos que se esta guardando. Luego se saca la carpeta del objeto y se eliminan los /
+			$upload_object_folder = trim( substr ( $upload_url , strlen ( $main_upload_url ) ), "/" );
+			if( $upload_object_folder != $upload->id && $upload->id > 0)
+			{
+				$upload->upload_url_error = moveDirectory($upload_url,$main_upload_url . $upload->id);
+			}
+		}
+	}
+}

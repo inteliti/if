@@ -1,4 +1,11 @@
 /*****************************************************
+ * Clase JavaScript para la carga de archivos IF.UPLOAD
+ * v2.0.0
+ * Derechos Reservados (c) 2014 INTELITI SOLUCIONES C.A.
+ * Para su uso sólo con autorización.
+ *****************************************************/
+
+/*****************************************************
  * Constructor
  *****************************************************/
 var IF_UPLOAD = function() {};
@@ -8,9 +15,12 @@ var IF_UPLOAD = function() {};
  *****************************************************/
 IF_UPLOAD.prototype = {
 	
+	/*
+	 * ATRIBUTOS
+	 */
 	PLG_URL : null,
 	PLG_PATH : null,
-	UPLOAD_PATH : null,
+	UPLOAD_URL : null,
 	MAX_COUNT_FILE : 1,
 	FILES : null,
 	FILES_COUNT : 0,
@@ -20,14 +30,18 @@ IF_UPLOAD.prototype = {
 	UPLOAD_FILE_TYPES : null,
 	UPLOAD_FILE_SIZE_MAX: null,
 	
+	/*
+	 * METODO INIT
+	 * Sirve para inicalizar el plugin
+	 */
 	init: function(cnf)
 	{
+		//Se inicalizan todos los parametros de entrada
 		this.PLG_URL = cnf.plg_url;
 		this.PLG_PATH = cnf.plg_path;
-		this.UPLOAD_PATH = cnf.upload_path;
+		this.UPLOAD_URL = cnf.upload_url;
 		this.MAX_COUNT_FILE = cnf.max_count_file;
 		this.FILES = cnf.files_array;
-		
 		this.UPLOAD_AREA = cnf.upload_area;
 		this.UPLOAD_AREA_INPUT = cnf.upload_area_input; 
 		this.UPLOAD_AREA_OUTPUT = cnf.upload_area_output;
@@ -43,16 +57,18 @@ IF_UPLOAD.prototype = {
 			}
 		}
 		
-		//console.log(this.FILES);
-		
+		//that para usarse dentro de otro conexto
 		var that = this;
 		
+		//inicializacion de listener para saber cuando se ha cargado un archivo
 		$(this.UPLOAD_AREA + ' #if-upload-image-file').on('change',function(e){
 			that._submit();
 		});
 		
+		//inicializacion en controles de archivos ya cargados
 		this._initControlsCaption();
 		
+		//si esta full la carga de archivos se oculta la opcion de carga al usuario
 		if(this._isFullCountFiles())
 		{
 			$(this.UPLOAD_AREA + ' #if-upload-input').hide();
@@ -61,9 +77,11 @@ IF_UPLOAD.prototype = {
 		}
 	}
 	,
+	/*
+	 * Incializa controles para manipular archivos
+	 */
 	_initControlsCaption : function()
 	{
-		
 		$(this.UPLOAD_AREA + ' .if-upload-thumbnail').hover(
 			function(){
 				$(this).find('.if-upload-caption').slideDown(250); //.fadeIn(250)
@@ -74,53 +92,68 @@ IF_UPLOAD.prototype = {
 		);
 		this._initControls();
 	}
-	
 	,
+	/*
+	 * Incializa controles para manipular archivos
+	 */
 	_initControls : function()
 	{
 		var that = this;
 		
-		$(this.UPLOAD_AREA + ' .eli-img-btn').on('click',function(){
+		$(this.UPLOAD_AREA + ' .eli-img-btn').off();
+		
+		$(this.UPLOAD_AREA + ' .eli-img-btn').on('click',function(ev){
+			ev.preventDefault();
+			ev.stopPropagation();
 			var filename = $(this).parent().parent().parent().parent().data('filename');
-			that.removeImage(filename);
+			that.removeFile(filename);
 		});
 		
-		$(this.UPLOAD_AREA + ' .izq-img-btn').on('click',function(){
-
+		$(this.UPLOAD_AREA + ' .izq-img-btn').off();
+		
+		$(this.UPLOAD_AREA + ' .izq-img-btn').on('click',function(ev){
+			ev.preventDefault();
+			ev.stopPropagation();
 			var filename = $(this).parent().parent().parent().parent().data('filename');
-			console.log(filename);
 			that.desplazarIzq(filename);
 		});
 		
-		$(this.UPLOAD_AREA + ' .der-img-btn').on('click',function(){
-
+		$(this.UPLOAD_AREA + ' .der-img-btn').off();
+		
+		$(this.UPLOAD_AREA + ' .der-img-btn').on('click',function(ev){
+			ev.preventDefault();
+			ev.stopPropagation();
 			var filename = $(this).parent().parent().parent().parent().data('filename');
-			console.log(filename);
 			that.desplazarDer(filename);
 		});
 		
 	}
-	
-	
 	,
+	/*
+	 * Funcion que cargar archivo al servidor
+	 */
 	_submit : function()
 	{
-		//check whether browser fully supports all File API
+		//Revisa si el navegador soporta todas las caracteristicas de File API
 		if (window.File && window.FileReader && window.FileList && window.Blob)
 		{
-			if( !$(this.UPLOAD_AREA + ' #if-upload-image-file').val()) //check empty input filed
+			//revisa si esta vacio el input file
+			if( !$(this.UPLOAD_AREA + ' #if-upload-image-file').val())
 			{
 				$(this.UPLOAD_AREA_OUTPUT+' > p').html("No hay archivo");
-				return false
+				return false;
 			}
 
-			var fsize = $(this.UPLOAD_AREA + ' #if-upload-image-file')[0].files[0].size; //get file size
-			var ftype = $(this.UPLOAD_AREA + ' #if-upload-image-file')[0].files[0].type; // get file type
-
-
-			//allow only valid image file types 
-			var ftype_flag = true; //BANDERA PARA SABER SI EL TIPO DE ARCHIVO ES ACEPTADO, 
+			//Obtiene el tamaño del archivo
+			var fsize = $(this.UPLOAD_AREA + ' #if-upload-image-file')[0].files[0].size;
+			//Obtiene el tipo del archivo
+			var ftype = $(this.UPLOAD_AREA + ' #if-upload-image-file')[0].files[0].type;
 			
+			/****************************
+			 * SOLO ARCHIVOS PERMITIDOS
+			 ****************************/
+			//BANDERA PARA SABER SI EL TIPO DE ARCHIVO ES ACEPTADO
+			var ftype_flag = true;
 			for(var i=0;i<this.UPLOAD_FILE_TYPES.length;i++)
 			{
 				if(ftype==this.UPLOAD_FILE_TYPES[i])
@@ -134,42 +167,50 @@ IF_UPLOAD.prototype = {
 			{
 				$(this.UPLOAD_AREA_OUTPUT+' > p').html(
 						"<b>"+ftype+"</b> tipo de archivo no soportado!");
-				return false
+				return false;
 			}
+			/****************************
+			 * FIN SOLO ARCHIVOS PERMITIDOS
+			 ****************************/
 			
+			//Verifica Tamaño del archivo
 			if(fsize>this.UPLOAD_FILE_SIZE_MAX) 
 			{
-				
 				$(this.UPLOAD_AREA_OUTPUT+' > p').html("<b>"+this._bytesToSize(fsize) +
-					"</b> muy grande! <br />por favor reduzca el tamano del archivo."+
+					"</b> muy grande! <br />por favor reduzca el tamaño del archivo."+
 					"<br /> El límite es: " +
 					this._bytesToSize(this.UPLOAD_FILE_SIZE_MAX));
-				return false
+				return false;
 			}
-								
+			
+			//Inicialización de parametros de subida AJAX
 			var		fd = new FormData(),
 					xhr = new XMLHttpRequest()
 					name = this._getEmptyFileName()
 					;
-					
+			
+			//Si se tiene un nombre disponible 
+			//se procede a la subida del archivo
 			if(name)
 			{
 				fd.append('contents', $(this.UPLOAD_AREA + ' #if-upload-image-file')[0].files[0]);
 				fd.append('name', name);
-				fd.append('upload_path', this.UPLOAD_PATH );
+				fd.append('upload_url', this.UPLOAD_URL );
+				
 				xhr.open('POST', this.PLG_URL + 'savefile.php');
-				xhr.addEventListener('error', function(ev) {
+				xhr.addEventListener('error', function(ev){
 					console.log('Upload Error!');
 				}, false);
 				xhr.addEventListener('load', function(ev) {
 					//$('input[name=file_foto]').val('<?= $FILE_NAME ?>.jpg');
-					//console.log(ev);
+					console.log(ev);
 				}, false);
 				
 				var that = this;
 				
 				xhr.onreadystatechange = function(){
-					if (xhr.readyState == 4) {
+					if (xhr.readyState == 4)
+					{
 						$(that.UPLOAD_AREA + ' #if-upload-image-file').val('');
 						var r = JSON.parse(xhr.responseText);
 						if(r.success)
@@ -178,15 +219,18 @@ IF_UPLOAD.prototype = {
 						}
 					}
 				}
+				
 				xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+				
 				$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').addClass('if-loading');
 				$(this.UPLOAD_AREA_INPUT).hide();
+				
 				xhr.send(fd);
 			}
 			else
 			{
 				$(this.UPLOAD_AREA_OUTPUT+' > p').html("no puedes subir mas archivos");
-				return false
+				return false;
 			}
 			
 			return true;
@@ -195,16 +239,18 @@ IF_UPLOAD.prototype = {
 		else
 		{
 			//Output error to older unsupported browsers that doesn't support HTML5 File API
-			$(this.UPLOAD_AREA_OUTPUT+' p').html("Por favor actualice su navegador, se requieren "+
+			$(this.UPLOAD_AREA_OUTPUT+' p').html("Lo siento, pero necesitamos que por favor actualice su navegador, se requieren "+
 				"ciertas caracteristicas que su navegador no dispone!");
 			return false;
 		}
 	}
 	,
+	/*
+	 * Funcion que inserta el archivo en el area de subida de archivos
+	 */
 	_insertFile: function(name,filename,ftype)
 	{
-		$(this.UPLOAD_AREA + ' #if-upload-image-loader').removeClass('if-loading');
-		console.log($(this.UPLOAD_AREA_INPUT));
+		$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').removeClass('if-loading');
 		$(this.UPLOAD_AREA_INPUT).show();
 		
 		if($(this.UPLOAD_AREA + " input[name="+name+"]").length>0)
@@ -228,25 +274,36 @@ IF_UPLOAD.prototype = {
 		var file_str = '';
 		var desp_str = '';
 		
+		if(ftype=='image/jpeg' || ftype=='image/png' || ftype=='image/gif')
+		{
+			file_str = 	'<img '+
+						'class="img-thumbnail"'+
+						'alt="' + name + '"'+
+						'src="' + this.UPLOAD_URL + 'thumb_' + filename + '?' + hex_md5(Math.random()) + '">';
+		}
+		else
+		{
+			file_str = '<img '+
+						'class="img-thumbnail"'+
+						'alt="PDF" '+
+						'src="'+this.PLG_URL+'img/PDF-Icon.jpg">';
+
+		}
 		
-		file_str = 	'<img '+
-					'class="img-thumbnail"'+
-					'alt="' + name + '"'+
-					'src="' + this.UPLOAD_PATH + 'thumb_' + filename + '?' + hex_md5(Math.random()) + '">';
-		desp_str = 	'<a onclick="IF_UPLOAD.desplazarIzq(\''+name+'\')" '+
-						' class="label label-info" '+
+		desp_str = 	'<a class="label label-info izq-img-btn" '+
 						' title="Desplazar izquierda">'+
 						'<'+
 					'</a>'+
-					'<a	onclick="IF_UPLOAD.desplazarDer(\''+name+'\')" '+
-						'class="label label-info" '+
+					'<a	class="label label-info der-img-btn" '+
 						'title="Desplazar derecha">'+
 						'>'+
 					'</a>';
+
 		
 		//Colocar la imagen despues del input que guarda ruta de la imagen
 		$(this.UPLOAD_AREA + " input[name="+name+"]").after(
-				'<div id="if-upload-thumb-'+name+'" class="col-md-2" data-filename="'+name+'" data-file="'+filename+'">'+
+				'<div id="if-upload-thumb-'+name+'" class="col-md-2" data-filename="'+name
+					+'" data-file="'+filename+'" data-ftype="'+ftype+'">'+
 					'<div class="if-upload-thumbnail">' +
 						'<div class="if-upload-caption">'+
 							'<p>'+
@@ -264,18 +321,21 @@ IF_UPLOAD.prototype = {
 					'</div>'+
 				'</div>'
 		);
+		
 		this.FILES[name] = filename;
 		this._initControlsCaption();
-		//console.log(this.FILES);
+		
 		if(this._isFullCountFiles())
 		{
-			console.log($(this.UPLOAD_AREA_INPUT));
 			$(this.UPLOAD_AREA_INPUT).hide();
 			$(this.UPLOAD_AREA + ' #if-upload-image-loader > div').removeClass('if-upload-image-new');
 		}
 	}
 	,
-	removeImage: function(img)
+	/*
+	 * 
+	 */
+	removeFile: function(img)
 	{
 		var that = this;
 		//La eliminacion es local, no se puede borrar del sistema 
@@ -284,46 +344,45 @@ IF_UPLOAD.prototype = {
 			function(r){
 				if(r)
 				{
-					that._shiftImages(img);
+					that._shiftFiles(img);
 				}
 				
 		});
 	}
 	,
-	//recibe como parametro la imagen que se borro,
-	//es decir donde empieza el shift. todas las imagenes despues de esas
-	//deben correrse a la izquierda
-	_shiftImages : function (start)
+	/*
+	 * Recibe como parametro el archivo que se borro,
+	 * es decir donde empieza el shift. Todos los archivos despues de este
+	 * deben correrse a la izquierda
+	 */
+	_shiftFiles : function (start)
 	{
-		
 		var prev_i = null;
 		var i_n = 1;
 		var canShift = false;
 		
 		for (var i in this.FILES)
-		{ 
-			//console.log('Iteracion '+ i_n );
+		{
 			if(canShift)
 			{
 				if(prev_i!==null)
 				{
-					//si hay regitrada una imagen en esta posicion
+					//si hay regitrada un archivo en esta posicion
 					if(this.FILES[i].length>0)
 					{
-						//console.log('mover '+ i +' a '+prev_i);
-						this._insertImage(prev_i,this.FILES[i]);
+						var ftype = $(this.UPLOAD_AREA + " #if-upload-thumb-" + i).data("ftype");
+						this._insertFile(prev_i,this.FILES[i],ftype);
 						prev_i = i;
 					}
 					else
 					{
-						//console.log('mover vacio a '+ i);
+						//REVISAR! A la seguda eliminacion se oculta carga de archivos
 						this.FILES[prev_i] = "";
 						$(this.UPLOAD_AREA + " input[name="+prev_i+"]").val("");
 						$(this.UPLOAD_AREA + " input[name="+prev_i+"]").next().remove();
 						prev_i = i;
 					}
 				}
-				
 			}
 			else
 			{
@@ -334,48 +393,46 @@ IF_UPLOAD.prototype = {
 				}
 			}
 			
-			//console.log("el i n es "+ i_n+" y el len es "+this.FILES_COUNT);
 			if(i_n===this.FILES_COUNT)
 			{
-				//console.log('mover vacio al ultimo '+ i);
 				this.FILES[i] = "";
 				$(this.UPLOAD_AREA + " input[name="+i+"]").val("");
 				$(this.UPLOAD_AREA + " input[name="+i+"]").next().remove();
 			}
 			
-			
 			i_n++;
-			
-			//console.log(this.FILES);
 		} 
 		
 		if(!this._isFullCountFiles())
 		{
-			$(this.UPLOAD_AREA + ' #if-upload-input').show();
+			$(this.UPLOAD_AREA_INPUT).show();
 		}
 		
 	}
 	,
-	desplazarIzq : function(img)
+	/*
+	 * Funcion para desplazar archivos a la izquierda
+	 */
+	desplazarIzq : function(file)
 	{
-		var img2 = img;
+		var file2 = file;
 		
 		var prev_i = null;
 		
 		for (var i in this.FILES)
 		{ 
-			if(i===img)
+			if(i===file)
 			{
-				var img1 = prev_i;
+				var file1 = prev_i;
 				break;
 				
 			}
 			prev_i = i;
 		} 
 		
-		if(img1!==null)
+		if(file1!==null)
 		{
-			this._switchImages(img1,img2);
+			this._switchFiles(file1,file2);
 		}
 		else
 		{
@@ -383,26 +440,29 @@ IF_UPLOAD.prototype = {
 		}
 	}
 	,
-	desplazarDer : function(img)
+	/*
+	 * Funcion para desplazar archivos a la derecha
+	 */
+	desplazarDer : function(file)
 	{
-		var img1 = img;
+		var file1 = file;
 		
 		var prev_i = null;
-		var img2 = null;
+		var file2 = null;
 		
 		for (var i in this.FILES)
 		{ 
-			if(prev_i===img && this.FILES[i].length>0)
+			if(prev_i===file && this.FILES[i].length>0)
 			{
-				img2 = i;
+				file2 = i;
 				break;
 			}
 			prev_i = i;
 		} 
 		
-		if(img2!==null)
+		if(file2!==null)
 		{
-			this._switchImages(img1,img2);
+			this._switchFiles(file1,file2);
 		}
 		else
 		{
@@ -410,15 +470,24 @@ IF_UPLOAD.prototype = {
 		}
 	}
 	,
-	_switchImages : function(img1,img2)
+	/*
+	 * Intercambia posicion de dos archivos
+	 */
+	_switchFiles : function(file1,file2)
 	{
-		var filename1 = this.FILES[img1];
-		var filename2 = this.FILES[img2];
+		var filename1 = this.FILES[file1];
+		var filename2 = this.FILES[file2];
+		
+		var ftype1 = $(this.UPLOAD_AREA + " #if-upload-thumb-" + file1).data("ftype");
+		var ftype2 = $(this.UPLOAD_AREA + " #if-upload-thumb-" + file2).data("ftype");
 
-		this._insertImage(img1,filename2);
-		this._insertImage(img2,filename1);
+		this._insertFile(file1,filename2,ftype2);
+		this._insertFile(file2,filename1,ftype1);
 	}
 	,
+	/*
+	 * Obtiene proximo nombre de archivo disponible
+	 */
 	_getEmptyFileName: function()
 	{
 		for (var i in this.FILES)
@@ -431,6 +500,9 @@ IF_UPLOAD.prototype = {
 		return false;
 	}
 	,
+	/*
+	 * Funcion para conocer si esta lleno el contenedor de archivos
+	 */
 	_isFullCountFiles : function()
 	{
 		for (var i in this.FILES)
@@ -443,6 +515,9 @@ IF_UPLOAD.prototype = {
 		return true;
 	}
 	,
+	/*
+	 * Transaforma los bytes en un tamaño legible por un ser humano
+	 */
 	_bytesToSize: function(bytes) {
 		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 		if (bytes == 0) return '0 Bytes';

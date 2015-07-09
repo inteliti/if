@@ -187,7 +187,7 @@ class _If_Model extends CI_Model
 	 * $limit_begin: int con numero de registro de inicio para limitar resultados
 	 * $limit_offset: int con numero de registro final para limitar resultados
 	 */
-	public function getWhere($where='1=1', $order=NULL , $limit_begin=0 , $limit_offset=18446744073709551615)
+	public function getWhere($where='1=1', $order=NULL , $limit_begin=0 , $limit_offset=9999)
 	{
 		$order_clause = !empty($order) ? $order : $this->primary_key . " ASC";
 		
@@ -395,10 +395,19 @@ class _If_Model extends CI_Model
 
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<label class="error">','</label>');
-
+		
 		if (is_array($this->model))
 		{
-			$this->form_validation->set_rules($this->model);
+			$rulesModel = array();
+			foreach($this->model as $atributo)
+			{
+				if(isset($atributo['rules']))
+				{
+					array_push($rulesModel, $atributo);
+				}
+			}
+			
+			$this->form_validation->set_rules($rulesModel);
 			return $this->form_validation->run();
 		}
 		else
@@ -422,6 +431,7 @@ class _If_Model extends CI_Model
 				$f_error = form_error($m['field']);
 				if(!empty($f_error))
 				{
+					$errors['success'] = FALSE;
 					$i_error = $m['field'] . '_error';
 					$errors[$i_error] = $f_error;
 				}

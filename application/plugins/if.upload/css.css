@@ -1,3 +1,5 @@
+ 
+
 #if-upload-output{
 	width: 100%;
 	height: 100px;
@@ -21,8 +23,17 @@
 .if-upload-thumbnail {
     position:relative;
     overflow:hidden;
+    border: 1px solid #dadada;
+    height: 155px;
+    text-align: center;
 }
- 
+.upload-area-canvas .img-thumbnail{
+	box-shadow: none !important;
+	border: none !important;
+    max-height: 153px;
+    max-width: 153px;
+}
+
 .if-upload-caption {
     position:absolute;
     top:0;
@@ -41,16 +52,24 @@
 .fileUpload {
 	position: relative;
 	overflow: hidden;
-	background: transparent url(img/upload.png)
-		no-repeat 50% 50%;
+	padding: 2px;
 	height: 155px;
 	width: 155px;
+	border: 1px solid #ababab;
+}
+.fileUpload > .icon-upload{
+	margin: 0 9px;
+	font-size:150px;
+	height: 100%;
+	width: 100%;
+	color: #ababab;
+}
+.fileUpload:hover > .icon-upload{
+	color: #878787;
 }
 .fileUpload input.upload {
 	position: absolute;
 	top: 0;
-
-
 	padding: 0;
 	font-size: 20px;
 	cursor: pointer;
