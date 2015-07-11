@@ -1,26 +1,33 @@
-/*****************************************************
- * Clase JavaScript MAIN
+/******************************************************************
+ * 
+ * Clase JavaScript MAIN Basado en cwf.main
  * v1.0.0
- * Dependencias: jquery
- * Derechos Reservados (c) 2014 INTELITI SOLUCIONES C.A.
- * Basado en cwf.main
+ * 
+ * Clase principal JavaScript del framework if.
+ * 
+ * Dependencias: Framework JQuery
+ * 
+ * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
- *****************************************************/
+ * 
+ *****************************************************************/
 
 var IF_MAIN = {
-	//customize
-	//codeigniter index.php url
+	//Customize
+	//Codeigniter index.php url
 	CI_INDEX: '',
 	DATEPICKER_FORMAT: 'dd/mm/yy',
 	CANVAS_SELECTOR: '#canvas',
 	INVALID_BROWSER_URL: '',
 	SESSION_CHECKER_URL: '',
-	//
 	//---------------------------------------
 	//dont touch anything below here!
 
 	CANVAS_LOCK: 0,
 	UNSAVED_DATA: 0,
+	
+	//-----------------------------------------------------------------
+	
 	init: function(cnf)
 	{
 		if (!cnf) cnf = {};
@@ -42,62 +49,109 @@ var IF_MAIN = {
 		$(IF_MAIN.CANVAS_SELECTOR).height(bodyH);
 	}
 
+	//-----------------------------------------------------------------
+
+	/*
+	* ajax
+	*
+	* Funcion para realizar solicitudes ajax. 
+	* Depende de libreria jQuery.
+	*
+	* @param cnf objeto de configuracion con pares clave/valor
+	* ver: http://api.jquery.com/jQuery.ajax/
+	*/
 	, ajax: function(cnf)
 	{
 		cnf.type = 'POST';
+		
 		if (!cnf.dataType)
-			cnf.dataType = 'json';
+		{
+			 cnf.dataType = 'json';
+		}
+		
 		cnf.url = cnf.url || IF_MAIN.CI_INDEX + cnf.controller;
 		cnf.success = cnf.callback;
 
-		$.ajax(cnf);
+		$.ajax(cnf);		
 	}
 
+	//-----------------------------------------------------------------
 	//canvas monitor
+	//-----------------------------------------------------------------
+	
 	, canvasLock: function()
 	{
 		IF_MAIN.CANVAS_LOCK++;
 	}
+	
+	//-----------------------------------------------------------------
+	
 	, canvasUnlock: function()
 	{
 		IF_MAIN.CANVAS_LOCK--;
 		if (IF_MAIN.CANVAS_LOCK < 0)
 			IF_MAIN.CANVAS_LOCK = 0;
 	}
+	
+	//-----------------------------------------------------------------
+	
 	, canvasLocked: function()
 	{
 		return IF_MAIN.CANVAS_LOCK > 0;
 	}
+	
+	//-----------------------------------------------------------------
+	
 	, canvasShowLoading: function()
 	{
 		$(IF_MAIN.CANVAS_SELECTOR).empty()
 				.append('<div class="cwfComposLoaderL"></div>')
 	}
+	
+	
+	//-----------------------------------------------------------------
+	//
+	//-----------------------------------------------------------------
 
+	/*
+	* loadCompos
+	*
+	* Funcion para cargar datos (composite) desde el servidor 
+	* hacia un objetivo especifico en la vista (div html).
+	* Depende de libreria jQuery.
+	*
+	* @param objetc cnf		objeto de configuracion con pares clave/valor
+	*	cnf.target:			identificador de objetivo (#div)
+	* 
+	* ver: http://api.jquery.com/load/
+	*/
 	, loadCompos: function(cnf)
 	{
-		var
-				loaderCls = 'cwfComposLoader' + (cnf.loaderSize || 'L')
-				, $target = $(cnf.target).empty()
-				.html('<div class="' + loaderCls + '">&nbsp;</div>')
+		var $target	= 
+			$(cnf.target)
+				.empty()
 				.load(
-				cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
-				cnf.data || null,
-				function(resp)
-				{
-					if (IF_USER.browser.name != 'msie')
+					cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
+					cnf.data || null,
+					function(r)
 					{
-						$target.css('display', 'none').fadeIn(175);
-					}
-					//$target.cwfForm();
+						//todos menos Internet Explorer
+						if (IF_USER.browser.name !== 'msie')
+						{
+							$target.css('display', 'none').fadeIn(200);
+						}
 
-					if (cnf.callback)
-						cnf.callback(resp);
-				}
-		)
-				;
+						if (cnf.callback)
+						{
+							cnf.callback(r);
+						}
+					}
+				)
+		;
 		return 1;
 	}
+	
+	//-----------------------------------------------------------------
 	
 	//Revisar depende de GWF_DIALOG y GWF_HOTKEY
 	, loadCanvas: function(cnf)
@@ -127,6 +181,8 @@ var IF_MAIN = {
 			GWF_DIALOG.close();
 	}
 
+	//-----------------------------------------------------------------
+
 	, prepareFormForUnsavedData: function(sel)
 	{
 		$(sel + ' input,' + sel + ' textarea')
@@ -134,6 +190,8 @@ var IF_MAIN = {
 				;
 		$(sel + ' select').change(MAIN.setUnsavedData);
 	}
+
+	//-----------------------------------------------------------------
 
 	//Revisar porque depende de CWF_DIALOG
 	, confirmUnsavedData: function(callback, cbParams, scope)
@@ -160,6 +218,8 @@ var IF_MAIN = {
 			callback.call(scope || window, cbParams);
 	}
 
+	//-----------------------------------------------------------------
+
 	, setUnsavedData: function(status)
 	{
 		if (typeof status == 'object' && status.which && status.which == 27)
@@ -171,6 +231,8 @@ var IF_MAIN = {
 			var status = true;
 		IF_MAIN.UNSAVED_DATA = status;
 	}
+
+	//-----------------------------------------------------------------
 
 	//revisar depende de CWF_L10N
 	, serialize: function(selector, returnAsStr, valueSeparator, pairSeparator)
@@ -263,6 +325,10 @@ var IF_MAIN = {
 
 		return returnAsStr ? str.join(pairSeparator) : obj;
 	}
+
+	//-----------------------------------------------------------------
+
+	
 	/**
 	 ,	showFormErrors: function(sel, obj, showAlert)
 	 {
@@ -321,6 +387,9 @@ var IF_MAIN = {
 	 
 	 }/**/
 
+
+	//-----------------------------------------------------------------
+
 	, startSessionChecker: function(time)
 	{
 		if (!time)
@@ -344,6 +413,10 @@ var IF_MAIN = {
 	}
 };
 
+//-----------------------------------------------------------------
+//
+//-----------------------------------------------------------------
+
 Date.prototype.toISO8601 = function()
 {
 	var day = this.getDate(), mon = this.getMonth() + 1;
@@ -354,6 +427,9 @@ Date.prototype.toISO8601 = function()
 	return this.getFullYear() + '-' + mon + '-' + day;
 };
 
+/*
+ * 
+ */
 var IF_USER = {};
 (function()
 {

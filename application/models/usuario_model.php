@@ -71,41 +71,43 @@ class Usuario_Model extends _If_Model
 	/*
 	 * validar
 	 * 
-	 * Validamos que el usuario existe
+	 * Validamos que el usuario existe. Si no existe retorna FALSE 
+	 * Si existe devuelve el usuario. Si el parametro $clave no es 
+	 * pasado por parametro solo se valida el nombre de usuario.
 	 * 
-	 * Si no existe retorna FALSE
-	 * Si existe devuelve el usuario
-	 * 
-	 * $usuario: nombre del usuario a validar (si se pasa 
-	 * solo este parametro se valida que exista un usuario 
-	 * con ese nombre)
-	 * $clave: clave de usuario a validar
+	 * @param string $usuario	nombre del usuario a validar 
+	 * @param string $clave		clave de usuario a validar
+	 * @return boolean o objetc
 	 */
 	public function validar($usuario, $clave = NULL)
 	{
-		$D = new stdClass();	//DATA
-		
-		if(!empty($usuario))
-		{
-			$usuario = $this->sanitize($usuario);
-			$D = array('usuario' => $usuario);
-			 
-			if(!empty($clave))
-			{
-				$clave = $this->sanitize($clave);
-				$D = array_merge($D, array('clave', $clave));
-			}
-		}
-		else
-		{
-			return FALSE;
+		if(empty($usuario))
+		{ 
+			return FALSE; 
 		}
 		
-		$r = $this->db->get_where('usuarios', $D);	//result
+		$D = array('usuario' => $this->sanitize($usuario));
+
+		if(!empty($clave))
+		{
+			$D = array_merge(
+					$D, 
+					array('clave' => $this->sanitize($clave))
+					);
+		}
 		
-		return count($r->row()) <= 0 ? FALSE : $r->row();
+		$r = $this->db->get_where('usuarios', $D);
+		
+		return count($r->row()) <= 0 
+					? FALSE : 
+					$r->row_object();
 	}
 	
+	
+	/*public function increment_acceso_invalido()
+	{
+		
+	}*/
 	// ------------------------------------------------------------------------
 	
 	/*

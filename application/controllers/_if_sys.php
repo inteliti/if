@@ -1,5 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /******************************************************************
+ * 
  * Clase _If_Sys
  * 
  * Clase que define funciones de sistema como: autenticacion 
@@ -10,6 +11,7 @@
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
+ *
  *****************************************************************/
 
 include APPPATH . 'core/_if_controller.php';
@@ -31,12 +33,10 @@ class _If_Sys extends _If_Controller {
 	 * publica login (definida en esta clase) sino se llama a la 
 	 * vista correspondiente a traves de la funcion tmpl de la clase 
 	 * _If_Controller.
-	 * 
-	 * No recibe parametros
 	 */
 	public function index()
 	{
-		$this->login();
+		$this->_login();
 	}
 	
 	//-----------------------------------------------------------------
@@ -49,37 +49,37 @@ class _If_Sys extends _If_Controller {
 	 * Funcion publica que llama a la vista login. Recupera las
 	 * varibles enviadas a traves del metodo post y delega la 
 	 * validacion de usuarios en el sistema.
-	 * 
-	 * No recibe parametros
 	 */
 	public function login()
 	{
-		$D	= new stdClass();
-		$in	= &$this->input;
+		echo 1;
 		
-		if(empty($in->post()))
+		
+		/*$D = new stdClass();
+		
+		d($this->input->raw_input_stream);
+
+		if(empty($this->input->post()))
 		{
 			$this->_login();
-		}
-		else
-		{
-			if(!empty($in->post('usuario')) && empty($in->post('md5')))
-			{
-				$D->usuario = $in->post('usuario');
-				
-				$r = $this->USUARIO->validar($D->usuario);
-				
-				$D->is_usuario = !$r ? FALSE : TRUE;
-				//intentos
-			}
-			else
-			{
-				echo $in->post('md5');
-			}
-			
-			$this->_login($D);
+			return;
 		}
 		
+		//Nombre de usuario invalido redirige a login
+		if(
+			$this->input->post('is_valid') !== NULL
+				&& !$this->input->post('is_valid')
+		)
+		{
+			$D->error = 'Usuario inválido.';
+			$this->_login($D);
+			return;
+		}
+
+		$D->ONLY_NAME_USER = count($this->input->post()) === 1 
+								&& !empty($this->input->post('usuario'));
+		
+		$this->_validar($D);*/
 	}
 	
 	//-----------------------------------------------------------------
@@ -90,7 +90,7 @@ class _If_Sys extends _If_Controller {
 	 * Metodo privado para cargar el template relacionado al login 
 	 * en la aplicacion
 	 * 
-	 * $D: datos para la vista
+	 * @param mixed $D		datos para la vista
 	 */
 	private function _login($D = NULL)
 	{
@@ -105,20 +105,76 @@ class _If_Sys extends _If_Controller {
 	/*
 	 * _validar
 	 *  
-	 * Funcion privada que valida el acceso de usuarios.
+	 * Funcion privada que autentica el acceso de usuarios al sistema. 
+	 * Si el parametro $clave no es pasado por parametro solo se valida 
+	 * el nombre de usuario.
 	 * 
-	 * $usuario: nombre de usuario del sistema.
-	 * $clave: clave de acceso del usuario. Si no es pasada por 
-	 * parametro solo se valida el nombre de usuario.
+	 * @param mixed $D			parametro por referencia
 	 */
-	private function _validar($usuario, $clave = NULL)
+	private function _validar(&$D)
 	{
-		$this->load->model('Usuario_Model', 'USR');
+		$this->load->model('Usuario_Model', 'USUARIO');
 		
-		$usuario = $this->input->post('usuario');
-		
-		$r = $this->usuario->validate_user_name($usuario);
+		if($D->ONLY_NAME_USER)
+		{
+			$D->usuario = $this->input->post('usuario');
+			
+			$r = $this->USUARIO->validar($this->input->post('usuario'));
+			
+			if($r === FALSE)	//nombre de usuario invalido
+			{
+				$D->is_valid = FALSE;
+				$D->enable_captcha = TRUE;
+			}
+			else				//nombre de usuario valido
+			{
+				$D->is_valid = TRUE;
+				$D->enable_captcha = $this->_is_max_acceso_invalid(
+											(int) $r->acceso_invalid);
+			}
+			
+			$this->_login($D);
+		}
+		else
+		{
+			$D	= new stdClass();
+			
+			$r = $this->USUARIO->validar(
+					$this->input->post('usuario'), 
+					$this->input->post('md5')
+				);
+			
+			if($r === FALSE)	//usuario invalido
+			{
+				$D->error = 'Usuario inválido.';
+			}
+			else				//usuario valido
+			{
+				$D->error = 'Usuario válido.';
+			}
+			
+			$this->_login($D);
+		}
 	}
+	
+	private function _is_max_acceso_invalid($accesos_invalid)
+	{
+		//LLAMAR FUNCION QUE RETORNA VALOR MAX
+		return $accesos_invalid >= 3 ? TRUE : FALSE;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -161,5 +217,10 @@ class _If_Sys extends _If_Controller {
 	{
 		$this->tmpl('demos/masterdetail');
 	}
+	
+	
+	
+	
+	
 }
 
