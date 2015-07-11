@@ -14,11 +14,11 @@
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap.min.css' />
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap-theme.min.css' />
 	
-	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/md5.js'></script>
-
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>
+	
 	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/login.css' />
 </head>
 <body>
@@ -113,9 +113,12 @@
 	<div id="div" style="border: red dashed 1px;"></div>
 	
 	<script type="text/javascript">
-		
+			
 		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
-		
+		IF_MAIN.INVALID_BROWSER_URL = 
+				IF_MAIN.CI_INDEX + '_if_sys/browser_invalid';
+		IF_MAIN.init();
+				
 		$('input').keyup(function(e){
 			if(e.which === 13)
 			{ 

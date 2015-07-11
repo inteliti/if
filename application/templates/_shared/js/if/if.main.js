@@ -13,36 +13,48 @@
  *****************************************************************/
 
 var IF_MAIN = {
-	//Customize
-	//Codeigniter index.php url
-	CI_INDEX: '',
+	CI_INDEX: '', //Codeigniter index.php url
 	DATEPICKER_FORMAT: 'dd/mm/yy',
 	CANVAS_SELECTOR: '#canvas',
 	INVALID_BROWSER_URL: '',
 	SESSION_CHECKER_URL: '',
 	//---------------------------------------
-	//dont touch anything below here!
+	
+	//NO hacer modificaciones de aqui para abajo!!!
 
 	CANVAS_LOCK: 0,
 	UNSAVED_DATA: 0,
 	
 	//-----------------------------------------------------------------
 	
+	/*
+	 * init
+	 * 
+	 * Instrucciones de inicializacion 
+	 * 
+	 * @param objetc cnf		variable de configuracion 
+	 *							con pares clave/valor
+	 */
 	init: function(cnf)
 	{
 		if (!cnf) cnf = {};
 
 		//test if the browser is compatible
 		var b = IF_USER.browser, n = b.name, v = b.ver;
-		if (
-				!(n == 'chrome')
-				&& !(n == 'firefox' && v >= 3.5)
-				)
+		
+		//Solo chrome o firefox >= v3.5
+		if (!(n === 'chrome') && !(n === 'firefox' && v >= 3.5))
 		{
-			location.href = INVALID_BROWSER_URL + '/' + n + '/' + v;
-			return;
+			location.href = IF_MAIN.INVALID_BROWSER_URL + '/' + n + '/' + v;
+			return false;
 		}
-		IF_MAIN.startSessionChecker(cnf.sessionTimeout);
+		else
+		{
+	
+		}
+		
+		
+		//IF_MAIN.startSessionChecker(cnf.sessionTimeout);
 
 		//prepare canvas
 		var bodyH = $("#body").height();
@@ -57,7 +69,8 @@ var IF_MAIN = {
 	* Funcion para realizar solicitudes ajax. 
 	* Depende de libreria jQuery.
 	*
-	* @param cnf objeto de configuracion con pares clave/valor
+	 * @param objetc cnf		variable de configuracion 
+	 *							con pares clave/valor
 	* ver: http://api.jquery.com/jQuery.ajax/
 	*/
 	, ajax: function(cnf)
@@ -120,8 +133,9 @@ var IF_MAIN = {
 	* hacia un objetivo especifico en la vista (div html).
 	* Depende de libreria jQuery.
 	*
-	* @param objetc cnf		objeto de configuracion con pares clave/valor
-	*	cnf.target:			identificador de objetivo (#div)
+	 * @param objetc cnf		variable de configuracion 
+	 *							con pares clave/valor
+	*		cnf.target:			identificador de objetivo (#div)
 	* 
 	* ver: http://api.jquery.com/load/
 	*/
@@ -427,35 +441,44 @@ Date.prototype.toISO8601 = function()
 	return this.getFullYear() + '-' + mon + '-' + day;
 };
 
+//browser list - popular first
+//opmini first thatn opera: useragentstring.com/pages/Opera%20Mini/
+//version = safari, put last: useragentstring.com/pages/Safari/
+
 /*
  * 
  */
-var IF_USER = {};
+var IF_USER_AGENT = {};
 (function()
 {
-	var NAV = navigator.userAgent
-
-			//browser list - popular first
-			//opmini first thatn opera: useragentstring.com/pages/Opera%20Mini/
-			//version = safari, put last: useragentstring.com/pages/Safari/
-			, USER_BROWSER = "msie,firefox,chrome,opera mini,opera,konqueror,epiphany,fennec,version"
+	var 
+		X = null, i,
+		NAV = navigator.userAgent,
+		USER_BROWSER = 
+			"msie,firefox,chrome,opera mini,opera," + 
+			"konqueror,epiphany,fennec,version"
 			.split(",")
-			, X1, X2
-			;
-	for (X1 = 0; X1 < USER_BROWSER.length; )
-		if (
-				X2 = (
-				new RegExp(USER_BROWSER[X1++] + "[ /](\\d+\\.\\d+)", "i")
-				).test(NAV)
-				)
+	;
+	
+	for(i = 0; i < USER_BROWSER.length;)
+	{
+		X = new RegExp(USER_BROWSER[i++] + "[ /](\\d+\\.\\d+)", "i");
+		
+		if(X.test(NAV))
+		{
 			break;
+		}
+	}
+	i--;
 
-	X1--;
-
-	IF_USER.browser = X2 ? {
-		//safari fix
-		name: USER_BROWSER[X1] == 'version' ? 'safari' : USER_BROWSER[X1]
-				,
-		ver: RegExp.$1
-	} : {};
+	IF_USER_AGENT.browser = X 
+	?	
+		{
+			name: USER_BROWSER[i] === 'version' 
+				? 'safari' 
+				: USER_BROWSER[i],
+			ver: RegExp.$1
+		} 
+	:	
+		{};
 })();

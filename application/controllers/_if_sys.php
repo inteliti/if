@@ -10,7 +10,7 @@
  * Dependecias: Clase _If_Controller.
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
- * Para su uso sólo con autorización.
+ * Para su uso solo con autorizacion.
  *
  *****************************************************************/
 
@@ -178,8 +178,19 @@ class _If_Sys extends _If_Controller {
 	
 	
 	
-	
-	
+	/*
+	 * browser_invalid
+	 * 
+	 * Funcion que redirecciona la vista a una pantalla
+	 * de error si el navegador usado es invalido.
+	 * 
+	 * @param string $n		nombre del navegador invalido
+	 * @param string $v		version del navegador invalido
+	 */
+	public function browser_invalid($n, $v)
+	{ 
+		show_error('EL navegador: '.$n.'(Versión: '.$v.') no es válido.'); 
+	}
 	
 	
 	
