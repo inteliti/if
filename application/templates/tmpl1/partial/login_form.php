@@ -1,4 +1,4 @@
-<form id="login" method="post" onsubmit="return false;">
+<form id="login_form" method="post" onsubmit="return false;">
 	<div class="form-group">
 
 		<?php if(empty($usuario)): ?>

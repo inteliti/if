@@ -38,7 +38,7 @@
 	</div>
 	
 	<div id="wrapper-login" class="container">
-		<?php include TMPL_PATH.'login_form.php'; ?>
+		<?php include TMPL_PATH.'partial/login_form.php'; ?>
 	</div>
 	
 	<div class="container-fluid">	
@@ -62,7 +62,7 @@
 				$('#pass').val('');
 			}*/
 			
-			if($('#login').valid())
+			if($('#login_form').valid())
 			{
 				IF_MAIN.loadCompos({
 					target: '#wrapper-login',
@@ -85,7 +85,7 @@
 
 		//validacion de formulario
 		IF_MAIN._form_validate(
-			'#login', 
+			'#login_form', 
 			{
 				rules:{
 					usuario: 'required'

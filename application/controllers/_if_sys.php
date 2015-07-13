@@ -97,7 +97,7 @@ class _If_Sys extends _If_Controller {
 	
 		if($ONLY_FORM)
 		{
-			$view .= '_form';
+			$view = '/partial/login_form';
 		}
 		
 		$this->load->view(
