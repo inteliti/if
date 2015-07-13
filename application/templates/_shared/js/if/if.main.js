@@ -1,6 +1,6 @@
 /******************************************************************
  * 
- * Clase JavaScript MAIN Basado en cwf.main
+ * Clase JavaScript MAIN basado en cwf.main
  * v1.0.0
  * 
  * Clase principal JavaScript del framework if.
@@ -13,12 +13,11 @@
  *****************************************************************/
 
 var IF_MAIN = {
-	CI_INDEX: '', //Codeigniter index.php url
+	
+	CI_INDEX: '',	//Codeigniter index.php url
 	DATEPICKER_FORMAT: 'dd/mm/yy',
 	CANVAS_SELECTOR: '#canvas',
-	INVALID_BROWSER_URL: '',
 	SESSION_CHECKER_URL: '',
-	//---------------------------------------
 	
 	//NO hacer modificaciones de aqui para abajo!!!
 
@@ -38,25 +37,8 @@ var IF_MAIN = {
 	init: function(cnf)
 	{
 		if (!cnf) cnf = {};
-
-		//test if the browser is compatible
-		var b = IF_USER.browser, n = b.name, v = b.ver;
 		
-		//Solo chrome o firefox >= v3.5
-		if (!(n === 'chrome') && !(n === 'firefox' && v >= 3.5))
-		{
-			location.href = IF_MAIN.INVALID_BROWSER_URL + '/' + n + '/' + v;
-			return false;
-		}
-		else
-		{
-	
-		}
-		
-		
-		//IF_MAIN.startSessionChecker(cnf.sessionTimeout);
-
-		//prepare canvas
+		//adaptando altura de canvas a <body>
 		var bodyH = $("#body").height();
 		$(IF_MAIN.CANVAS_SELECTOR).height(bodyH);
 	}
@@ -86,6 +68,85 @@ var IF_MAIN = {
 		cnf.success = cnf.callback;
 
 		$.ajax(cnf);		
+	}
+
+	//-----------------------------------------------------------------
+
+	/*
+	* loadCompos
+	*
+	* Funcion para cargar datos (composite) desde el servidor 
+	* hacia un objetivo especifico en la vista (div html).
+	* Depende de libreria jQuery.
+	*
+	 * @param objetc cnf		variable de configuracion 
+	 *							con pares clave/valor
+	*		cnf.target:			identificador de objetivo (#div)
+	* 
+	* ver: http://api.jquery.com/load/
+	*/
+	, loadCompos: function(cnf)
+	{
+		$(cnf.target)
+			.empty()
+			.load(
+				cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
+				cnf.data || null,
+				function(r)
+				{
+					if (cnf.callback)
+					{
+						cnf.callback(r);
+					}
+				}
+			)
+		;
+		return 1;
+	}
+	
+	//-----------------------------------------------------------------
+	
+	//Revisar depende de GWF_DIALOG y GWF_HOTKEY
+	/*
+	 * loadCanvas
+	 * 
+	 * 
+	 * 
+	 * @param objetc cnf		variable de configuracion 
+	 *							con pares clave/valor
+	 */
+	, loadCanvas: function(cnf)
+	{
+		if(IF_MAIN.canvasLocked()) return;
+		
+		IF_MAIN.canvasLock();
+
+		cnf.target = IF_MAIN.CANVAS_SELECTOR;
+
+		//
+		cnf._cb = cnf.callback;
+		cnf.callback = function(r)
+		{
+			IF_MAIN.canvasUnlock();
+			if(typeof cnf._cb == 'function')
+			{
+				cnf._cb(r);
+			}		
+		};
+
+		IF_MAIN.loadCompos(cnf);
+
+		//limpia pasadas hotkeys al actualizar canvas
+		if (typeof IF_HOTKEY != 'undefined')
+		{
+			IF_HOTKEY.clearTempAll();
+		}
+
+		//cierra dialogo si se encuentra abierto
+		if (typeof IF_MODAL != 'undefined')
+		{
+			IF_MODAL.close();
+		}
 	}
 
 	//-----------------------------------------------------------------
@@ -119,80 +180,6 @@ var IF_MAIN = {
 	{
 		$(IF_MAIN.CANVAS_SELECTOR).empty()
 				.append('<div class="cwfComposLoaderL"></div>')
-	}
-	
-	
-	//-----------------------------------------------------------------
-	//
-	//-----------------------------------------------------------------
-
-	/*
-	* loadCompos
-	*
-	* Funcion para cargar datos (composite) desde el servidor 
-	* hacia un objetivo especifico en la vista (div html).
-	* Depende de libreria jQuery.
-	*
-	 * @param objetc cnf		variable de configuracion 
-	 *							con pares clave/valor
-	*		cnf.target:			identificador de objetivo (#div)
-	* 
-	* ver: http://api.jquery.com/load/
-	*/
-	, loadCompos: function(cnf)
-	{
-		var $target	= 
-			$(cnf.target)
-				.empty()
-				.load(
-					cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
-					cnf.data || null,
-					function(r)
-					{
-						//todos menos Internet Explorer
-						if (IF_USER.browser.name !== 'msie')
-						{
-							$target.css('display', 'none').fadeIn(200);
-						}
-
-						if (cnf.callback)
-						{
-							cnf.callback(r);
-						}
-					}
-				)
-		;
-		return 1;
-	}
-	
-	//-----------------------------------------------------------------
-	
-	//Revisar depende de GWF_DIALOG y GWF_HOTKEY
-	, loadCanvas: function(cnf)
-	{
-		if (IF_MAIN.canvasLocked())
-			return;
-		IF_MAIN.canvasLock();
-
-		cnf.target = IF_MAIN.CANVAS_SELECTOR;
-
-		cnf._cb = cnf.callback;
-		cnf.callback = function(r)
-		{
-			IF_MAIN.canvasUnlock();
-			if (typeof cnf._cb == 'function')
-				cnf._cb(r);
-		};
-
-		IF_MAIN.loadCompos(cnf);
-
-		//clear past view hotkeys
-		if (typeof GWF_HOTKEY != 'undefined')
-			GWF_HOTKEY.clearTempAll();
-
-		//close the dialog if opened
-		if (typeof GWF_DIALOG != 'undefined')
-			GWF_DIALOG.close();
 	}
 
 	//-----------------------------------------------------------------
@@ -425,6 +412,9 @@ var IF_MAIN = {
 			});
 		}, time);
 	}
+	
+	
+	
 };
 
 //-----------------------------------------------------------------
@@ -434,51 +424,9 @@ var IF_MAIN = {
 Date.prototype.toISO8601 = function()
 {
 	var day = this.getDate(), mon = this.getMonth() + 1;
-	if (day < 10)
-		day = '0' + day;
-	if (mon < 10)
-		mon = '0' + mon;
+	
+	if (day < 10) day = '0' + day;
+	if (mon < 10) mon = '0' + mon;
+	
 	return this.getFullYear() + '-' + mon + '-' + day;
 };
-
-//browser list - popular first
-//opmini first thatn opera: useragentstring.com/pages/Opera%20Mini/
-//version = safari, put last: useragentstring.com/pages/Safari/
-
-/*
- * 
- */
-var IF_USER_AGENT = {};
-(function()
-{
-	var 
-		X = null, i,
-		NAV = navigator.userAgent,
-		USER_BROWSER = 
-			"msie,firefox,chrome,opera mini,opera," + 
-			"konqueror,epiphany,fennec,version"
-			.split(",")
-	;
-	
-	for(i = 0; i < USER_BROWSER.length;)
-	{
-		X = new RegExp(USER_BROWSER[i++] + "[ /](\\d+\\.\\d+)", "i");
-		
-		if(X.test(NAV))
-		{
-			break;
-		}
-	}
-	i--;
-
-	IF_USER_AGENT.browser = X 
-	?	
-		{
-			name: USER_BROWSER[i] === 'version' 
-				? 'safari' 
-				: USER_BROWSER[i],
-			ver: RegExp.$1
-		} 
-	:	
-		{};
-})();

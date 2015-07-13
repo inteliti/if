@@ -13,13 +13,15 @@
 	
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap.min.css' />
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap-theme.min.css' />
+	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/login.css' />
 	
-	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/md5.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.hotkeys.js'></script>
 	
-	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/login.css' />
+	<?php include PLUGINS_PATH.'if.modal/_loader.php'; ?>
 </head>
 <body>
 	<div class="container-fluid">
@@ -110,13 +112,11 @@
 		</div>	
 	</div>
 	
-	<div id="div" style="border: red dashed 1px;"></div>
+	<div id="canvas" style="border: red dashed 1px;"></div>
 	
 	<script type="text/javascript">
 			
 		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
-		IF_MAIN.INVALID_BROWSER_URL = 
-				IF_MAIN.CI_INDEX + '_if_sys/browser_invalid';
 		IF_MAIN.init();
 				
 		$('input').keyup(function(e){
@@ -128,6 +128,8 @@
 		
 		function submit()
 		{
+			IF_MODAL.alert('aqui va un mensaje!');
+			
 			/*if($('#pass').val())
 			{
 				var md5 = hex_md5($('#pass').val());
@@ -147,11 +149,12 @@
 		
 			//alert($('#form-login').serialize());
 			
-			IF_MAIN.loadCompos({
-				controller: '_if_sys/login',
-				target: '#div'
-			});
+			/*IF_MAIN.loadCanvas({
+				controller: '_if_sys/login'
+			});*/
 		}
+		
+		//IF_HOTKEY.registerTemp('n', submit);
 	</script>
 	
 </body>

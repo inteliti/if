@@ -1,26 +1,44 @@
-/*****************************************************
+/******************************************************************
+ * 
  * Clase JavaScript para utilizar ventanas modales
  * v1.0.0
- * Dependencias: jquery.nestable
- * Derechos Reservados (c) 2014 INTELITI SOLUCIONES C.A.
+ * 
  * Basado en utilidades de Bootstrap
+ * Dependencias: jquery.nestable
+ * 
+ * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
- *****************************************************/
+ * 
+ *****************************************************************/
+
 var IF_MODAL =
 {
+	/*
+	 * 
+	 */
 	_setSm: function()
 	{
 		$('#myModal > div').removeClass('modal-lg');
 		$('#myModal > div').addClass('modal-sm');
 	}
-	,
-	_setLg: function()
+	
+	//-----------------------------------------------------------------
+	
+	/*
+	 * 
+	 */
+	,_setLg: function()
 	{
 		$('#myModal > div').removeClass('modal-sm');
 		$('#myModal > div').addClass('modal-lg');
 	}
-	,
-	alert: function(m)
+	
+	//-----------------------------------------------------------------
+	
+	/*
+	 * 
+	 */
+	,alert: function(m)
 	{
 		IF_MODAL._setSm();
 		
@@ -38,7 +56,12 @@ var IF_MODAL =
 		
 		$('#myModal').modal('show');
 	}
-
+	
+	//-----------------------------------------------------------------
+	
+	/*
+	 * 
+	 */
 	,confirm: function(m,callback)
 	{
 		IF_MODAL._setSm();
@@ -65,6 +88,11 @@ var IF_MODAL =
 		
 	}
 	
+	//-----------------------------------------------------------------
+	
+	/*
+	 * 
+	 */
 	,close: function()
 	{
 		
@@ -93,6 +121,11 @@ var IF_MODAL =
 		$('#alerts').html('');
 	}
 	
+	//-----------------------------------------------------------------
+	
+	/*
+	 * 
+	 */
 	,ajaxCntrllr: function (cntrllr)
 	{
 		IF_MODAL._setLg();

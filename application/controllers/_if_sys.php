@@ -21,6 +21,8 @@ class _If_Sys extends _If_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		
+		$this->is_browser_compatible();
 	}
 	
 	//-----------------------------------------------------------------
@@ -53,7 +55,6 @@ class _If_Sys extends _If_Controller {
 	public function login()
 	{
 		echo 1;
-		
 		
 		/*$D = new stdClass();
 		
@@ -167,33 +168,7 @@ class _If_Sys extends _If_Controller {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * browser_invalid
-	 * 
-	 * Funcion que redirecciona la vista a una pantalla
-	 * de error si el navegador usado es invalido.
-	 * 
-	 * @param string $n		nombre del navegador invalido
-	 * @param string $v		version del navegador invalido
-	 */
-	public function browser_invalid($n, $v)
-	{ 
-		show_error('EL navegador: '.$n.'(Versión: '.$v.') no es válido.'); 
-	}
-	
-	
-	
+
 	
 	
 	
@@ -230,7 +205,40 @@ class _If_Sys extends _If_Controller {
 	}
 	
 	
+	//-----------------------------------------------------------------
+	//BROWSER
+	//-----------------------------------------------------------------
 	
+	/*
+	 * is_browser_compatible
+	 * 
+	 * Funcion que obtiene datos del navegador (cliente) y realiza 
+	 * las instrucciones correspondientes  entre los diferentes tipos 
+	 * y plataformas.
+	 
+	 * Ver: http://www.codeigniter.com/user_guide/libraries/user_agent.html
+	 */
+	private function is_browser_compatible()
+	{
+		$this->load->library('user_agent');
+		
+		//solo firefox o chrome
+		if (
+			$this->agent->is_browser() 
+			&& !($this->agent->browser() === 'Firefox'
+			|| $this->agent->browser() === 'Chrome')
+		)
+		{
+			show_error(
+				'Navegador '.
+				$this->agent->browser().' '.
+				$this->agent->version().
+				' no es compatible con esta aplicación.'
+			);
+			
+			return FALSE;
+		}		
+	}
 	
 	
 }
