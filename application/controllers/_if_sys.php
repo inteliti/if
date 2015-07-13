@@ -164,6 +164,17 @@ class _If_Sys extends _If_Controller {
 		}
 	}
 	
+	//-----------------------------------------------------------------
+	
+	/*
+	 * _is_max_acceso_invalid
+	 * 
+	 * Determina si el numero de acceso invalidos es mayor al 
+	 * maximo permitido
+	 * 
+	 * @param int $accesos_invalid numero de accesos invalidos
+	 * @return boolean
+	 */
 	private function _is_max_acceso_invalid($accesos_invalid)
 	{
 		//LLAMAR FUNCION QUE RETORNA VALOR MAX

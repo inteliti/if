@@ -15,7 +15,7 @@
 	
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap.min.css' />
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap-theme.min.css' />
-	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/login.css' />
+	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/app.css' />
 	
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
@@ -51,13 +51,6 @@
 	
 	<script type="text/javascript">
 		
-		//validacion de formulario
-		$('#login').validate({
-			rules:{
-				usuario: 'required'
-			}
-		});
-		
 		function submit()
 		{
 			//IF_MODAL.alert('aqui va un mensaje!');
@@ -87,8 +80,20 @@
 			return false; 
 		});
 
+		//
 		IF_HOTKEY.registerTemp('enter', submit);
 
+		//validacion de formulario
+		IF_MAIN._form_validate(
+			'#login', 
+			{
+				rules:{
+					usuario: 'required'
+				}
+			}
+		);
+		
+		//configuracion inicial
 		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
 		IF_MAIN.init();
 	</script>

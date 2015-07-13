@@ -1,4 +1,24 @@
 
+body{
+	
+}
+
+/*****************************************************/
+/*LOGIN*/
+/*****************************************************/
+#wrapper-login{
+	width: 350px;
+	height: auto;
+	min-height: 30px;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+#footer{
+	font-size: .8em;
+	color: lightgray;
+}
+
 #navbar .container, #canvas.container{ width: 100%; }
 #canvas.container{
 	width: 100%;
@@ -9,9 +29,23 @@
 }
 
 
-//-----------------------------------------------------------------
-//LOADING
-//-----------------------------------------------------------------
-.loading{
-	background: #fff url('../img/loading.gif');
+/*****************************************************/
+/*ESTILOS VALIDACION DE FORMULARIOS*/
+/*****************************************************/
+label.invalid{
+	color: red;
+	font-size: 11px;
+	font-weight: normal;
 }
+input.invalid{
+	border: red solid 1px;
+}
+
+
+/*****************************************************/
+/*LOADING*/
+/*****************************************************/
+.loading{
+	background: #fff url('../img/loading.gif') no-repeat 50% 50% !important;
+}
+

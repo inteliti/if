@@ -5,7 +5,7 @@
  * 
  * Clase principal JavaScript del framework if.
  * 
- * Dependencias: Framework JQuery
+ * Dependencias: jquery, jquery.validation
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
@@ -17,7 +17,6 @@ var IF_MAIN = {
 	CI_INDEX: '',	//Codeigniter index.php url
 	DATEPICKER_FORMAT: 'dd/mm/yy',
 	CANVAS_SELECTOR: '#canvas',
-	SESSION_CHECKER_URL: '',
 	
 	//NO hacer modificaciones de aqui para abajo!!!
 
@@ -75,12 +74,12 @@ var IF_MAIN = {
 	/*
 	* loadCompos
 	*
-	* Funcion para cargar datos (composite) desde el servidor 
-	* hacia un objetivo especifico en la vista (div html).
-	* Depende de libreria jQuery.
+	* Cargar datos (composite) desde el servidor hacia un objetivo 
+	* especifico en la vista (div html). Depende de libreria jQuery.
 	*
 	 * @param objetc cnf		variable de configuracion 
 	 *							con pares clave/valor
+	*		
 	*		cnf.target:			identificador de objetivo (#div)
 	* 
 	* ver: http://api.jquery.com/load/
@@ -109,11 +108,10 @@ var IF_MAIN = {
 	
 	//-----------------------------------------------------------------
 	
-	//Revisar depende de GWF_DIALOG y GWF_HOTKEY
 	/*
 	 * loadCanvas
 	 * 
-	 * 
+	 * Carga una vista en el canvas de la aplicacion.
 	 * 
 	 * @param objetc cnf		variable de configuracion 
 	 *							con pares clave/valor
@@ -153,7 +151,7 @@ var IF_MAIN = {
 	}
 
 	//-----------------------------------------------------------------
-	//canvas monitor
+	//MONITOR DEL CANVAS
 	//-----------------------------------------------------------------
 	
 	, canvasLock: function()
@@ -235,201 +233,25 @@ var IF_MAIN = {
 			var status = true;
 		IF_MAIN.UNSAVED_DATA = status;
 	}
-
-	//-----------------------------------------------------------------
-
-	//revisar depende de CWF_L10N
-	, serialize: function(selector, returnAsStr, valueSeparator, pairSeparator)
-	{
-		//BUGFIX
-		//takes out focus from any input to allow blur() execution
-		//on inputs that need it like inputs with [xtype]
-		$("<a href=#></a>")
-				.appendTo('body').focus()
-				.css({
-			position: 'absolute',
-			visibility: 'hidden',
-			left: '0px'
-		})
-				.remove()
-				;
-
-		if (!valueSeparator)
-			valueSeparator = '=';
-		if (!pairSeparator)
-			pairSeparator = '&';
-
-		var obj = {}, str = [], arr;
-
-		arr = $(selector + ' input,' + selector + ' select,' + selector + ' textarea')
-				.toArray()
-				;
-		for (var i = 0, name, value, curr, $curr, l = arr.length; i < l; i++)
-		{
-			curr = arr[i];
-			$curr = $(curr);
-
-			if ($(curr).hasClass('exclude'))
-			{
-				continue;
-			}
-
-			//just ignore not checked radios and checkboxes
-			if ((curr.type == 'radio' || curr.type == 'checkbox') && !curr.checked)
-			{
-				continue;
-			}
-
-			name = curr.name;
-
-			//jquery ui datepicker?
-			if ($curr.hasClass('hasDatepicker'))
-			{
-				var type = curr.getAttribute('type');
-				if(type=="datetime")
-				{
-					value = $curr.datetimepicker("getDate");
-					function pad(number) {
-						if ( number < 10 )
-						{
-							return '0' + number;
-						}
-						return number;
-					}
-					value = value.getFullYear() +
-					'-' + pad( value.getMonth() + 1 ) +
-					'-' + pad( value.getDate() ) +
-					' ' + pad( value.getHours() ) +
-					':' + pad( value.getMinutes() ) +
-					':' + pad( value.getSeconds() );
-				}
-				else
-				{
-					value = $curr.datepicker("getDate");
-					value = value ? value.toISO8601() : '';
-				}
-			}
-			else
-			{
-				value = $(curr).val();
-				var xtype = curr.getAttribute('xtype');
-
-				if (xtype == 'numeric')
-				{
-					value = CWF_L10N.number2Float(value);
-				}
-				if (xtype == 'currency')
-				{
-					value = CWF_L10N.currency2Float(value);
-				}
-			}
-			obj[name] = value;
-			str.push(name + valueSeparator + (value));
-		}
-
-		return returnAsStr ? str.join(pairSeparator) : obj;
-	}
-
-	//-----------------------------------------------------------------
-
 	
-	/**
-	 ,	showFormErrors: function(sel, obj, showAlert)
-	 {
-	 var $sel = $(sel);
-	 
-	 //process errors only once !
-	 if ($sel.attr('errorsShowed'))
-	 return;
-	 
-	 for (var i in obj)
-	 {
-	 var $input = $(sel + ' [name=' + i + ']');
-	 
-	 $input
-	 .addClass('error')
-	 .after('<div class=errMsg>' + obj[i] + '</div>')
-	 ;
-	 $input.prev('.tagLabel').addClass('error');
-	 }
-	 $sel.attr('errorsShowed', 1);
-	 
-	 if (typeof showAlert == 'undefined')
-	 showAlert = 1;
-	 if (showAlert)
-	 {
-	 CWF_DIALOG.alert(
-	 'Se encontraron algunos errores, por favor verifique.'
-	 , {
-	 modal: 1
-	 }
-	 );
-	 }
-	 }
-	 
-	 ,	markError: function(sel, msg)
-	 {
-	 $(sel).addClass('error').after('<div class=errMsg>' + msg + '</div>')
-	 }
-	 
-	 ,	clearFormErrors: function(sel)
-	 {
-	 $(sel)
-	 .removeAttr('errorsShowed')
-	 .find('.error')
-	 .removeClass('error')
-	 .next('.errMsg')
-	 .remove()
-	 ;
-	 $(sel).prev('.tagLabel').removeClass('error');
-	 }
-	 
-	 ,	disableForm: function(sel)
-	 {
-	 $(sel + ' input,' + sel + ' textarea, ' + sel + ' select')
-	 .attr('disabled', 'disabled');
-	 
-	 }/**/
-
-
 	//-----------------------------------------------------------------
-
-	, startSessionChecker: function(time)
+	//VALIDACION DE FORMULARIOS
+	//-----------------------------------------------------------------	
+	
+	/*
+	 * _form_validate
+	 * 
+	 * Establece validacion de un formulario.
+	 * 
+	 * @param string form	identificador de formulario a validar
+	 * @param objetc cnf	varible de configuracion jquery.validation
+	 */
+	, _form_validate: function(form, cnf)
 	{
-		if (!time)
-			time = 305000;//5min 5sec
-
-		IF_MAIN._sessChecker = window.setInterval(function()
-		{
-			IF_MAIN.ajax({
-				controller: IF_MAIN.SESSION_CHECKER_URL
-						,
-				callback: function(r)
-				{
-					if (r != 1)
-					{
-						window.clearInterval(IF_MAIN._sessChecker);
-						location.href = IF_MAIN.CI_INDEX + '?session_dead=1';
-					}
-				}
-			});
-		}, time);
+		//trabajando...
+		cnf.errorClass = 'invalid';
+		
+		$(form).validate(cnf);
 	}
 	
-	
-	
-};
-
-//-----------------------------------------------------------------
-//
-//-----------------------------------------------------------------
-
-Date.prototype.toISO8601 = function()
-{
-	var day = this.getDate(), mon = this.getMonth() + 1;
-	
-	if (day < 10) day = '0' + day;
-	if (mon < 10) mon = '0' + mon;
-	
-	return this.getFullYear() + '-' + mon + '-' + day;
 };
