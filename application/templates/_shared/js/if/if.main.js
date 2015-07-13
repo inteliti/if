@@ -89,6 +89,7 @@ var IF_MAIN = {
 	{
 		$(cnf.target)
 			.empty()
+			.addClass('loading')
 			.load(
 				cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
 				cnf.data || null,
@@ -98,6 +99,8 @@ var IF_MAIN = {
 					{
 						cnf.callback(r);
 					}
+					
+					$(this).removeClass('loading');
 				}
 			)
 		;

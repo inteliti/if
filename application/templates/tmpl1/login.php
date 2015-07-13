@@ -11,6 +11,8 @@
 
 	<title>if (inteliti framework)</title>
 	
+	<!--<link rel="icon" type="image/png" href="<?= TMPL_URL; ?>img/favicon.png" />-->
+	
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap.min.css' />
 	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap-theme.min.css' />
 	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/login.css' />
@@ -18,8 +20,11 @@
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/md5.js'></script>
-	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.min.js'></script>
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.additional-methods.min.js'></script>
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.messages_es.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.hotkeys.js'></script>
+	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>	
 	
 	<?php include PLUGINS_PATH.'if.modal/_loader.php'; ?>
 </head>
@@ -32,129 +37,60 @@
 		</div>
 	</div>
 	
-	<?php if(!empty($error)): ?>
-	
-	<div class="container-fluid">
-		<div class="row">
-			<div id="error" class="col-lg-12 text-center bg-danger">
-				<div >
-					<?= $error; ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<?php endif; ?>
-	
 	<div id="wrapper-login" class="container">
-		<form id="form-login" method="post" action="./">
-			<div class="form-group">
-				
-				<?php if(empty($usuario)): ?>
-				
-				<div class="form-group">
-					<input type="text" 
-						   id="usuario" name="usuario" 
-						   class="form-control input-lg" 
-						   placeholder="Nombre de usuario" 
-						   required 
-						   autofocus  />
-				</div>
-				
-				<?php else: ?>
-				
-				<div class="form-group">
-					<input type="password" 
-						   id="pass" 
-						   class="form-control input-lg" 
-						   placeholder="Contraseña" 
-						   required 
-						   autocomplete="off" 
-						   autofocus />
-				</div>
-				
-				<input type="hidden" id="md5" name="md5" value="" />
-				<input type="hidden" id="usuario" name="usuario" value="<?= $usuario; ?>" />
-				<input type="hidden" id="is_valid" name="is_valid" value="<?= $is_valid ? '1': '0'; ?>" />
-				
-				<?php endif; ?>
-				
-				<?php if(!empty($enable_captcha) && $enable_captcha): ?>
-				
-				<!-- CAPTCHA -->
-				
-				<div class="form-group">
-					<input type="text" 
-						   id="captcha" name="captcha"
-						   class="form-control input-lg" 
-						   placeholder="Captcha" 
-						   required 
-						   autocomplete="off" />
-				</div>
-				
-				<?php endif; ?>
-				
-			</div>
-		</form>
-		
-		<button type="button" 
-				class="btn btn-lg btn-primary btn-block" 
-				onclick="submit();">
-			Iniciar sesión
-		</button>
+		<?php include TMPL_PATH.'login_form.php'; ?>
 	</div>
 	
 	<div class="container-fluid">	
 		<div class="row">
 			<div class="col-lg-12 text-center" id="footer">
-				© <?= date('Y'); ?> Inteliti Soluciones, C.A. Todos los derechos reservados. 
+				&copy; <?= date('Y'); ?> Inteliti Soluciones, C.A. Todos los derechos reservados. 
 			</div>
 		</div>	
 	</div>
 	
-	<div id="canvas" style="border: red dashed 1px;"></div>
-	
 	<script type="text/javascript">
-			
-		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
-		IF_MAIN.init();
-				
-		$('input').keyup(function(e){
-			if(e.which === 13)
-			{ 
-				submit();
+		
+		//validacion de formulario
+		$('#login').validate({
+			rules:{
+				usuario: 'required'
 			}
 		});
 		
 		function submit()
 		{
-			IF_MODAL.alert('aqui va un mensaje!');
-			
+			//IF_MODAL.alert('aqui va un mensaje!');
+
 			/*if($('#pass').val())
 			{
 				var md5 = hex_md5($('#pass').val());
 				$('#md5').val(md5);
 				$('#pass').val('');
-			}*/	
+			}*/
 			
-			//$('#form-login').submit();
-			/*IF_MAIN.ajax({
-				controller: 'login',
-				data: $('#form-login').serialize(),
-				callback: function(r)
-				{
-					alert(r);
-				}
-			});*/
-		
-			//alert($('#form-login').serialize());
-			
-			/*IF_MAIN.loadCanvas({
-				controller: '_if_sys/login'
-			});*/
+			if($('#login').valid())
+			{
+				IF_MAIN.loadCompos({
+					target: '#wrapper-login',
+					controller: '_if_sys/login',
+					data: $('#login').serializeArray(),
+					callback: function()
+					{
+						//alert('funciono!');
+					}
+				});
+			}
 		}
-		
-		//IF_HOTKEY.registerTemp('n', submit);
+
+		$('input').keyup(function(){ 
+			return false; 
+		});
+
+		IF_HOTKEY.registerTemp('enter', submit);
+
+		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
+		IF_MAIN.init();
 	</script>
 	
 </body>

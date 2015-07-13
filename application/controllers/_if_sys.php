@@ -22,7 +22,7 @@ class _If_Sys extends _If_Controller {
 	{
 		parent::__construct();
 		
-		$this->is_browser_compatible();
+		$this->_is_browser_compatible();
 	}
 	
 	//-----------------------------------------------------------------
@@ -38,7 +38,7 @@ class _If_Sys extends _If_Controller {
 	 */
 	public function index()
 	{
-		$this->_login();
+		$this->login();
 	}
 	
 	//-----------------------------------------------------------------
@@ -54,20 +54,16 @@ class _If_Sys extends _If_Controller {
 	 */
 	public function login()
 	{
-		echo 1;
-		
-		/*$D = new stdClass();
-		
-		d($this->input->raw_input_stream);
-
 		if(empty($this->input->post()))
 		{
 			$this->_login();
 			return;
 		}
 		
+		$D = new stdClass();
+
 		//Nombre de usuario invalido redirige a login
-		if(
+		/*if(
 			$this->input->post('is_valid') !== NULL
 				&& !$this->input->post('is_valid')
 		)
@@ -75,12 +71,13 @@ class _If_Sys extends _If_Controller {
 			$D->error = 'Usuario inválido.';
 			$this->_login($D);
 			return;
-		}
-
-		$D->ONLY_NAME_USER = count($this->input->post()) === 1 
-								&& !empty($this->input->post('usuario'));
+		}*/
 		
-		$this->_validar($D);*/
+		$this->_validar($D);
+		$this->_login($D, TRUE);
+		
+		
+		
 	}
 	
 	//-----------------------------------------------------------------
@@ -88,16 +85,24 @@ class _If_Sys extends _If_Controller {
 	/*
 	 * _login
 	 * 
-	 * Metodo privado para cargar el template relacionado al login 
-	 * en la aplicacion
+	 * Metodo privado para cargar el template y la vista 
+	 * relacionada al login en la aplicacion
 	 * 
-	 * @param mixed $D		datos para la vista
+	 * @param mixed $D				datos para la vista
+	 * @param boolean $ONLY_FORM	carga solo el formulario si es TRUE
 	 */
-	private function _login($D = NULL)
+	private function _login($D = NULL, $ONLY_FORM = FALSE)
 	{
+		$view = '/login';
+	
+		if($ONLY_FORM)
+		{
+			$view .= '_form';
+		}
+		
 		$this->load->view(
-			'../templates/'.$this->config->item('tmpl').'/login', 
-				(object) $D
+			'../templates/'.$this->config->item('tmpl').$view, 
+			(object) $D
 		);
 	}
 	
@@ -115,12 +120,17 @@ class _If_Sys extends _If_Controller {
 	private function _validar(&$D)
 	{
 		$this->load->model('Usuario_Model', 'USUARIO');
+		$in = &$this->input;
 		
-		if($D->ONLY_NAME_USER)
+		$ONLY_NAME_USER = count($in->post()) === 1 
+							&& !empty($in->post('usuario'));
+		
+		//solo nombre de usuario fue pasado por parametro
+		if($ONLY_NAME_USER)
 		{
-			$D->usuario = $this->input->post('usuario');
+			$D->usuario = $in->post('usuario');
 			
-			$r = $this->USUARIO->validar($this->input->post('usuario'));
+			$r = $this->USUARIO->validar($D->usuario);
 			
 			if($r === FALSE)	//nombre de usuario invalido
 			{
@@ -133,16 +143,14 @@ class _If_Sys extends _If_Controller {
 				$D->enable_captcha = $this->_is_max_acceso_invalid(
 											(int) $r->acceso_invalid);
 			}
-			
-			$this->_login($D);
 		}
-		else
+		else	//validar nombre de usuario y clave
 		{
 			$D	= new stdClass();
 			
 			$r = $this->USUARIO->validar(
-					$this->input->post('usuario'), 
-					$this->input->post('md5')
+					$in->post('usuario'), 
+					$in->post('md5')
 				);
 			
 			if($r === FALSE)	//usuario invalido
@@ -153,8 +161,6 @@ class _If_Sys extends _If_Controller {
 			{
 				$D->error = 'Usuario válido.';
 			}
-			
-			$this->_login($D);
 		}
 	}
 	
@@ -218,7 +224,7 @@ class _If_Sys extends _If_Controller {
 	 
 	 * Ver: http://www.codeigniter.com/user_guide/libraries/user_agent.html
 	 */
-	private function is_browser_compatible()
+	private function _is_browser_compatible()
 	{
 		$this->load->library('user_agent');
 		
@@ -230,7 +236,7 @@ class _If_Sys extends _If_Controller {
 		)
 		{
 			show_error(
-				'Navegador '.
+				'EL navegador '.
 				$this->agent->browser().' '.
 				$this->agent->version().
 				' no es compatible con esta aplicación.'
