@@ -51,5 +51,5 @@
 <button type="button" 
 		class="btn btn-lg btn-primary btn-block" 
 		onclick="submit()">
-	Iniciar sesión
+	<?= empty($usuario) ? 'Siguiente' : 'Acceder'; ?>
 </button>

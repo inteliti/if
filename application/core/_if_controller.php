@@ -220,7 +220,7 @@ class _If_Controller extends CI_Controller
 	 * $this->form_validation->set_rules('required|integer|callback_external_callbacks[formval_callbacks,test]');
 	 * 
 	 **/
-	public function external_callbacks( $postdata, $param )
+	public function external_callbacks($postdata, $param)
 	{
 		$param_values = explode( ',', $param ); 
 		
@@ -232,7 +232,7 @@ class _If_Controller extends CI_Controller
 		$method = $param_values[1];
 		
 		//agregado por Eduardo Diaz (Inteliti Soluciones CA) 29/04/2014
-		if ( ! method_exists($model, $method) )
+		if ( ! method_exists($model, $method))
 		{
 			return TRUE;
 		}

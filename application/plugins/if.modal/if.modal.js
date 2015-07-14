@@ -100,7 +100,7 @@ var IF_MODAL =
 	}
 	
 	/*
-	 * type: success, info, warning, danger
+	 * PENDIENTE ACOMODAR
 	 */
 	,osd: function (msg, type, timeout)
 	{

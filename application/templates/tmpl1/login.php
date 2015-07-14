@@ -53,8 +53,6 @@
 		
 		function submit()
 		{
-			//IF_MODAL.alert('aqui va un mensaje!');
-
 			/*if($('#pass').val())
 			{
 				var md5 = hex_md5($('#pass').val());
@@ -67,10 +65,10 @@
 				IF_MAIN.loadCompos({
 					target: '#wrapper-login',
 					controller: '_if_sys/login',
-					data: $('#login').serializeArray(),
+					data: $('#login_form').serializeArray(),
 					callback: function()
 					{
-						//alert('funciono!');
+						
 					}
 				});
 			}
@@ -96,6 +94,7 @@
 		//configuracion inicial
 		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
 		IF_MAIN.init();
+		
 	</script>
 	
 </body>
