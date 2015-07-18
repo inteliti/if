@@ -126,7 +126,7 @@ var IF_MODAL =
 	/*
 	 * 
 	 */
-	,ajaxCntrllr: function (cntrllr)
+	,ajaxCntrllr: function (cntrllr, data)
 	{
 		IF_MODAL._setLg();
 
@@ -139,6 +139,7 @@ var IF_MODAL =
 		
 		var cnf = {
 			controller : cntrllr,
+			data: data,
 			target : '#ifModal'
 		}
 
