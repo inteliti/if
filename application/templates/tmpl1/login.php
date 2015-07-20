@@ -60,7 +60,7 @@
 				$('#pass').val('');
 			}*/
 			
-			if($('#login_form').valid())
+			/*if($('#login_form').valid())
 			{
 				IF_MAIN.loadCompos({
 					target: '#wrapper-login',
@@ -71,7 +71,11 @@
 						
 					}
 				});
-			}
+			}*/
+		
+			IF_MODAL.ajaxCntrllr({
+				controller: '_if_sys/home'
+			});
 		}
 
 		$('input').keyup(function(){ 

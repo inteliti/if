@@ -39,6 +39,13 @@ class _If_Sys extends _If_Controller {
 	public function index()
 	{
 		$this->login();
+		
+		
+	}
+	
+	public function home()
+	{
+		$this->tmpl('home');
 	}
 	
 	//-----------------------------------------------------------------

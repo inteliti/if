@@ -9,7 +9,7 @@ $PATH = APP_URL . 'plugins/if.modal/';
 	$(function()
 	{
 		$('body').append(   '<div id="myModal" class="modal fade">'+
-								'<div class="modal-dialog modal-lg">'+
+								'<div id="dialog" class="modal-dialog modal-lg">'+
 									'<div id="ifModal-content" class="modal-content">'+
 									'</div>'+
 								'</div>'+

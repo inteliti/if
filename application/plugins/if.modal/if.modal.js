@@ -124,24 +124,36 @@ var IF_MODAL =
 	//-----------------------------------------------------------------
 	
 	/*
-	 * 
+	 * @param objetc cnf			objeto para configuracion del modal
+	 *		
+	 *		cnf.controller			controlador que trae la vista
+	 *		cnf.data				data para el controlador
+	 *		cnf.title				titulo del modal
+	 *		cnf.width				ancho
+	 *		cnf.height				alto (POR PROGRAMAR)
 	 */
-	,ajaxCntrllr: function (cntrllr, data)
+	,ajaxCntrllr: function (cnf)
 	{
+		if(!cnf) return;
+		
+		if(!cnf.title) 
+			cnf.title = 'Título del modal';
+	
+		cnf.target = '#ifModal';
+		
 		IF_MODAL._setLg();
 
 		var header	=	'<div class="modal-header">'+
+							'<h4 class="modal-title">'+ cnf.title +'</h4>'+
 							'<a class="close" data-dismiss="modal"></a>'+
 						'</div>';
 		var body	=	'<div id="ifModal" class="modal-body"></div>';
 
 		$('#ifModal-content').html( header + body );
 		
-		var cnf = {
-			controller : cntrllr,
-			data: data,
-			target : '#ifModal'
-		}
+		//establecemos ancho del modal
+		if(cnf.width)
+			$('#dialog').css('width', cnf.width);
 
 		IF_MAIN.loadCompos(cnf);
 
