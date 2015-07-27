@@ -73,9 +73,7 @@
 				});
 			}*/
 		
-			IF_MODAL.ajaxCntrllr({
-				controller: '_if_sys/home'
-			});
+			IF_MODAL.confirm('Seguro?', function(){alert('ok');}, {width:'100%'});
 		}
 
 		$('input').keyup(function(){ 

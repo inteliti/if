@@ -38,7 +38,7 @@ var IF_MODAL =
 	/*
 	 * 
 	 */
-	,alert: function(m)
+	,alert: function(m, cnf)
 	{
 		IF_MODAL._setSm();
 		
@@ -54,6 +54,9 @@ var IF_MODAL =
 		
 		$('#ifModal-content').html( header + body + footer );
 		
+		if(cnf.width)
+			$('#dialog').width(cnf.width);
+		
 		$('#myModal').modal('show');
 	}
 	
@@ -62,7 +65,7 @@ var IF_MODAL =
 	/*
 	 * 
 	 */
-	,confirm: function(m,callback)
+	,confirm: function(m,callback, cnf)
 	{
 		IF_MODAL._setSm();
 		var msg		=	'<p>' + m + '<p>';
@@ -71,6 +74,9 @@ var IF_MODAL =
 						'</div>';
 					
 		$('#ifModal-content').html( body + footer );
+		
+		if(cnf.width)
+			$('#dialog').width(cnf.width);
 		
 		$('<button class="btn">Aceptar</button>')
 					.on('click',function(){
@@ -124,6 +130,11 @@ var IF_MODAL =
 	//-----------------------------------------------------------------
 	
 	/*
+	 * ajaxCntrllr
+	 * 
+	 * Muestra una modal con la vista retornada desde el 
+	 * controlador usando ajax.
+	 * 
 	 * @param objetc cnf			objeto para configuracion del modal
 	 *		
 	 *		cnf.controller			controlador que trae la vista
@@ -132,19 +143,12 @@ var IF_MODAL =
 	 *		cnf.width				ancho
 	 *		cnf.height				alto (POR PROGRAMAR)
 	 */
-	,ajaxCntrllr: function (cnf)
+	,ajaxCntrllr: function (cntrllr, data, cnf)
 	{
-		if(!cnf) return;
-		
-		if(!cnf.title) 
-			cnf.title = 'Título del modal';
-	
-		cnf.target = '#ifModal';
-		
 		IF_MODAL._setLg();
 
 		var header	=	'<div class="modal-header">'+
-							'<h4 class="modal-title">'+ cnf.title +'</h4>'+
+							'<h4 class="modal-title">'+ (cnf.title || '') +'</h4>'+
 							'<a class="close" data-dismiss="modal"></a>'+
 						'</div>';
 		var body	=	'<div id="ifModal" class="modal-body"></div>';
@@ -153,9 +157,13 @@ var IF_MODAL =
 		
 		//establecemos ancho del modal
 		if(cnf.width)
-			$('#dialog').css('width', cnf.width);
+			$('#dialog').width(cnf.width);
 
-		IF_MAIN.loadCompos(cnf);
+		IF_MAIN.loadCompos({
+			controller: cntrllr,
+			data: data,
+			target: '#ifModal'
+		});
 
 		$('#myModal').modal('show');
 	}
