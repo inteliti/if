@@ -18,6 +18,8 @@
 <script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>
 <script>
 	IF_MAIN.CI_INDEX = '<?= INDEX_URL; ?>';
+	IF_MAIN.CSFR_NAME = '<?= $this->security->get_csrf_token_name(); ?>';
+	IF_MAIN.CSFR_TOKEN = '<?= $this->security->get_csrf_hash(); ?>';
 	IF_MAIN.init();
 </script>
 <!-- END IF LOADER -->

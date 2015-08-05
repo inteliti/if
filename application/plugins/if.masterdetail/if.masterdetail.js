@@ -175,10 +175,18 @@ IF_MD.prototype = {
 			} : null
 		});
 		
+		var postData = {
+			filter: forceData
+		};
+		
+		//agregar parametro de proteccion csfr
+		if(IF_MAIN.CSFR_NAME.length>0)
+		{
+			postData[IF_MAIN.CSFR_NAME] = IF_MAIN.CSFR_TOKEN;
+		}
+		
 		this.GRID.setGridParam({
-			postData: {
-				filter: forceData
-			}
+			postData: postData
 		}).trigger('reloadGrid');
 	}
 	

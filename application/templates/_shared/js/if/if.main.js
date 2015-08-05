@@ -17,6 +17,8 @@ var IF_MAIN = {
 	CI_INDEX: '',	//Codeigniter index.php url
 	DATEPICKER_FORMAT: 'dd/mm/yy',
 	CANVAS_SELECTOR: '#canvas',
+	CSFR_NAME: '',
+	CSFR_TOKEN: '',
 	
 	//NO hacer modificaciones de aqui para abajo!!!
 
@@ -61,6 +63,13 @@ var IF_MAIN = {
 		if (!cnf.dataType)
 		{
 			 cnf.dataType = 'json';
+		}
+		
+		if(IF_MAIN.CSFR_NAME.length>0)
+		{
+			if (!cnf.data)
+				cnf.data = {};
+			cnf.data[IF_MAIN.CSFR_NAME] = IF_MAIN.CSFR_TOKEN;
 		}
 		
 		cnf.url = cnf.url || IF_MAIN.CI_INDEX + cnf.controller;
