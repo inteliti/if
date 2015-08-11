@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-include APPPATH . 'core/_if_controller.php';
+include APPPATH . 'core/IF_Controller.php';
 
-class Login extends _If_Controller
+class Login extends IF_Controller
 {
 	public function __construct()
 	{

@@ -14,9 +14,9 @@
  *
  *****************************************************************/
 
-include APPPATH . 'core/_if_controller.php';
+include APPPATH . 'core/IF_Controller.php';
 
-class _If_Sys extends _If_Controller {
+class IF_Sys extends IF_Controller {
 
 	public function __construct()
 	{

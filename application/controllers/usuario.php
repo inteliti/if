@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-include_once(APPPATH . 'core/_if_controller.php');
+include_once(APPPATH . 'core/IF_Controller.php');
 
-class Usuario extends _If_Controller {
+class Usuario extends IF_Controller {
 	
 	public function __construct()
 	{

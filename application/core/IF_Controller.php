@@ -12,7 +12,7 @@
  * 
  *********************************************************/
 
-class _If_Controller extends CI_Controller
+class IF_Controller extends CI_Controller
 {
 	/**
 	 * Contructor de la clase.
@@ -28,7 +28,7 @@ class _If_Controller extends CI_Controller
 		parent::__construct();
 		
 		//constantes que se comparten en toda la aplicacion
-		require_once APPPATH.'core/_if_constants.php';
+		require_once APPPATH.'core/IF_Constants.php';
 		
 		//llamar a la libreira ACL
 		$this->load->library(array('acl'));

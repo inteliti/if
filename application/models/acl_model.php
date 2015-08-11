@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Acl_Model extends CI_Model
+class ACL_Model extends CI_Model
 {
 	protected $db_roles;
 	protected $db_acciones;

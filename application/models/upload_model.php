@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-include_once(APPPATH . 'core/_if_model.php');
+include_once(APPPATH . 'core/IF_Model.php');
 
-class Upload_Model extends _If_Model
+class Upload_Model extends IF_Model
 {
     public $model = array(
         array( 'field' => 'id',

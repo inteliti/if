@@ -18,7 +18,7 @@
  * 
  *********************************************************/
 
-class _If_Model extends CI_Model
+class IF_Model extends CI_Model
 {
 	/**
 	 * El nombre de la tabla en la Base de Datos. Solo configurar si no se usa nombre standar en BD (Plural del Modelo).

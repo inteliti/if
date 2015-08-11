@@ -1,8 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-include APPPATH . 'core/_if_controller.php';
+include APPPATH . 'core/IF_Controller.php';
 
-class Upload extends _If_Controller
+class Upload extends IF_Controller
 {
 	
 	
