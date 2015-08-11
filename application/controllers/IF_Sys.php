@@ -61,7 +61,8 @@ class IF_Sys extends IF_Controller {
 	 */
 	public function login()
 	{
-		if(empty($this->input->post()))
+		$post = $this->input->post();
+		if(empty($post))
 		{
 			$this->_login();
 			return;
