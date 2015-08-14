@@ -64,7 +64,8 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'clicts-dev.dnsalias.com:3326',
+	'hostname' => 'clicts-dev.dnsalias.com',
+	'port'	   => '3326',
 	'username' => 'if',
 	'password' => 'if123',
 	'database' => 'db_if',
