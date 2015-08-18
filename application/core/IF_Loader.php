@@ -1,15 +1,24 @@
 
 <!-- Third party libs -->
-<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap.min.css' />
-<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap-theme.min.css' />
-<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/jquery.ui.min.css' />
-<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/icons.css' />
+<link rel='stylesheet' type='text/css' 
+	  href='<?=SHARED_URL; ?>css/third/bootstrap/bootstrap.min.css' />
+<link rel='stylesheet' type='text/css' 
+	  href='<?=SHARED_URL; ?>css/third/bootstrap/bootstrap-theme.min.css' />
+<link rel='stylesheet' type='text/css'
+	  href='<?=SHARED_URL; ?>css/third/jquery.ui.min.css' />
+<link rel='stylesheet' type='text/css'
+	  href='<?=SHARED_URL; ?>css/third/icons.css' />
 
-<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
-<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.ui.min.js'></script>
-<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
-<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/md5.js'></script>
-<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.min.js'></script>
+<script type='text/javascript'
+src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
+<script type='text/javascript'
+src='<?=SHARED_URL; ?>js/third/jquery.ui.min.js'></script>
+<script type='text/javascript'
+src='<?=SHARED_URL; ?>js/third/bootstrap.min.js'></script>
+<script type='text/javascript' 
+src='<?=SHARED_URL; ?>js/third/md5.js'></script>
+<script type='text/javascript' 
+src='<?=SHARED_URL; ?>js/third/jquery.validate.min.js'></script>
 <script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.additional-methods.min.js'></script>
 
 <!-- BEGIN IF LOADER -->
