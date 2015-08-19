@@ -31,6 +31,12 @@ var IF_MASTERDETAIL = {
 		mtCnf.multiSelect = false;
 		mtCnf.rowSelect = true;
 		mtCnf.keepSelection = true;
+		//agregar parametro de proteccion csfr
+		if(IF_MAIN.CSFR_NAME.length>0)
+		{
+			mtCnf.post = {};
+			mtCnf.post[IF_MAIN.CSFR_NAME] = IF_MAIN.CSFR_TOKEN;
+		}
 
 		//Creamos la tabla
 		var $table = $("<table id='if-grid'></table>")

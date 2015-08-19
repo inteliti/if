@@ -47,6 +47,63 @@ class IF_Controller extends CI_Controller
 		//$this->session->set_userdata('ultima_actividad',time());
 	}
 	
+	// ------------------------------------------------------------------------
+	//BOOTGRID
+	// ------------------------------------------------------------------------
+	
+	/**
+	 * Metodo bootgrid que permite traerse los datos para alimentar el maestro bootgrid.
+	 *
+	 * $model: referencial al modelo donde se definen los datos que se estan consultando
+	 * $additionalWhere: Setencia SQL para consulta de los datos
+	 */
+	protected function bootgrid(&$model, $additionalWhere = NULL)
+	{
+		$in =  $this->input->post();
+		if(!empty($in['sort']))
+		{
+			reset($in['sort']);
+			$sort = key($in['sort']);
+			$dir  = $sort[0];
+			$sort_order = $sort . ' ' . $dir;
+		}
+		else
+		{
+			$sort_order = NULL;
+		}
+		//$filter = empty($in['searchPhrase'])	? ''		: $in['filter'];
+		$limit	= empty($in['rowCount'])	? NULL		: intval($in['rowCount']);
+		$page	= empty($in['current'])	? 1			: intval($in['current']);
+
+		//$where = $this->filter2SqlWhere($filter);
+		$where = '1=1';
+		if($additionalWhere)
+		{
+			$where .= " AND ({$additionalWhere})";
+		}
+		
+		$total = $model->count( $where );
+		
+		$total_pages = $total > 0 ? ceil( $total / $limit ) : 0;
+		
+		if($page > $total_pages) $page = $total_pages;
+		
+		$start = $limit * $page - $limit; // do not put $limit * ($page - 1)
+		
+		if($start < 0) $start = 0;
+		
+		$rows = $model->getWhere( $where, $sort_order, $start, $limit );
+		
+		$R			= new stdClass();
+		$R->current	= $page;
+		$R->total	= $total;
+		$R->rowCount = $limit;
+		$R->_rows	= $rows;
+		$R->rows	= array();
+		
+		return $R;
+	}
+	
 	
 	// ------------------------------------------------------------------------
 	//JQGRID
