@@ -8,7 +8,7 @@
 var IF_MASTERDETAIL = {
 	//recibe dos objetos de configuracion: para la MT y para el Detalle
 	//El objeto para el MT será rebotado tal cual a Bootgrid, ver docs de
-	//Bootgrid para +info
+	//Bootgrid para +info http://www.jquery-bootgrid.com/
 	//Adicionalmente debe recibir un Modelo de Columnas en colModel,
 	init: function (mtCnf, detailCnf)
 	{
