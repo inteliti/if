@@ -302,9 +302,9 @@ class IF_Model extends CI_Model
 		
 		$id = $D->id;
 		unset($D->id);
-
+		
 		$D = $this->sanitizeAll($D);
-
+		
 		if($id<=0)
 		{
 			$this->db->insert($this->_table, $D);
@@ -387,13 +387,10 @@ class IF_Model extends CI_Model
 		{
 			return TRUE;
 		}
-
-		foreach($data as $key => $val)
-		{
-			$_POST[$key] = $val;
-		}
-
 		$this->load->library('form_validation');
+		
+		$array_data = (array) $data;
+		$this->form_validation->set_data($array_data);
 		$this->form_validation->set_error_delimiters('<label class="error">','</label>');
 		
 		if (is_array($this->model))
