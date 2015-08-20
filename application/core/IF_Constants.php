@@ -44,6 +44,7 @@ define('VIEWS_PATH', APPPATH . 'views/');
 define('ASSETS_PATH', APPPATH . 'assets/');
 define('TMPL_PATH', APPPATH. 'templates/'.$C->item('tmpl').'/');
 define('PLUGINS_PATH', APPPATH . 'plugins/');
+define('THIRD_PATH', APPPATH . 'third_party/');
 
 /*********************************************************
  * COLOCAR EN TRUE DURANTE PRODUCCION, FALSE EN DESPLIEGUE
