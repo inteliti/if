@@ -1,6 +1,23 @@
+<?php
+	$usuario = isset($usuario) ? $usuario : NULL;
+	$is_valid = isset($is_valid) ? $is_valid : FALSE;
+	
+	$success = isset($success) ? $success : FALSE;
+	$msg = isset($msg) ? $msg : NULL;
+?>
+
+
 <form id="login_form" method="post" onsubmit="return false;">
 	<div class="form-group">
-
+		
+		<?php if(!empty($msg)): ?>
+		
+		<div class="alert <?= $success ? 'alert-success' : 'alert-danger'; ?>" role="alert">
+			<?= $msg; ?>
+		</div>
+		
+		<?php endif; ?>
+		
 		<?php if(empty($usuario)): ?>
 
 		<div class="form-group">
@@ -32,7 +49,7 @@
 
 		<?php if(!empty($enable_captcha) && $enable_captcha): ?>
 
-		<!-- CAPTCHA -->
+		<!-- TO-DO: CAPTCHA -->
 
 		<div class="form-group">
 			<input type="text" 
@@ -50,6 +67,16 @@
 
 <button type="button" 
 		class="btn btn-lg btn-primary btn-block" 
-		onclick="submit()">
+		onclick="LOGIN.submit()">
 	<?= empty($usuario) ? 'Siguiente' : 'Acceder'; ?>
 </button>
+
+<?php if($success): ?>
+
+<!-- Hubo exito en el inicio de sesion y se refresca el sitio web para obtener la sesion -->
+
+<script>
+	location.href = IF_MAIN.CI_INDEX;
+</script>
+
+<?php endif; ?>

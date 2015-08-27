@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /******************************************************************
  * 
- * Clase _If_Sys
+ * Clase IF_Sys
  * 
  * Clase que define funciones de sistema como: autenticacion 
  * de usuarios (Login), registro de usuarios (SignIn), gestión 
@@ -34,11 +34,21 @@ class IF_Sys extends IF_Controller {
 	 * Ej.: si el sistema requiere autenticación se llama a la funcion 
 	 * publica login (definida en esta clase) sino se llama a la 
 	 * vista correspondiente a traves de la funcion tmpl de la clase 
-	 * _If_Controller.
+	 * IF_Controller.
 	 */
 	public function index()
 	{
-		$this->login();
+		//si esta logueado
+		if($this->session->userdata('auth'))
+		{
+			$this->home();
+		}
+		//sino lo esta hay que loguearse
+		else
+		{
+			$this->login();
+		}
+		
 		
 		
 	}
@@ -83,9 +93,12 @@ class IF_Sys extends IF_Controller {
 		
 		$this->_validar($D);
 		$this->_login($D, TRUE);
-		
-		
-		
+	}
+	
+	public function logout()
+	{
+		$this->_destroy_session();
+		$this->login();
 	}
 	
 	//-----------------------------------------------------------------
@@ -143,31 +156,34 @@ class IF_Sys extends IF_Controller {
 			if($r === FALSE)	//nombre de usuario invalido
 			{
 				$D->is_valid = FALSE;
-				$D->enable_captcha = TRUE;
+				//$D->enable_captcha = TRUE;
 			}
 			else				//nombre de usuario valido
 			{
 				$D->is_valid = TRUE;
-				$D->enable_captcha = $this->_is_max_acceso_invalid(
-											(int) $r->acceso_invalid);
+				//$D->enable_captcha = $this->_is_max_acceso_invalid(
+				//							(int) $r->acceso_invalid);
 			}
 		}
 		else	//validar nombre de usuario y clave
 		{
 			$D	= new stdClass();
 			
-			$r = $this->USUARIO->validar(
+			$usuario = $this->USUARIO->validar(
 					$in->post('usuario'), 
 					$in->post('md5')
 				);
 			
-			if($r === FALSE)	//usuario invalido
+			if($usuario === FALSE)	//usuario invalido
 			{
-				$D->error = 'Usuario inválido.';
+				$D->success = FALSE;
+				$D->msg = 'Autenticación fallida';
 			}
 			else				//usuario valido
 			{
-				$D->error = 'Usuario válido.';
+				$D->success = TRUE;
+				$D->msg = 'Autenticación exitosa';
+				$this->_set_session($usuario);
 			}
 		}
 	}
@@ -189,15 +205,6 @@ class IF_Sys extends IF_Controller {
 		return $accesos_invalid >= 3 ? TRUE : FALSE;
 	}
 	
-	
-	
-	
-	
-
-	
-	
-	
-	
 	private function _set_session($usuario)
 	{	
 		$this->load->library('session');
@@ -209,11 +216,10 @@ class IF_Sys extends IF_Controller {
 			'rol_id'			=> $usuario->rol_id,
 			'ultima_actividad'	=> time()
 		));
-			
-		d($this->session->userdata);
+		
 	}
 	
-	public function destroy_session()
+	private function _destroy_session()
 	{
 		$this->session->sess_destroy();
 	}

@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>IF</title>
 	
-	<?php include APPPATH . 'core/_if_loader.php'; ?>
+	<?php include APPPATH . 'core/IF_Loader.php'; ?>
 	
 	<link rel='stylesheet' type='text/css' href='<?= TMPL_URL ?>css/app.css' />
 </head>

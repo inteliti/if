@@ -2,7 +2,7 @@
 
 include_once(APPPATH . 'core/IF_Model.php');
 
-class Usuario_Model extends _If_Model
+class Usuario_Model extends IF_Model
 {
     public $model = array(
         array( 'field' => 'id',
@@ -96,7 +96,7 @@ class Usuario_Model extends _If_Model
 					);
 		}
 		
-		$r = $this->db->get_where('usuarios', $D);
+		$r = $this->db->get_where($this->_table, $D);
 		
 		return count($r->row()) <= 0 
 					? FALSE : 

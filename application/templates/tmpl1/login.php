@@ -13,8 +13,8 @@
 	
 	<!--<link rel="icon" type="image/png" href="<?= TMPL_URL; ?>img/favicon.png" />-->
 	
-	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap.min.css' />
-	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap-theme.min.css' />
+	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap/bootstrap.min.css' />
+	<link rel='stylesheet' type='text/css' href='<?=SHARED_URL; ?>css/third/bootstrap/bootstrap-theme.min.css' />
 	<link rel='stylesheet' type='text/css' href='<?=TMPL_URL; ?>css/app.css' />
 	
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.min.js'></script>
@@ -25,6 +25,8 @@
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/third/jquery.validate.messages_es.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.hotkeys.js'></script>
 	<script type='text/javascript' src='<?=SHARED_URL; ?>js/if/if.main.js'></script>	
+	
+	<script type='text/javascript' src='<?=TMPL_URL; ?>js/login.js'></script>
 	
 	<?php include PLUGINS_PATH.'if.modal/_loader.php'; ?>
 </head>
@@ -51,51 +53,11 @@
 	
 	<script type="text/javascript">
 		
-		function submit()
-		{
-			/*if($('#pass').val())
-			{
-				var md5 = hex_md5($('#pass').val());
-				$('#md5').val(md5);
-				$('#pass').val('');
-			}*/
-			
-			/*if($('#login_form').valid())
-			{
-				IF_MAIN.loadCompos({
-					target: '#wrapper-login',
-					controller: '_if_sys/login',
-					data: $('#login_form').serializeArray(),
-					callback: function()
-					{
-						
-					}
-				});
-			}*/
-		
-			IF_MODAL.confirm('Seguro?', function(){alert('ok');}, {width:'100%'});
-		}
-
-		$('input').keyup(function(){ 
-			return false; 
-		});
-
-		//
-		IF_HOTKEY.registerTemp('enter', submit);
-
-		//validacion de formulario
-		IF_MAIN._form_validate(
-			'#login_form', 
-			{
-				rules:{
-					usuario: 'required'
-				}
-			}
-		);
-		
 		//configuracion inicial
 		IF_MAIN.CI_INDEX = '<?= INDEX_URL ?>';
 		IF_MAIN.init();
+		
+		LOGIN.init();
 		
 	</script>
 	
