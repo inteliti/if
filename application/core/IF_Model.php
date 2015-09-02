@@ -248,7 +248,26 @@ class IF_Model extends CI_Model
 		//Sino se hace de la manera tradicional obviando el where
 		else
 		{
-			return $this->db->count_all($this->_table); //sin el where
+			//si en el modelo se define un query_count
+			if($this->query_count)
+			{
+				//$result = $this->db->query($this->query_count, array($where)); 
+				$result = $this->db->query(sprintf($this->query_count,$where))->result();
+				if(count($result)>0){
+					$row = $result[0];
+					return isset($row->c) ? $row->c : 0;
+				}
+				return 0;
+			}
+			//sino se utiliza active record de codeigniter
+			else
+			{
+				$this->db->where($where);
+				
+				return $this->db->count_all($this->_table); //sin el where
+			}
+			
+			
 		}
 	}
      
