@@ -39,9 +39,12 @@ if(isset($_POST))
 	
 	// Random number will be added after image name
 	$RandomNumber 	= rand(0, 9999999999); 
-
-	$FileName 		=	str_replace(' ','-',strtolower($_POST['name'])) . '.' .
-						end(explode('/',$_FILES['contents']['type'])); //get image name
+	$_name = $_POST['name'];
+	$_type = explode('/',$_FILES['contents']['type']);
+	$FileName 		=	str_replace(' ','-',strtolower($_name)) . '.' .
+						end($_type); //get image name
+	/*$FileName 		=	str_replace(' ','-',strtolower($_POST['name'])) . '.' .
+						end(explode('/',$_FILES['contents']['type'])); //get image name*/
 	$TempSrc	 	= $_FILES['contents']['tmp_name']; // Temp name of image file stored in PHP tmp folder
 	$FileType	 	= $_FILES['contents']['type']; //get file type, returns "image/png", image/jpeg, text/plain etc.
 
