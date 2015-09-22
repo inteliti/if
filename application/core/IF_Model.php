@@ -419,7 +419,10 @@ class IF_Model extends CI_Model
 			{
 				if(isset($atributo['rules']))
 				{
-					array_push($rulesModel, $atributo);
+					if(!empty($atributo['rules']))
+					{
+						array_push($rulesModel, $atributo);
+					}
 				}
 			}
 			
