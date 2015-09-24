@@ -15,6 +15,7 @@
 	$UPLOAD_URL = isset($UPLOAD_URL) ? $UPLOAD_URL : NULL;
 	$FILES_ARRAY = isset($FILES_ARRAY) ? $FILES_ARRAY : array();
 	$TITTLE = isset($TITTLE) ? $TITTLE : 'Imágenes y archivos';
+	$DELETE_CONFIRMATION = isset($DELETE_CONFIRMATION) ? $DELETE_CONFIRMATION : TRUE;
 	
 	$MAX_COUNT_FILE = isset($MAX_COUNT_FILE) ? $MAX_COUNT_FILE : count($FILES_ARRAY);
 	
@@ -108,7 +109,8 @@
 		upload_area_input : '#if-upload-input-<?= md5($UPLOAD_URL) ?>',
 		upload_area_output : '#if-upload-output-<?= md5($UPLOAD_URL) ?>',
 		upload_files_types : <?= json_encode($UPLOAD_FILE_TYPES) ?>,
-		upload_file_size_max : <?= $UPLOAD_FILE_SIZE_MAX ?>
+		upload_file_size_max : <?= $UPLOAD_FILE_SIZE_MAX ?>,
+		delete_confirmation : <?= $DELETE_CONFIRMATION ? 'true' : 'false' ?>
 	};
 	
 	var <?= 'IF_UPLOAD_'.md5($UPLOAD_URL) ?> = new IF_UPLOAD();

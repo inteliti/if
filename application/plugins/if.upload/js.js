@@ -29,6 +29,7 @@ IF_UPLOAD.prototype = {
 	UPLOAD_AREA_OUTPUT : null,
 	UPLOAD_FILE_TYPES : null,
 	UPLOAD_FILE_SIZE_MAX: null,
+	DELETE_CONFIRMATION: true,
 	
 	/*
 	 * METODO INIT
@@ -47,6 +48,7 @@ IF_UPLOAD.prototype = {
 		this.UPLOAD_AREA_OUTPUT = cnf.upload_area_output;
 		this.UPLOAD_FILE_TYPES = cnf.upload_files_types;
 		this.UPLOAD_FILE_SIZE_MAX = cnf.upload_file_size_max;
+		this.DELETE_CONFIRMATION = cnf.delete_confirmation;
 		
 		//restore count of files to 0, before calculate
 		this.FILES_COUNT = 0;
@@ -339,14 +341,23 @@ IF_UPLOAD.prototype = {
 		var that = this;
 		//La eliminacion es local, no se puede borrar del sistema 
 		//de archivos hasta tanto no se actualice la bd
-		IF_MODAL.confirm('¿Esta usted seguro de eliminar este archivo?',
-			function(r){
-				if(r)
-				{
-					that._shiftFiles(img);
-				}
-				
-		});
+		
+		if(this.DELETE_CONFIRMATION)
+		{
+			IF_MODAL.confirm('¿Esta usted seguro de eliminar este archivo?',
+				function(r){
+					if(r)
+					{
+						that._shiftFiles(img);
+					}
+
+			});
+		}
+		else
+		{
+			that._shiftFiles(img);
+		}
+
 	}
 	,
 	/*
