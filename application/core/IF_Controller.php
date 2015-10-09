@@ -64,7 +64,7 @@ class IF_Controller extends CI_Controller
 		{
 			reset($in['sort']);
 			$sort = key($in['sort']);
-			$dir  = $sort[0];
+			$dir  = $in['sort'][$sort];
 			$sort_order = $sort . ' ' . $dir;
 		}
 		else
