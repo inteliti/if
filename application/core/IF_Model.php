@@ -151,7 +151,7 @@ class IF_Model extends CI_Model
 	{
 		//se sanitiza menos ciertos elemento HTML
 		$r = strip_tags(trim($str),'<p><a><h1><h2><h3><h4><h5><h6><span><b><i><u><ol><ul><li><br>');
-		return empty($r) ? NULL : $r;
+		return empty($r) && !is_numeric($r) ? NULL : $r;
 	}
 
 	/**

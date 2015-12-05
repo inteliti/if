@@ -90,29 +90,64 @@ var IF_MAIN = {
 	 *							con pares clave/valor
 	*		
 	*		cnf.target:			identificador de objetivo (#div)
+	*		cnf.fadeAnimation	bool que indica si hace un efecto fade al cargar un elemento
 	* 
 	* ver: http://api.jquery.com/load/
 	*/
 	, loadCompos: function(cnf)
 	{
-		$(cnf.target)
-			.empty()
-			.addClass('loading')
-			.load(
-				cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
-				cnf.data || null,
-				function(r)
-				{
-					if (cnf.callback)
-					{
-						cnf.callback(r);
-					}
+		if (!cnf.fadeAnimation)
+		{
+			cnf.fadeAnimation = false;
+		}
+		
+		if(cnf.fadeAnimation)
+		{
+			$(cnf.target).fadeOut(400).promise().done(function(){
+				$(cnf.target)
+					.empty()
+					.addClass('loading')
+					.show()
+					.load(
+						cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
+						cnf.data || null,
+						function(r)
+						{
+							if (cnf.callback)
+							{
+								cnf.callback(r);
+							}
+							$(this).hide();
+							$(this).removeClass('loading');
+							$(this).fadeIn(800);
+						}
+					)
 					
-					$(this).removeClass('loading');
-				}
-			)
-		;
-		return 1;
+				;
+				return 1;
+			});
+		}
+		else
+		{
+			$(cnf.target)
+				.empty()
+				.addClass('loading')
+				.load(
+					cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
+					cnf.data || null,
+					function(r)
+					{
+						if (cnf.callback)
+						{
+							cnf.callback(r);
+						}
+
+						$(this).removeClass('loading');
+					}
+				)
+			;
+			return 1;
+		}
 	}
 	
 	//-----------------------------------------------------------------
@@ -263,4 +298,21 @@ var IF_MAIN = {
 		$(form).validate(cnf);
 	}
 	
+};
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
 };
