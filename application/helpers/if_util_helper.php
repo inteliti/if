@@ -314,3 +314,16 @@ function updateUploadURL($upload,$upload_url=NULL,$main_upload_url=NULL)
 		}
 	}
 }
+
+function get_empty_user()
+{
+	$user = new stdClass();
+	
+	$user->id = 1;
+	$user->name = 'NO NAME';
+	$user->email = 'NO_MAIL@DOMINIO.COM';
+	$user->rol_id = 1;
+	
+	return $user;
+}
+
