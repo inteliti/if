@@ -228,12 +228,17 @@ class IF_Controller extends CI_Controller
 	 * $view: vista para cargar en el template
 	 * $D: datos para la vista
 	 * $page: pagina del template que se desea cargar
+	 * $return_data: devuelve la vista HTML que puede ser utilizada con otro fin que no sea enviar al navegador
 	 */
-	protected function tmpl( $view , $D = NULL , $page='index' )
+	protected function tmpl( $view , $D = NULL , $page='index' , $return_data = FALSE)
 	{
 		$D = (object) $D;
 		$D->VIEW = $view;
-		$this->load->view('../templates/'.$this->config->item('tmpl').'/'.$page, $D);
+		if($return_data)
+		{
+			return $this->load->view('../templates/'.$this->config->item('tmpl').'/'.$page, $D , $return_data);
+		}
+		$this->load->view('../templates/'.$this->config->item('tmpl').'/'.$page, $D );
 	}
 
 	/**

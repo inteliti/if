@@ -6,7 +6,7 @@
 	$PLG_URL = PLUGINS_URL . 'if.upload/';
 	$PLG_PATH = PLUGINS_PATH . 'if.upload/';
 	    
-    $UPLOAD_URL = $id>0 ? $main_upload_url . $id . "/" : $main_upload_url . "nuevo-" . md5(rand()) . "/" ;
+    $UPLOAD_URL = $id > 0 ? $main_upload_url . $id . "/" : $main_upload_url . "nuevo-" . md5(rand()) . "/" ;
 	
 	$FILES_ARRAY = array(
 		'file1' => $file1,

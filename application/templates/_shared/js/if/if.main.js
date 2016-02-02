@@ -278,6 +278,70 @@ var IF_MAIN = {
 		IF_MAIN.UNSAVED_DATA = status;
 	}
 	
+	, serialize: function(selector, returnAsStr, valueSeparator, pairSeparator)
+	{
+		if (!valueSeparator)
+			valueSeparator = '=';
+		if (!pairSeparator)
+			pairSeparator = '&';
+
+		var obj = {}, str = [], arr;
+
+		arr = $(selector + ' input,' + selector + ' select,' + selector + ' textarea')
+				.toArray()
+				;
+		for (var i = 0, name, value, curr, $curr, l = arr.length; i < l; i++)
+		{
+			curr = arr[i];
+			$curr = $(curr);
+			
+			//console.log($(curr));
+			
+			if ($(curr).hasClass('exclude'))
+			{
+				continue;
+			}
+
+			//just ignore not checked radios and checkboxes
+			if ((curr.type == 'radio' || curr.type == 'checkbox') && !curr.checked)
+			{
+				continue;
+			}
+			
+			if (curr.name == 'success')
+			{
+				continue;
+			}
+
+			name = curr.name;
+
+			//jquery ui datepicker?
+			if ($curr.hasClass('hasDatepicker'))
+			{
+				value = $curr.datepicker("getDate");
+				value = value ? value.toISO8601() : '';
+			}
+			else
+			{
+				value = $(curr).val();
+				var xtype = curr.getAttribute('xtype');
+
+				if (xtype == 'numeric')
+				{
+					value = CWF_L10N.number2Float(value);
+				}
+				if (xtype == 'currency')
+				{
+					value = CWF_L10N.currency2Float(value);
+				}
+			}
+			obj[name] = value;
+			str.push(name + valueSeparator + (value));
+		}
+
+		return returnAsStr ? str.join(pairSeparator) : obj;
+	}
+	
 	//-----------------------------------------------------------------
 	//VALIDACION DE FORMULARIOS
 	//-----------------------------------------------------------------	
