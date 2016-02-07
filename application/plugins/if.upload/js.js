@@ -130,7 +130,7 @@ IF_UPLOAD.prototype = {
 	//Muestra un mensaje
 	, _showMsg: function (m)
 	{
-		$(this.UPLOAD_AREA_OUTPUT + ' p').html(m);
+		alert(m);
 	}
 
 	//Llamar al momento de guardar el formulario para subir las imagenes.
