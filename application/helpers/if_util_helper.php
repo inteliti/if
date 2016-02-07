@@ -280,41 +280,6 @@ function moveDirectory($_src,$_dst)
 	return TRUE;
 }
 
-/*
- * 
- */
-function getUploadURL($D)
-{
-	$upload_url = NULL;
-	
-	if(isset($D->upload_url))
-	{
-		$upload_url = $D->upload_url;
-	}
-	
-	return $upload_url;
-}
-
-/*
- * 
- */
-function updateUploadURL($upload,$upload_url=NULL,$main_upload_url=NULL)
-{
-	if($upload->success)
-	{
-		if(!empty($upload_url))
-		{
-			//obtiene la posicion donde empieza el directorio especifico del objeto
-			// de archivos que se esta guardando. Luego se saca la carpeta del objeto y se eliminan los /
-			$upload_object_folder = trim( substr ( $upload_url , strlen ( $main_upload_url ) ), "/" );
-			if( $upload_object_folder != $upload->id && $upload->id > 0)
-			{
-				$upload->upload_url_error = moveDirectory($upload_url,$main_upload_url . $upload->id);
-			}
-		}
-	}
-}
-
 function get_empty_user()
 {
 	$user = new stdClass();

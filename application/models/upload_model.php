@@ -54,4 +54,9 @@ class Upload_Model extends IF_Model
 		parent::__construct();
 	}
 	
+	public function store(&$D, $skip_validation = false)
+	{
+		return parent::store($D, $skip_validation);
+	}
+	
 }

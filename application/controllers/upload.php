@@ -1,87 +1,84 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if(!defined('BASEPATH'))
+	exit('No direct script access allowed');
 
 include APPPATH . 'core/IF_Controller.php';
 
 class Upload extends IF_Controller
 {
-	
-	
-	
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('upload_model','upload_m');
-		
-		/*
-		 * Se define parametro de url donde se subiran los archivos
-		 */
-		$this->main_upload_url = ASSETS_URL . 'uploads/';
-		
+		$this->load->model('upload_model', 'upload_m');
+
+		//MODIFICAR AL DIRECTORIO A SUBIR, incluir / al final
+		$upload_dir = 'uploads/';
+
+		//NO modificar estos
+		$this->main_upload_url = ASSETS_URL . $upload_dir;
+		$this->main_upload_path = ASSETS_PATH . $upload_dir;
+
 		//$this->output->enable_profiler(TRUE);
 	}
-	
-	public function index($id=-1)
+
+	public function index($id = -1)
 	{
 		$D = new stdClass();
-		
 		$D->id = $id;
-		
-		$this->tmpl('demos/upload_master',$D);
+		$this->tmpl('demos/fotos/index', $D);
 	}
-	
-	public function detail( $id=-1, $ADDON = FALSE )
+
+	public function detail($id = -1, $nombre_objeto = 'UPLOADER')
 	{
 		//obtener datos del objeto
 		$D = $id <= 0 ? $this->upload_m->vacio() :
-						$this->upload_m->get($id);
-		
+			$this->upload_m->get($id);
+
 		//si existe algun agregado para el objeto hay que anexarlo
 		if(!empty($ADDON))
 		{
-			
+
 			$D = (object) array_merge((array) $D, (array) $ADDON);
 		}
-		
+
 		/*
 		 * Se envia URL donde se subiran los archivos
 		 */
 		$D->main_upload_url = $this->main_upload_url;
-		
-		$this->load->view('demos/upload_detail',$D);
-	}
-	
-	public function save()
-	{
-		$D = (object) $this->input->post();
-		
-		/*
-		 * Se llama antes de guardar un objeto que tenga archivos 
-		 * que han sido subidos a la aplicacion. 
-		 * 
-		 * Esta funcion permite guardar la URL donde se guardaron los archivos.
-		 * 
-		 * Es necesario para poder usar el plugin en objetos que aun no tienen un id
-		 */
-		$upload_url = getUploadURL($D);
-		/*
-		 * Se llama para guardar el objeto
-		 */
-		$upload = $this->upload_m->store($D);
-		
-		/*
-		 * Se llama despues de guardar objeto que tenga archivos
-		 * que han sido subidos a la aplicacion.
-		 * 
-		 * Esta funcion permite actualizar la URL donde se guardaron los archivos
-		 * 
-		 * Es necesario para poder usar el plugin en objetos que aun no tienen un id
-		 */
-		updateUploadURL($upload,$upload_url,$this->main_upload_url);
-		
-		$this->detail(NULL,$upload);
-	}
-	
-	
-	
-}
+		$D->NOMBRE_OBJETO = $nombre_objeto;
+		$D->ID = $id;
 
+		$this->load->view('demos/fotos/upload_detail', $D);
+	}
+
+	//$id contiene el ID del elemento
+	public function ajax_save($id)
+	{
+		$D = new stdClass();
+		$D->id = $id <= 0 ? mt_rand(1, 5000) : $id;
+
+		//carpeta especifica
+		$upload_dir = $this->main_upload_path . $D->id . '/';
+		if(mkdir($upload_dir))
+		{
+			//Subir archivos
+			foreach($_FILES as $i=> $v)
+			{
+				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
+				$dbCol = 'file' . ($i + 1);
+				$D->$dbCol = $file_name = "{$i}.{$ext}";
+				move_uploaded_file($v["tmp_name"], $upload_dir . $file_name);
+			}
+			//$this->upload_m->store($D);
+		}
+		else
+		{
+			die('1'); //Cod Error 1: No se pudo crear el directorio
+		}
+		
+		echo 0; //No error code
+	}
+
+}

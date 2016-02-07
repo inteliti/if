@@ -14,10 +14,12 @@ html, body{
 	padding: 0;
 	overflow: auto;
 	overflow-x: hidden;
+	position:relative;
 }
 #if-md-detail{
 	background-color: #fafafa;
-	padding: 2%;
+	padding: 40px;
+	min-height: 500px;
 }
 
 
@@ -34,11 +36,33 @@ BOOTGRID OVERWRITE
 }
 .bootgrid-footer{
 	line-height: 100%;
-	position: fixed; 
+	height: 40px;
 	bottom: 0;
-	width: 41.66666667%;
+	width:100%;
+	overflow: hidden;
 }
 .bootgrid-footer .pagination a{
 }
+.bootgrid-footer .infoBar{
+	color: #777;
+	display: block;
+	line-height: 30px;
+}
+.bootgrid-table-wrap{
+	height: calc(100% - 85px);
+	overflow: auto;
+}
 .bootgrid-table{
+	margin: 0;
+}
+
+
+/*****************************
+MOVIL, RESPONSIVE
+*****************************/
+@media (max-width: 768px)
+{
+	#if-md-detail{
+		padding: 20px;
+	}
 }

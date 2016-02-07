@@ -7,7 +7,9 @@ $PATH = APP_URL . 'plugins/if.masterdetail/';
 <link rel="stylesheet" type="text/css" 
 	  href="<?= $PATH; ?>if.masterdetail.css" />
 <script type='text/javascript' 
-	src='<?= $PATH; ?>jquery.bootgrid.min.js'></script>
+src='<?= $PATH; ?>jquery.bootgrid.min.js'></script>
 <script type='text/javascript' 
-	src='<?= $PATH; ?>if.masterdetail.js'></script>
+src='<?= $PATH; ?>jquery.scrollto.min.js'></script>
+<script type='text/javascript' 
+src='<?= $PATH; ?>if.masterdetail.js'></script>
 <!-- /if.masterdetail loader -->

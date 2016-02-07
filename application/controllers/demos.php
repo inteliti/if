@@ -17,6 +17,11 @@ class Demos extends IF_Controller
 	{
 		$this->view('demos/masterdetail/index');
 	}
+	
+	public function fotos()
+	{
+		$this->view('demos/fotos/index');
+	}
 
 	protected function view($view)
 	{
@@ -26,7 +31,9 @@ class Demos extends IF_Controller
 		$this->load->view('demos/_template.php', $D);
 	}
 	
+	//--------------------------------------------
 	//EJEMPLOS DE MASTERDETAIL
+	//--------------------------------------------
 	public function masterdetail_mt()
 	{
 		//$_POST recibe de Bootgrid:
