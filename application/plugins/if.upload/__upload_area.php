@@ -34,6 +34,7 @@
 	<script>
 		var <?= $NOMBRE_OBJETO ?> = new IF_UPLOAD({
 			upload_url : '<?=INDEX_URL; ?>upload/ajax_save/',
+			plg_url : '<?= addslashes($PLG_URL) ?>',
 			canvas: '#if-upload-<?= md5($NOMBRE_OBJETO) ?>',
 			max_count_file: <?= $MAX_COUNT_FILE ?>,
 			upload_files_types: <?= json_encode($UPLOAD_FILE_TYPES) ?>,

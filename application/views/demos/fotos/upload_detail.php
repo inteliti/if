@@ -24,6 +24,8 @@
 			include "upload_files_loader.php"; 
 		?>
 		
+		<hr />
+		
 		<div class="row">
 			<div class="col-md-12">
 				<button class="btn green pull-right margin-left-right-xs" 

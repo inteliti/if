@@ -13,6 +13,7 @@ var IF_UPLOAD = function (cnf)
 {
 	this.CNF = cnf || {};
 	this.UPLOAD_URL = cnf.upload_url;
+	this.PLG_URL = cnf.plg_url;
 	this.CANVAS = cnf.canvas + " ";
 	this.UPLOAD_AREA = this.CANVAS + ".thumbs";
 	this.MAX_COUNT_FILE = cnf.max_count_file;
@@ -43,13 +44,11 @@ IF_UPLOAD.prototype = {
 	_addFile: function (input)
 	{
 		var $input = $(input);
-		$input.removeClass('add_file').addClass('hide');
 
 		//revisa si esta vacio el input file
 		if (!$input.val())
 		{
 			this._showMsg("No hay archivo");
-			return false;
 		}
 
 		var file = input.files[0];
@@ -83,24 +82,49 @@ IF_UPLOAD.prototype = {
 			return false;
 		}
 
-		//Render Thumbnail
-		var reader = new FileReader();
-		var that = this;
-		reader.onload = function (e)
+		//Render Thumbnail solo para imagenes
+		if (this._mimeSimple(file.type)=='image')
 		{
-			that._thumbRender(file, e);
-		};
-		reader.readAsDataURL(file);
-		
+			var reader = new FileReader();
+			var that = this;
+			reader.onload = function (e)
+			{
+				that._thumbRender(file, e);
+			};
+			reader.readAsDataURL(file);
+		} else
+		{
+			this._thumbIcon(file);
+		}
+
 		//anadir nuevo boton para subir otro archivo
+		$input.removeClass('add_file').addClass('hide');
 		this._addUploadBtn();
 	}
 
-	//Dibuja el thumbnail
+	//Dibuja el thumbnail (solo imagenes)
 	, _thumbRender: function (file, e)
 	{
 		var that = this;
 		$("<img src='" + e.target.result + "' name='" + file.name + "' />")
+			.dblclick(function ()
+			{
+				that._removeFile(this);
+			})
+			.prependTo(this.CANVAS + '.thumbs')
+			;
+	}
+
+	, _thumbIcon: function (file)
+	{
+		var that = this;
+		var type = this._mimeSimple(file.type);
+
+		$("<img src='" + this.PLG_URL + "img/files/" + type + ".png' />")
+			.attr({
+				'name': file.name,
+				'title': file.name
+			})
 			.dblclick(function ()
 			{
 				that._removeFile(this);
@@ -142,25 +166,68 @@ IF_UPLOAD.prototype = {
 
 		var formData = new FormData();
 		formData.append('id', id);
-		var files = $(this.CANVAS+'input[type=file]').each(function (i)
+		var files = $(this.CANVAS + 'input[type=file]').each(function (i)
 		{
-			formData.append("file"+i, this.files[0]);
+			formData.append("file" + i, this.files[0]);
 		});
-		
+
 		$.ajax({
 			url: this.UPLOAD_URL,
 			type: 'POST',
 			dataType: 'JSON',
-			success : function (r)
+			success: function (r)
 			{
 				$fileBtn.show();
-				(callback||$.noop)(r);
+				(callback || $.noop)(r);
 			},
 			data: formData,
 			cache: false,
 			contentType: false,
 			processData: false
 		});
+	}
+
+	, _mimeSimple: function (s)
+	{
+		s = s.toLowerCase();
+		
+		if(s.indexOf('image/')>=0)
+		{
+			s = 'image';
+		}
+		else if(s.indexOf('audio/')>=0)
+		{
+			s = 'audio';
+		}
+		else if(s.indexOf('video/')>=0)
+		{
+			s = 'video';
+		}
+		else if(s.indexOf('excel')>=0)
+		{
+			s = 'excel';
+		}
+		else if(s.indexOf('word')>=0)
+		{
+			s = 'word';
+		}
+		else if(s.indexOf('powerpoint')>=0)
+		{
+			s = 'powerpoint';
+		}
+		else if(s.indexOf('text/plain')>=0)
+		{
+			s = 'text';
+		}
+		else if(s.indexOf('pdf')>=0)
+		{
+			s = 'pdf';
+		}
+		else
+		{
+			s = 'otro';
+		}
+		return s;
 	}
 
 }
