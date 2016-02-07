@@ -134,13 +134,14 @@ IF_UPLOAD.prototype = {
 	}
 
 	//Llamar al momento de guardar el formulario para subir las imagenes.
-	//Sube las imagenes asincronamente, recibe un callback como unico param
-	//que se ejecuta luego de subir las img
-	, upload: function (callback)
+	//TENER CUIDADO: sube las imagenes asincronamente, usar el callback
+	//si se necesita continuar el flujo LUEGO de que se hallan subido.
+	, upload: function (id, callback)
 	{
 		var $fileBtn = $(this.CANVAS + '.add_file').hide();
 
 		var formData = new FormData();
+		formData.append('id', id);
 		var files = $(this.CANVAS+'input[type=file]').each(function (i)
 		{
 			formData.append("file"+i, this.files[0]);
@@ -149,7 +150,8 @@ IF_UPLOAD.prototype = {
 		$.ajax({
 			url: this.UPLOAD_URL,
 			type: 'POST',
-			complete: function (r)
+			dataType: 'JSON',
+			success : function (r)
 			{
 				$fileBtn.show();
 				(callback||$.noop)(r);

@@ -25,12 +25,15 @@
 		<label>
 			<?= $TITTLE ?>
 		</label>
+		<p class="text-muted">
+			Para eliminar una imagen, hágale doble click.
+		</p>
 		<div class="thumbs"></div>
 	</div>
 
 	<script>
 		var <?= $NOMBRE_OBJETO ?> = new IF_UPLOAD({
-			upload_url : '<?=INDEX_URL; ?>upload/ajax_save/<?=$ID; ?>',
+			upload_url : '<?=INDEX_URL; ?>upload/ajax_save/',
 			canvas: '#if-upload-<?= md5($NOMBRE_OBJETO) ?>',
 			max_count_file: <?= $MAX_COUNT_FILE ?>,
 			upload_files_types: <?= json_encode($UPLOAD_FILE_TYPES) ?>,

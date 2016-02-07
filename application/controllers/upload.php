@@ -54,11 +54,12 @@ class Upload extends IF_Controller
 	}
 
 	//$id contiene el ID del elemento
-	public function ajax_save($id)
+	public function ajax_save()
 	{
+		$E = (object)$_POST;
 		$D = new stdClass();
-		$D->id = $id <= 0 ? mt_rand(1, 5000) : $id;
-
+		$D->id = $E->id;
+		
 		//carpeta especifica
 		$upload_dir = $this->main_upload_path . $D->id . '/';
 		if(mkdir($upload_dir))

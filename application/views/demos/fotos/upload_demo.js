@@ -1,4 +1,7 @@
 var UPLOAD_DEMO = {
+	
+	//mi_nombre_objeto debe ser un nombre unico en el que se instanciara
+	//la clase IF_UPLOAD para futura referencia.
 	detail: function (id)
 	{
 		IF_MAIN.loadCompos({
@@ -12,32 +15,28 @@ var UPLOAD_DEMO = {
 	
 	,save: function ()
 	{
+		
 		//procesar resto del formulario....
 		
-		mi_nombre_objeto.upload();
-	}
-	/**
-	,
-	save: function (form)
-	{
-		var data = IF_MAIN.serialize(form);
-
-		var cnf = {
-			controller: 'upload/save',
-			target: '#upload-detail',
-			data: data,
-			callback: function ()
+		
+		//Subir fotos, id se usara para crear el directorio donde se
+		//alojaran las fotos. Podria ser p.e. el ID del elemento a guardar
+		//(cuidado en los casos de distintos objetos con mismo ID)
+		//Para este ejemplo generamos un id aleatorio.
+		var id = Math.floor((Math.random() * 1000) + 1);
+		mi_nombre_objeto.upload(id, function (errorCode)
+		{
+			if(!errorCode)
 			{
-				var success = $('input[name=success]').val();
-				if (success)
-				{
-					SLIDER.nuevo();
-				}
+				alert('Archivos subidos exitosamente.');
 			}
-		}
-
-		IF_MAIN.loadCompos(cnf);
+			else
+			{
+				alert('Error, codigo: '+errorCode);
+			}
+		});
+		
+		
 	}
-	/**/
 }
 
