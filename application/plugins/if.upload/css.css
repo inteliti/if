@@ -5,21 +5,8 @@
 	position: relative;
 }
 .if-upload .thumbs img{
-	height: 150px;
+	height: 128px;
 }
-.if-upload .thumbs .controls{
-	position: absolute;
-	top: 0; right: 0;
-	z-index: 1;
-}
-.if-upload .thumbs .controls i{
-	border:2px solid red;
-	cursor: pointer;
-	display: inline-block;
-	width: 50px;
-	height: 50px;
-}
-/***/
 .if-upload .hide{
 	visibility:hidden;
 	width:1px;
@@ -27,4 +14,6 @@
 	position:absolute;
 	top:-1000;
 }
-/**/
+.if-upload .add_file input{
+	display:none;
+}

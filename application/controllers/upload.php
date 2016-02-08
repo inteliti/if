@@ -69,7 +69,7 @@ class Upload extends IF_Controller
 			{
 				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
 				$dbCol = 'file' . ($i + 1);
-				$D->$dbCol = $file_name = md5(time()).".{$ext}";
+				$D->$dbCol = $file_name = md5(mt_rand()).".{$ext}";
 				move_uploaded_file($v["tmp_name"], $upload_dir . $file_name);
 			}
 			//$this->upload_m->store($D);

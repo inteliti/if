@@ -54,7 +54,6 @@ IF_UPLOAD.prototype = {
 		var file = input.files[0];
 		var fsize = file.size; //Tamano
 		var ftype = file.type; //Tipo
-		$input.attr('name', file.name);
 
 		//Solo tipos permitidos
 		var ftype_flag = true;
@@ -83,7 +82,7 @@ IF_UPLOAD.prototype = {
 		}
 
 		//Render Thumbnail solo para imagenes
-		if (this._mimeSimple(file.type)=='image')
+		if (this._mimeSimple(file.type) == 'image')
 		{
 			var reader = new FileReader();
 			var that = this;
@@ -98,7 +97,11 @@ IF_UPLOAD.prototype = {
 		}
 
 		//anadir nuevo boton para subir otro archivo
-		$input.removeClass('add_file').addClass('hide');
+		$(this.CANVAS + '.add_file')
+			.removeClass('add_file')
+			.addClass('hide')
+			.attr('name', file.name)
+		;
 		this._addUploadBtn();
 	}
 
@@ -136,12 +139,20 @@ IF_UPLOAD.prototype = {
 	, _addUploadBtn: function ()
 	{
 		var that = this;
-		$('<input type="file" class="add_file" />')
-			.on('change', function () {
-				that._addFile(this);
-			})
+		var btn = $('<div class="add_file">'
+			+ '<img src="' + this.PLG_URL + 'img/upload.png" />'
+			+ '<input type="file" />'
+			+ '</div>'
+			)
 			.appendTo(this.CANVAS + '.thumbs')
 			;
+		btn.find('input').on('change', function () {
+			that._addFile(this);
+		});
+		btn.find('img').click(function ()
+		{
+			$(this).parent().find('input').click();
+		});
 	}
 
 	//Remueve ambos thumbnail y el input file
@@ -168,7 +179,11 @@ IF_UPLOAD.prototype = {
 		formData.append('id', id);
 		var files = $(this.CANVAS + 'input[type=file]').each(function (i)
 		{
-			formData.append("file" + i, this.files[0]);
+			var file = this.files[0]
+			if (file)
+			{
+				formData.append("file" + i, file);
+			}
 		});
 
 		$.ajax({
@@ -190,40 +205,32 @@ IF_UPLOAD.prototype = {
 	, _mimeSimple: function (s)
 	{
 		s = s.toLowerCase();
-		
-		if(s.indexOf('image/')>=0)
+
+		if (s.indexOf('image/') >= 0)
 		{
 			s = 'image';
-		}
-		else if(s.indexOf('audio/')>=0)
+		} else if (s.indexOf('audio/') >= 0)
 		{
 			s = 'audio';
-		}
-		else if(s.indexOf('video/')>=0)
+		} else if (s.indexOf('video/') >= 0)
 		{
 			s = 'video';
-		}
-		else if(s.indexOf('excel')>=0)
+		} else if (s.indexOf('excel') >= 0)
 		{
 			s = 'excel';
-		}
-		else if(s.indexOf('word')>=0)
+		} else if (s.indexOf('word') >= 0)
 		{
 			s = 'word';
-		}
-		else if(s.indexOf('powerpoint')>=0)
+		} else if (s.indexOf('powerpoint') >= 0)
 		{
 			s = 'powerpoint';
-		}
-		else if(s.indexOf('text/plain')>=0)
+		} else if (s.indexOf('text/plain') >= 0)
 		{
 			s = 'text';
-		}
-		else if(s.indexOf('pdf')>=0)
+		} else if (s.indexOf('pdf') >= 0)
 		{
 			s = 'pdf';
-		}
-		else
+		} else
 		{
 			s = 'otro';
 		}
