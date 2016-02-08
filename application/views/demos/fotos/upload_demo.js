@@ -19,16 +19,12 @@ var UPLOAD_DEMO = {
 		//procesar resto del formulario....
 		
 		
-		//Subir fotos, id se usara para crear el directorio donde se
-		//alojaran las fotos. Podria ser p.e. el ID del elemento a guardar
-		//(cuidado en los casos de distintos objetos con mismo ID)
-		//Para este ejemplo generamos un id aleatorio.
-		var id = Math.floor((Math.random() * 1000) + 1);
-		mi_nombre_objeto.upload(id, function (errorCode)
+		//Llamamos a nuestro objeto IF_UPLOAD
+		mi_nombre_objeto.upload(function (errorCode)
 		{
 			if(!errorCode)
 			{
-				alert('Archivos subidos exitosamente.');
+				alert('Archivos cargados exitosamente.');
 			}
 			else
 			{

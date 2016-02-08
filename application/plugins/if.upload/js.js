@@ -7,19 +7,21 @@
  * Changelog
  * ---------
  * 3.0.0
- * - Reescrito todo para simplificar el plugin entero
+ * - Reescrito todo el plugin
+ * - Removida dependencia con BD
  *****************************************************/
 var IF_UPLOAD = function (cnf)
 {
 	this.CNF = cnf || {};
+	this.ID = cnf.id;
 	this.UPLOAD_URL = cnf.upload_url;
 	this.PLG_URL = cnf.plg_url;
-	this.CANVAS = cnf.canvas + " ";
-	this.UPLOAD_AREA = this.CANVAS + ".thumbs";
+	this.NAMESPACE = cnf.namespace + " ";
 	this.MAX_COUNT_FILE = cnf.max_count_file;
 	this.UPLOAD_FILE_TYPES = cnf.upload_files_types;
 	this.UPLOAD_FILE_SIZE_MAX = cnf.upload_file_size_max;
 	this.DELETE_CONFIRMATION = cnf.delete_confirmation;
+	this.THUMBS = $(this.NAMESPACE + '.thumbs');
 
 	//Revisa si el navegador soporta todas las caracteristicas de File API
 	if (
@@ -34,7 +36,15 @@ var IF_UPLOAD = function (cnf)
 		return false;
 	}
 
-	//Carga de archivos
+	var that = this;
+
+	//Procesa fotos que ya han sido cargadas
+	this.THUMBS.find('img[data-remote]').dblclick(function ()
+	{
+		that._removeRemoteFile(this);
+	});
+
+	//Activa la carga de nuevos archivos
 	this._addUploadBtn();
 };
 
@@ -81,7 +91,8 @@ IF_UPLOAD.prototype = {
 			return false;
 		}
 
-		//Render Thumbnail solo para imagenes
+		//Render Thumbnail solo para imagenes, muestra un icono
+		//para archivos que no son imagenes
 		if (this._mimeSimple(file.type) == 'image')
 		{
 			var reader = new FileReader();
@@ -97,11 +108,11 @@ IF_UPLOAD.prototype = {
 		}
 
 		//anadir nuevo boton para subir otro archivo
-		$(this.CANVAS + '.add_file')
+		$(this.NAMESPACE + '.add_file')
 			.removeClass('add_file')
 			.addClass('hide')
 			.attr('name', file.name)
-		;
+			;
 		this._addUploadBtn();
 	}
 
@@ -114,7 +125,7 @@ IF_UPLOAD.prototype = {
 			{
 				that._removeFile(this);
 			})
-			.prependTo(this.CANVAS + '.thumbs')
+			.prependTo(this.THUMBS)
 			;
 	}
 
@@ -132,7 +143,7 @@ IF_UPLOAD.prototype = {
 			{
 				that._removeFile(this);
 			})
-			.prependTo(this.CANVAS + '.thumbs')
+			.prependTo(this.THUMBS)
 			;
 	}
 
@@ -144,7 +155,7 @@ IF_UPLOAD.prototype = {
 			+ '<input type="file" />'
 			+ '</div>'
 			)
-			.appendTo(this.CANVAS + '.thumbs')
+			.appendTo(this.THUMBS)
 			;
 		btn.find('input').on('change', function () {
 			that._addFile(this);
@@ -155,11 +166,39 @@ IF_UPLOAD.prototype = {
 		});
 	}
 
-	//Remueve ambos thumbnail y el input file
+	//Remover un archivo local que aun no se ha subido. El cambio
+	//aplica inmediatamente
 	, _removeFile: function (file)
 	{
-		var name = $(file).attr('name');
-		$(this.CANVAS + '.thumbs').find("[name='" + name + "']").remove();
+		var that = this;
+		IF_MODAL.confirm('¿Confirma eliminar este archivo?', function (si)
+		{
+			if (!si)
+			{
+				return;
+			}
+			that.THUMBS.find("[name='" + file.name + "']").remove();
+		});
+	}
+
+	//Remover un archivo remoto YA subido. El cambio aplicará al llamar
+	//upload()
+	, _removeRemoteFile: function (img)
+	{
+		var that = this;
+		IF_MODAL.confirm('¿Confirma eliminar este archivo?', function (si)
+		{
+			if (!si)
+			{
+				return;
+			}
+			var remoteFileName = $(img).attr('data-remote');
+			var remoteList = $(that.NAMESPACE + '.remove_remote_files').val();
+			$(that.NAMESPACE + '.remove_remote_files').val(
+				remoteList + ',' + remoteFileName
+				);
+			$(img).remove();
+		});
 	}
 
 	//Muestra un mensaje
@@ -171,13 +210,17 @@ IF_UPLOAD.prototype = {
 	//Llamar al momento de guardar el formulario para subir las imagenes.
 	//TENER CUIDADO: sube las imagenes asincronamente, usar el callback
 	//si se necesita continuar el flujo LUEGO de que se hallan subido.
-	, upload: function (id, callback)
+	, upload: function (callback)
 	{
-		var $fileBtn = $(this.CANVAS + '.add_file').hide();
+		var $fileBtn = $(this.NAMESPACE + '.add_file').hide();
 
 		var formData = new FormData();
-		formData.append('id', id);
-		var files = $(this.CANVAS + 'input[type=file]').each(function (i)
+		formData.append('id', this.ID);
+		formData.append('remove_remote_files',
+			$(this.NAMESPACE + '.remove_remote_files').val()
+			);
+
+		var files = $(this.NAMESPACE + 'input[type=file]').each(function (i)
 		{
 			var file = this.files[0]
 			if (file)
@@ -211,22 +254,22 @@ IF_UPLOAD.prototype = {
 			s = 'image';
 		} else if (s.indexOf('audio/') >= 0)
 		{
-			s = 'audio';
+			s = 'mp3';
 		} else if (s.indexOf('video/') >= 0)
 		{
-			s = 'video';
+			s = 'mp4';
 		} else if (s.indexOf('excel') >= 0)
 		{
-			s = 'excel';
+			s = 'xls';
 		} else if (s.indexOf('word') >= 0)
 		{
-			s = 'word';
+			s = 'doc';
 		} else if (s.indexOf('powerpoint') >= 0)
 		{
-			s = 'powerpoint';
+			s = 'pps';
 		} else if (s.indexOf('text/plain') >= 0)
 		{
-			s = 'text';
+			s = 'txt';
 		} else if (s.indexOf('pdf') >= 0)
 		{
 			s = 'pdf';

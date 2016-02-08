@@ -14,6 +14,6 @@ $id = isset($id) ? $id : NULL;
 <script>
 	$(function ()
 	{
-		UPLOAD_DEMO.detail(<?= $id ?>);
+		UPLOAD_DEMO.detail(89);
 	});
 </script>	

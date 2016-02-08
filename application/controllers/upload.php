@@ -5,64 +5,55 @@ if(!defined('BASEPATH'))
 
 include APPPATH . 'core/IF_Controller.php';
 
+/**
+ * Es recomendable heredar de esta clase si se necesitan
+ * varias instancias para subir a dos rutas distintas (ej: fotos de usuarios
+ * y archivos PDF)
+ */
 class Upload extends IF_Controller
 {
-
-	public function __construct()
+	public function __construct($upload_dir='uploads/')
 	{
 		parent::__construct();
-		$this->load->model('upload_model', 'upload_m');
 
-		//MODIFICAR AL DIRECTORIO A SUBIR, incluir / al final
-		$upload_dir = 'uploads/';
-
-		//NO modificar estos
-		$this->main_upload_url = ASSETS_URL . $upload_dir;
-		$this->main_upload_path = ASSETS_PATH . $upload_dir;
-
-		//$this->output->enable_profiler(TRUE);
+		$this->upload_path_client = ASSETS_URL . $upload_dir;
+		$this->upload_path_server = ASSETS_PATH . $upload_dir;
 	}
 
-	public function index($id = -1)
+	public function detail($id = -1, $nombre_objeto = 'IF_UPLOADER')
 	{
-		$D = new stdClass();
-		$D->id = $id;
-		$this->tmpl('demos/fotos/index', $D);
-	}
-
-	public function detail($id = -1, $nombre_objeto = 'UPLOADER')
-	{
-		//obtener datos del objeto
-		$D = $id <= 0 ? $this->upload_m->vacio() :
-			$this->upload_m->get($id);
-
-		//si existe algun agregado para el objeto hay que anexarlo
-		if(!empty($ADDON))
+		if(!extension_loaded('fileinfo'))
 		{
-
-			$D = (object) array_merge((array) $D, (array) $ADDON);
+			die('Se requiere la extensión PHP fileinfo.');
 		}
-
-		/*
-		 * Se envia URL donde se subiran los archivos
-		 */
-		$D->main_upload_url = $this->main_upload_url;
+		
+		$D = new stdClass();
+		$D->FILES_URL = $this->upload_path_client.$id.'/';
 		$D->NOMBRE_OBJETO = $nombre_objeto;
 		$D->ID = $id;
+		$D->FILES = array();
+		
+		//busca archivos ya subidos para este id
+		$dir = $this->upload_path_server.$id.'/';
+		if(is_dir($dir) && ($files = scandir($dir)))
+		{
+			unset($files[array_search('.', $files)]);
+			unset($files[array_search('..', $files)]);
+			$D->FILES = $files;
+		}
 
 		$this->load->view('demos/fotos/upload_detail', $D);
 	}
 
-	//$id contiene el ID del elemento
+	//Retorna codigos de error numerico. 0 = no error.
 	public function ajax_save()
 	{
-		$E = (object)$_POST;
-		$D = new stdClass();
-		$D->id = $E->id;
+		$D = (object)$_POST;
 		
 		//carpeta especifica
-		$upload_dir = $this->main_upload_path . $D->id . '/';
-		if(mkdir($upload_dir))
+		$upload_dir = $this->upload_path_server . $D->id . '/';
+		
+		if(file_exists($upload_dir) || mkdir($upload_dir))
 		{
 			//Subir archivos
 			foreach($_FILES as $i=> $v)
@@ -72,7 +63,17 @@ class Upload extends IF_Controller
 				$D->$dbCol = $file_name = md5(mt_rand()).".{$ext}";
 				move_uploaded_file($v["tmp_name"], $upload_dir . $file_name);
 			}
-			//$this->upload_m->store($D);
+			
+			//Remover archivos remotos
+			$elim = explode(',',$D->remove_remote_files);
+			foreach($elim as $v)
+			{
+				if(empty($v))
+				{
+					continue;
+				}
+				@unlink($upload_dir.$v);
+			}
 		}
 		else
 		{
