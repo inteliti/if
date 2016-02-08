@@ -15,7 +15,6 @@
 	$main_upload_url = isset($main_upload_url) ? $main_upload_url : "";
 ?>
 <div>
-
 	<form id="det-upload-form" onsubmit="return(false);" novalidate>
 		
 		<input type="hidden" name="id" value="<?= $id; ?>" />

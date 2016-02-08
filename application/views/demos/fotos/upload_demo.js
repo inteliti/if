@@ -32,7 +32,6 @@ var UPLOAD_DEMO = {
 			}
 		});
 		
-		
 	}
-}
+};
 
