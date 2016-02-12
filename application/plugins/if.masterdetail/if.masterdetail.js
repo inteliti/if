@@ -24,6 +24,8 @@ var IF_MASTERDETAIL = {
 		mtCnf = mtCnf || {};
 		mtCnf.formatters = mtCnf.formatters || {};
 
+		IF_MASTERDETAIL.AUTOSCROLL_OFFSET = mtCnf.autoScrollOffset || 0;
+
 		if (mtCnf.controller)
 		{
 			mtCnf.url = IF_MAIN.CI_INDEX + mtCnf.controller;
@@ -150,7 +152,13 @@ var IF_MASTERDETAIL = {
 	, _mtSelected: function (callback, e, colModel, row)
 	{
 		//Solo aplica a moviles: mover vista al detalle
-		$('head,body').scrollTo($('#if-md-detail').offset().top, 'fast');
+		if (IF_MAIN.IS_MOBILE)
+		{
+			var offset = $('#if-md-detail').offset().top -
+				IF_MASTERDETAIL.AUTOSCROLL_OFFSET
+				;
+			$('head,body').scrollTo(offset, 'fast');
+		}
 
 		callback(row.id);
 	}
