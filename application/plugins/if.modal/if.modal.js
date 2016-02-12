@@ -46,7 +46,7 @@ var IF_MODAL =
 		, alert: function (m, cnf)
 		{
 			cnf = cnf || {};
-			
+
 			IF_MODAL._setSm();
 
 			var msg = '<p>' + m + '<p>';
@@ -176,8 +176,13 @@ var IF_MODAL =
 			$('#ifModal-content').html(header + body);
 
 			//establecemos ancho del modal
-			if (cnf.width)
-				$('#dialog').width(cnf.width);
+			if (!cnf.width)
+			{
+				cnf.width = IF_MAIN.IS_MOBILE ?
+					(IF_MAIN.VIEWPORT.width - 20) + 'px' : '350px'
+					;
+			}
+			$('#dialog').width(cnf.width);
 
 			IF_MAIN.loadCompos({
 				controller: cntrllr,
