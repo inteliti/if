@@ -6,7 +6,7 @@ var UPLOAD_DEMO = {
 	{
 		IF_MAIN.loadCompos({
 			target: '#upload-detail',
-			controller: 'upload/detail/' + (id || '-1') + '/mi_nombre_objeto',
+			controller: 'IF_Upload/detail/' + (id || '-1') + '/mi_nombre_objeto',
 			callback: function () {
 
 			}

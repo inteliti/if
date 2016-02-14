@@ -10,7 +10,7 @@ include APPPATH . 'core/IF_Controller.php';
  * varias instancias para subir a dos rutas distintas (ej: fotos de usuarios
  * y archivos PDF)
  */
-class Upload extends IF_Controller
+class IF_Upload extends IF_Controller
 {
 	public function __construct($upload_dir='uploads/')
 	{
