@@ -3,7 +3,7 @@
 if(!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
-include APPPATH . 'core/IF_Controller.php';
+include_once APPPATH . 'core/IF_Controller.php';
 
 /**
  * HEREDAR de esta clase, no sobreescribirla directamente.
@@ -14,9 +14,9 @@ class IF_Upload extends IF_Controller
 	public function __construct($upload_dir = 'uploads/', $config = NULL)
 	{
 		parent::__construct();
-		
+
 		//Asegurarse que $upload_dir termina en /
-		$upload_dir = trim($upload_dir, '/').'/';
+		$upload_dir = trim($upload_dir, '/');
 
 		//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
@@ -29,8 +29,12 @@ class IF_Upload extends IF_Controller
 			$this->CONFIG->FILE_TYPE = array('application/pdf');
 		}
 
-		$this->upload_path_client = ASSETS_URL . $upload_dir;
-		$this->upload_path_server = ASSETS_PATH . $upload_dir;
+		$this->upload_path_client = ASSETS_URL . $upload_dir . '/';
+		$this->upload_path_server = ASSETS_PATH . $upload_dir .
+			DIRECTORY_SEPARATOR
+		;
+
+		$this->garbageCollect();
 	}
 
 	public function detail_compos($id = -1, $nombre_objeto = 'IF_UPLOADER')
@@ -68,7 +72,7 @@ class IF_Upload extends IF_Controller
 		$D = (object) $_POST;
 
 		//carpeta especifica
-		$upload_dir = $this->upload_path_server . $D->id . '/';
+		$upload_dir = $this->upload_path_server . $D->id . DIRECTORY_SEPARATOR;
 
 		if(file_exists($upload_dir) || mkdir($upload_dir))
 		{
@@ -98,6 +102,54 @@ class IF_Upload extends IF_Controller
 		}
 
 		echo 0; //No error code
+	}
+
+	//Crea un directorio temporal para alojar archivos, ideal para
+	//entidades que se esten creando y aun no posean un ID.
+	static function createTempFolder($upload_dir)
+	{
+		//Asegurarse que $upload_dir termina en /
+		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
+
+		$tempName = 'iftemp-' . md5(time()) ;
+		mkdir(ASSETS_PATH . $upload_dir . $tempName. DIRECTORY_SEPARATOR, 0777);
+		return $tempName;
+	}
+
+	//Renombra una carpeta temporal con su ID definitivo
+	static function renameTempFolder($upload_dir, $tempName, $elementId)
+	{
+		//Asegurarse que terminan en /
+		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
+		$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
+
+		@rename(ASSETS_PATH . $upload_dir . $tempName,
+				ASSETS_PATH . $upload_dir . $elementId . DIRECTORY_SEPARATOR
+		);
+	}
+
+	//Elimina carpetas temporales que no se hayan usado en algun tiempo
+	private function garbageCollect()
+	{
+		$dir = $this->upload_path_server;
+		if(is_dir($dir) && ($files = scandir($dir)))
+		{
+			unset($files[array_search('.', $files)]);
+			unset($files[array_search('..', $files)]);
+			foreach($files as $v)
+			{
+				//Borrar carpetas temp con 30mins de creada
+				if(
+					strpos(strtolower($v), 'iftemp-') !== FALSE &&
+					(time() - filectime($dir . $v . DIRECTORY_SEPARATOR) > 1000)
+				)
+				{
+					//chmod($dir . $v .'/', 0777);
+					//d("BORRANDO: $v");
+					@unlink($dir . $v . DIRECTORY_SEPARATOR);
+				}
+			}
+		}
 	}
 
 }
