@@ -5,7 +5,7 @@
  * Para su uso sólo con autorización.
  * 
  * Dependencias: 
- * - if.main
+ * - if.main +1.2.0
  *****************************************************/
 var IF_MASTERDETAIL = {
 	//Recibe dos objetos de configuracion: para la MT y para el Detalle
@@ -97,7 +97,6 @@ var IF_MASTERDETAIL = {
 			})
 			;
 
-		IF_MASTERDETAIL.CURRENT_CNF = mtCnf;
 		IF_MASTERDETAIL.loadDetail(detailCnf || {});
 	}
 
@@ -182,20 +181,15 @@ var IF_MASTERDETAIL = {
 
 //Sobre escribe boton atras/adelante para moviles.
 //Dejar FUERA de la clase para evitar overload de memoria cada vez 
-//que se cargue un Maestro Detalle
+//que se inicialize un Maestro Detalle
 var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
 {
 	var state = e.originalEvent.state;
-
-	console.debug(state)
 
 	//Back button
 	if (!state || !state.ifMTId)
 	{
 		IF_MASTERDETAIL.hideDetail();
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
 	}
 
 	//Forward, reabrir el detalle
@@ -204,8 +198,11 @@ var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
 		IF_MASTERDETAIL.showDetail();
 	}
 
-};
+	e.preventDefault();
+	e.stopPropagation();
+	return false;
 
+};
 $(window).bind('resizeEnd', function ()
 {
 	if (IF_MAIN.IS_MOBILE)
@@ -218,46 +215,3 @@ $(window).bind('resizeEnd', function ()
 		IF_MASTERDETAIL.showDetail();
 	}
 }).resize();
-
-/**
- var ignoreHashChange = true;
- window.onhashchange = function () {
- console.debug(window.location.hash)
- if (!ignoreHashChange) {
- ignoreHashChange = true;
- window.location.hash = Math.random();
- // Detect and redirect change here
- // Works in older FF and IE9
- // * it does mess with your hash symbol (anchor?) pound sign
- // delimiter on the end of the URL
- } else {
- ignoreHashChange = false;
- }
- };
- /**
- var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
- {
- alert(window.location.hash)
- if (window.location.hash=='#mobile-back')
- {
- if (IF_MASTERDETAIL.MOBILE_DETAIL_OPENED)
- {
- IF_MASTERDETAIL.hideDetail();
- }
- e.preventDefault();
- e.stopPropagation();
- return false;
- }
- };
- $(window).resize(function ()
- {
- if (IF_MAIN.IS_MOBILE)
- {
- history.pushState({page:1}, '', "#mobile-back");
- $(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
- } else
- {
- $(window).unbind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
- }
- }).resize();
- /**/

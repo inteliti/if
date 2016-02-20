@@ -1,6 +1,6 @@
 /******************************************************************
  * Clase JavaScript MAIN basado en cwf.main
- * v1.1.0
+ * v1.2.0
  * 
  * Clase principal JavaScript del framework if.
  * 
