@@ -4,9 +4,8 @@
  * 
  * Validador de formularios que hace uso de los parametros 
  * y funciones nativas de HTML5 Constraints, ej. required, pattern, email, etc
- * Ideal para usar con formularios que se deben enviar via AJAX.
  * Obviamente este plugin no es compatible con navegadores que no
- * soporten validación nativa HTML5 (p.e. < IE7)
+ * soporten validación nativa HTML5 (p.e. < IE8)
  * 
  * Debe llamarse sobre el formulario completo, p.e.:
  * $("#forma").ifValidate();

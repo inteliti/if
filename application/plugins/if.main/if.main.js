@@ -1,5 +1,4 @@
 /******************************************************************
- * 
  * Clase JavaScript MAIN basado en cwf.main
  * v1.1.0
  * 
@@ -9,11 +8,6 @@
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
- * 
- * 1.1.0
- * - Reemplazado DATEPICKER_FORMAT por DATEPICKER_CONFIG
- * - Añadidos VIEWPORT y IS_MOBILE. Se establecen automaticamente.
- *   IS_MOBILE es true si la pantalla del usuario < 800px
  *****************************************************************/
 
 var IF_MAIN = {
@@ -28,8 +22,7 @@ var IF_MAIN = {
 		language: 'es',
 		format: 'dd/mm/yy'
 	},
-	//NO hacer modificaciones de aqui para abajo!!!
-
+	//No modificar estas
 	CANVAS_LOCK: 0,
 	UNSAVED_DATA: 0,
 	//-----------------------------------------------------------------
@@ -50,11 +43,19 @@ var IF_MAIN = {
 		var bodyH = $("#body").height();
 		$(IF_MAIN.CANVAS_SELECTOR).height(bodyH);
 
-		IF_MAIN.VIEWPORT = {
-			width: $(window).width(),
-			height: $(window).height()
-		};
-		IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width < 800;
+		//Listener para modo móvil/no-móvil. Es necesario para algunos
+		//dispositivos que se pueden rotar y cambiar de modo "en vivo"
+		var $win = $(window);
+		$win.resize(function ()
+		{
+			IF_MAIN.VIEWPORT = {
+				width: $win.width(),
+				height: $win.height()
+			};
+			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width < 999;
+		})
+			.resize()
+			;
 	}
 
 	//-----------------------------------------------------------------

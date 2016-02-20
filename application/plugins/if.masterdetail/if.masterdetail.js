@@ -40,9 +40,9 @@ var IF_MASTERDETAIL = {
 			delay: 500,
 			characters: 3
 		};
-		
+
 		//Establecer idioma si previamente se ha cargado un paquete L10N
-		if(IF_MASTERDETAIL.L10N)
+		if (IF_MASTERDETAIL.L10N)
 		{
 			mtCnf.labels = IF_MASTERDETAIL.L10N;
 		}
@@ -101,21 +101,7 @@ var IF_MASTERDETAIL = {
 
 		IF_MASTERDETAIL.loadDetail(detailCnf || {});
 
-		//Sobre escribe boton hacia atras para moviles
-		if (IF_MAIN.IS_MOBILE)
-		{
-			window.history.pushState('', null, './');
-			$(window).on('popstate', function (e)
-			{
-				if (IF_MASTERDETAIL.MOBILE_DETAIL_OPENED)
-				{
-					IF_MASTERDETAIL.hideDetail();
-				}
-				window.history.pushState('', null, './');
-				e.preventDefault();
-				return false;
-			});
-		}
+
 	}
 
 	//Rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
@@ -164,20 +150,23 @@ var IF_MASTERDETAIL = {
 		//Solo aplica a moviles: mostrar panel de detalle 
 		if (IF_MAIN.IS_MOBILE)
 		{
-			IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 1;
-			$('#if-md-detail').animate({"left": 0}, 'fast').show();
+			IF_MASTERDETAIL.showDetail();
 		}
 
 		callback(row.id);
 	}
 
-	
-	//Movil, Ocultar el detalle, ideal para botones customizados para
-	//cerrar el detalle.
+	//Movil, Ocultar/Mostrar el detalle, ideal para botones customizados
 	, hideDetail: function ()
 	{
 		$('#if-md-detail').animate({"left": '1000px'}, 'fast').hide();
 		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 0;
+	}
+	
+	,showDetail: function ()
+	{
+		$('#if-md-detail').animate({"left": '0'}, 'fast').show();
+		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 1;
 	}
 
 	//Esta funcion se debe customizar por proyectos.
@@ -192,3 +181,33 @@ var IF_MASTERDETAIL = {
 		$("#if-md-detail .datepicker").datepicker(IF_MAIN.DATEPICKER_CONFIG);
 	}
 };
+
+//Sobre escribe boton hacia atras para moviles.
+//Dejar FUERA de la clase para evitar overload de memoria cada vez 
+//que se cargue un Maestro Detalle
+var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
+{
+	if (IF_MASTERDETAIL.MOBILE_DETAIL_OPENED)
+	{
+		IF_MASTERDETAIL.hideDetail();
+	}
+	window.history.pushState('', null, './');
+	e.preventDefault();
+	return false;
+};
+$(window).resize(function ()
+{
+	if (IF_MAIN.IS_MOBILE)
+	{
+		if (!IF_MASTERDETAIL._POPSTATE_NOTIFIED)
+		{
+			window.history.pushState('', null, './');
+			$(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
+			IF_MASTERDETAIL._POPSTATE_NOTIFIED = 1;
+		}
+	} else
+	{
+		$(window).unbind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
+		IF_MASTERDETAIL.showDetail();
+	}
+});
