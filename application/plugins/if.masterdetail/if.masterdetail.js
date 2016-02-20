@@ -17,8 +17,6 @@ var IF_MASTERDETAIL = {
 		mtCnf = mtCnf || {};
 		mtCnf.formatters = mtCnf.formatters || {};
 
-		IF_MASTERDETAIL.AUTOSCROLL_OFFSET = mtCnf.autoScrollOffset || 0;
-
 		if (mtCnf.controller)
 		{
 			mtCnf.url = IF_MAIN.CI_INDEX + mtCnf.controller;
@@ -99,9 +97,8 @@ var IF_MASTERDETAIL = {
 			})
 			;
 
+		IF_MASTERDETAIL.CURRENT_CNF = mtCnf;
 		IF_MASTERDETAIL.loadDetail(detailCnf || {});
-
-
 	}
 
 	//Rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
@@ -150,6 +147,7 @@ var IF_MASTERDETAIL = {
 		//Solo aplica a moviles: mostrar panel de detalle 
 		if (IF_MAIN.IS_MOBILE)
 		{
+			window.history.pushState({ifMTId: row.id}, '', "#detail");
 			IF_MASTERDETAIL.showDetail();
 		}
 
@@ -162,8 +160,8 @@ var IF_MASTERDETAIL = {
 		$('#if-md-detail').animate({"left": '1000px'}, 'fast').hide();
 		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 0;
 	}
-	
-	,showDetail: function ()
+
+	, showDetail: function ()
 	{
 		$('#if-md-detail').animate({"left": '0'}, 'fast').show();
 		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 1;
@@ -182,32 +180,84 @@ var IF_MASTERDETAIL = {
 	}
 };
 
-//Sobre escribe boton hacia atras para moviles.
+//Sobre escribe boton atras/adelante para moviles.
 //Dejar FUERA de la clase para evitar overload de memoria cada vez 
 //que se cargue un Maestro Detalle
 var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
 {
-	if (IF_MASTERDETAIL.MOBILE_DETAIL_OPENED)
+	var state = e.originalEvent.state;
+
+	console.debug(state)
+
+	//Back button
+	if (!state || !state.ifMTId)
 	{
 		IF_MASTERDETAIL.hideDetail();
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
 	}
-	window.history.pushState('', null, './');
-	e.preventDefault();
-	return false;
+
+	//Forward, reabrir el detalle
+	else if (state.ifMTId > 0)
+	{
+		IF_MASTERDETAIL.showDetail();
+	}
+
 };
-$(window).resize(function ()
+
+$(window).bind('resizeEnd', function ()
 {
 	if (IF_MAIN.IS_MOBILE)
 	{
-		if (!IF_MASTERDETAIL._POPSTATE_NOTIFIED)
-		{
-			window.history.pushState('', null, './');
-			$(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
-			IF_MASTERDETAIL._POPSTATE_NOTIFIED = 1;
-		}
+		$(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
+		IF_MASTERDETAIL.hideDetail();
 	} else
 	{
 		$(window).unbind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
 		IF_MASTERDETAIL.showDetail();
 	}
-});
+}).resize();
+
+/**
+ var ignoreHashChange = true;
+ window.onhashchange = function () {
+ console.debug(window.location.hash)
+ if (!ignoreHashChange) {
+ ignoreHashChange = true;
+ window.location.hash = Math.random();
+ // Detect and redirect change here
+ // Works in older FF and IE9
+ // * it does mess with your hash symbol (anchor?) pound sign
+ // delimiter on the end of the URL
+ } else {
+ ignoreHashChange = false;
+ }
+ };
+ /**
+ var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
+ {
+ alert(window.location.hash)
+ if (window.location.hash=='#mobile-back')
+ {
+ if (IF_MASTERDETAIL.MOBILE_DETAIL_OPENED)
+ {
+ IF_MASTERDETAIL.hideDetail();
+ }
+ e.preventDefault();
+ e.stopPropagation();
+ return false;
+ }
+ };
+ $(window).resize(function ()
+ {
+ if (IF_MAIN.IS_MOBILE)
+ {
+ history.pushState({page:1}, '', "#mobile-back");
+ $(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
+ } else
+ {
+ $(window).unbind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
+ }
+ }).resize();
+ /**/

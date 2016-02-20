@@ -52,10 +52,8 @@ var IF_MAIN = {
 				width: $win.width(),
 				height: $win.height()
 			};
-			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width < 999;
-		})
-			.resize()
-			;
+			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width < 768;
+		}).resize();
 	}
 
 	//-----------------------------------------------------------------
@@ -372,6 +370,9 @@ var IF_MAIN = {
 
 };
 
+//===============================================
+//FUNCIONES DE UTILIDAD
+//===============================================
 $.fn.serializeObject = function ()
 {
 	var o = {};
@@ -388,3 +389,16 @@ $.fn.serializeObject = function ()
 	});
 	return o;
 };
+
+//Custom event para ejecutar algo al final de un resize
+$(window).resize(function ()
+{
+	if (this.resizeTO)
+	{
+		clearTimeout(this.resizeTO);
+	}
+	this.resizeTO = setTimeout(function ()
+	{
+		$(this).trigger('resizeEnd');
+	}, 250);
+});
