@@ -7,6 +7,7 @@
  * Dependencias: 
  * - if.main +1.2.0
  *****************************************************/
+
 var IF_MASTERDETAIL = {
 	//Recibe dos objetos de configuracion: para la MT y para el Detalle
 	//El objeto para el MT será rebotado tal cual a Bootgrid, ver docs de
@@ -156,7 +157,10 @@ var IF_MASTERDETAIL = {
 	//Movil, Ocultar/Mostrar el detalle, ideal para botones customizados
 	, hideDetail: function ()
 	{
-		$('#if-md-detail').animate({"left": '1000px'}, 'fast').hide();
+		$('#if-md-detail').animate({"left": '1000px'}, 'fast', null, function ()
+		{
+			$('#if-md-detail').hide();
+		});
 	}
 
 	, showDetail: function ()
