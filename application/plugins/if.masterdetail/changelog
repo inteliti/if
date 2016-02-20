@@ -1,0 +1,11 @@
+1.0.0
+- Inicial
+1.1.0
+- Añadido soporte para Data Formatters de Bootgrid
+- Añadido método save()
+- Añadido método detailLoaded()
+- Localizacion a español de Bootgrid
+1.2.0
+- Soporte multi-idiomas, por defecto estará en inglés. Para establecer otro idioma se debe incluir MANUALMENTE alguno de los paquetes l10n.xx.js ANTES de llamar init().
+- Mejorada la experiencia movil permitiendo que el detalle esté inicialmente invisible y sólo se muestre a pantalla completa al seleccionar un elemento de la MT 
+- Añadido método hideDetail()

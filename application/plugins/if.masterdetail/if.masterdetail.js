@@ -1,27 +1,16 @@
 /*****************************************************
  * Clase JavaScript de Maestro Detalle
- * v1.2.0
- * Dependencias: 
+ * v1.2.0 (detalles en changelog)
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 
- * Versiones
- * 1.0.0
- * - Inicial
- * 1.1.0
- * - Añadido soporte para Data Formatters de Bootgrid
- * - Añadido método save()
- * - Añadido método detailLoaded()
- * - Localizacion a español de Bootgrid
- * 1.2.0
- * - Mejorada la experiencia movil permitiendo que el detalle
- * esté inicialmente invisible y sólo se muestre pantalla completa
- * al seleccionar un elemento de la MT 
+ * Dependencias: 
+ * - if.main
  *****************************************************/
 var IF_MASTERDETAIL = {
 	//Recibe dos objetos de configuracion: para la MT y para el Detalle
 	//El objeto para el MT será rebotado tal cual a Bootgrid, ver docs de
-	//Bootgrid para +info http://www.jquery-bootgrid.com/
+	//Bootgrid: http://www.jquery-bootgrid.com/
 	//Adicionalmente debe recibir un Modelo de Columnas en colModel,
 	init: function (mtCnf, detailCnf)
 	{
@@ -51,13 +40,12 @@ var IF_MASTERDETAIL = {
 			delay: 500,
 			characters: 3
 		};
-		mtCnf.labels = {
-			noResults: "No se encontraron resultados.",
-			search: 'Búsqueda',
-			refresh: 'Recargar',
-			loading: 'Cargando...',
-			infos: 'Mostrando {{ctx.start}} - {{ctx.end}} de {{ctx.total}}'
-		};
+		
+		//Establecer idioma si previamente se ha cargado un paquete L10N
+		if(IF_MASTERDETAIL.L10N)
+		{
+			mtCnf.labels = IF_MASTERDETAIL.L10N;
+		}
 
 		//agregar parametro de proteccion csfr
 		if (IF_MAIN.CSFR_NAME.length > 0)
@@ -130,7 +118,7 @@ var IF_MASTERDETAIL = {
 		}
 	}
 
-	//rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
+	//Rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
 	//recibe los mismos parametros. Ver docs de IF_MAIN.loadCompos
 	, loadDetail: function (detailCnf)
 	{
@@ -145,6 +133,8 @@ var IF_MASTERDETAIL = {
 		});
 	}
 
+	//Recarga la MT. Re-envia al servidor los ultimos parametros
+	//establecidos en Bootgrid (search, sort, etc).
 	, reloadMT: function ()
 	{
 		$("#if-md #if-grid").bootgrid('reload');
@@ -182,7 +172,8 @@ var IF_MASTERDETAIL = {
 	}
 
 	
-	//Movil, Ocultar el detalle, ideal para botones customizados
+	//Movil, Ocultar el detalle, ideal para botones customizados para
+	//cerrar el detalle.
 	, hideDetail: function ()
 	{
 		$('#if-md-detail').animate({"left": '1000px'}, 'fast').hide();
