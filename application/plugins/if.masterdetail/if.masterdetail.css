@@ -19,7 +19,6 @@ html, body{
 #if-md-detail{
 	background-color: #fafafa;
 	padding: 40px;
-	min-height: 500px;
 	overflow: auto;
 }
 
