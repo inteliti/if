@@ -157,13 +157,11 @@ var IF_MASTERDETAIL = {
 	, hideDetail: function ()
 	{
 		$('#if-md-detail').animate({"left": '1000px'}, 'fast').hide();
-		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 0;
 	}
 
 	, showDetail: function ()
 	{
 		$('#if-md-detail').animate({"left": '0'}, 'fast').show();
-		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 1;
 	}
 
 	//Esta funcion se debe customizar por proyectos.
@@ -176,6 +174,15 @@ var IF_MASTERDETAIL = {
 
 		//Configuraciones adicionales
 		$("#if-md-detail .datepicker").datepicker(IF_MAIN.DATEPICKER_CONFIG);
+	}
+
+	//Debe llamarse al cerrar el detalle, sea movil o no
+	, detailClosed: function ()
+	{
+		if (IF_MAIN.IS_MOBILE)
+		{
+			history.back();
+		}
 	}
 };
 
