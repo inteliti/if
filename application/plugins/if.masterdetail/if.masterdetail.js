@@ -1,6 +1,6 @@
 /*****************************************************
  * Clase JavaScript de Maestro Detalle
- * v1.1.0
+ * v1.2.0
  * Dependencias: 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
@@ -13,6 +13,10 @@
  * - Añadido método save()
  * - Añadido método detailLoaded()
  * - Localizacion a español de Bootgrid
+ * 1.2.0
+ * - Mejorada la experiencia movil permitiendo que el detalle
+ * esté inicialmente invisible y sólo se muestre pantalla completa
+ * al seleccionar un elemento de la MT 
  *****************************************************/
 var IF_MASTERDETAIL = {
 	//Recibe dos objetos de configuracion: para la MT y para el Detalle
@@ -108,6 +112,22 @@ var IF_MASTERDETAIL = {
 			;
 
 		IF_MASTERDETAIL.loadDetail(detailCnf || {});
+
+		//Sobre escribe boton hacia atras para moviles
+		if (IF_MAIN.IS_MOBILE)
+		{
+			window.history.pushState('', null, './');
+			$(window).on('popstate', function (e)
+			{
+				if (IF_MASTERDETAIL.MOBILE_DETAIL_OPENED)
+				{
+					IF_MASTERDETAIL.hideDetail();
+				}
+				window.history.pushState('', null, './');
+				e.preventDefault();
+				return false;
+			});
+		}
 	}
 
 	//rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
@@ -151,16 +171,22 @@ var IF_MASTERDETAIL = {
 
 	, _mtSelected: function (callback, e, colModel, row)
 	{
-		//Solo aplica a moviles: mover vista al detalle
+		//Solo aplica a moviles: mostrar panel de detalle 
 		if (IF_MAIN.IS_MOBILE)
 		{
-			var offset = $('#if-md-detail').offset().top -
-				IF_MASTERDETAIL.AUTOSCROLL_OFFSET
-				;
-			$('head,body').scrollTo(offset, 'fast');
+			IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 1;
+			$('#if-md-detail').animate({"left": 0}, 'fast').show();
 		}
 
 		callback(row.id);
+	}
+
+	
+	//Movil, Ocultar el detalle, ideal para botones customizados
+	, hideDetail: function ()
+	{
+		$('#if-md-detail').animate({"left": '1000px'}, 'fast').hide();
+		IF_MASTERDETAIL.MOBILE_DETAIL_OPENED = 0;
 	}
 
 	//Esta funcion se debe customizar por proyectos.
