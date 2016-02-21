@@ -6,16 +6,9 @@
  * 
  * Dependencias
  * ------------
- * - IF_MAIN
+ * - if.main +1.2.0
  * - Se debe cargar uno de los archivos de localización (l10n.xx.js) 
  * antes de instanciar. (_loader.php NO lo carga, debe cargarse manualmente)
- * 
- * Changelog
- * ---------
- * 3.0.0
- * - Reescrito todo el plugin
- * - Removida dependencia con BD
- * - Anadido soporte de localización (ingles y español)
  *****************************************************/
 var IF_UPLOAD = function (cnf)
 {

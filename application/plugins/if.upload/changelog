@@ -1,0 +1,4 @@
+3.0.0
+- Reescrito todo el plugin
+- Removida dependencia con BD
+- Anadido soporte de localización (ingles y español)
