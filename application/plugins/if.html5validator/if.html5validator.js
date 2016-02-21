@@ -1,5 +1,5 @@
 /****************************************
- * V1.0
+ * V1.0.0
  * Por Gregorio Bolivar para Intelliti Framework
  * 
  * Validador de formularios que hace uso de los parametros 
@@ -8,7 +8,7 @@
  * soporten validación nativa HTML5 (p.e. < IE8)
  * 
  * Debe llamarse sobre el formulario completo, p.e.:
- * $("#forma").ifValidate();
+ * $("#formulario").ifValidate();
  * Retorna TRUE o FALSE si el formulario es valido o no.
  * Comportamiento automatico adicional:
  *  - Marca los campos con errores con la clase de Bootstrap 'has-error'

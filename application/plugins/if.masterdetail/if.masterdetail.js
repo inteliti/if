@@ -9,7 +9,7 @@
  *****************************************************/
 
 var IF_MASTERDETAIL = {
-	//Recibe dos objetos de configuracion: para la MT y para el Detalle
+	//Recibe dos objetos de configuracion: para la MT y para el Detalle.
 	//El objeto para el MT será rebotado tal cual a Bootgrid, ver docs de
 	//Bootgrid: http://www.jquery-bootgrid.com/
 	//Adicionalmente debe recibir un Modelo de Columnas en colModel,
@@ -46,7 +46,7 @@ var IF_MASTERDETAIL = {
 			mtCnf.labels = IF_MASTERDETAIL.L10N;
 		}
 
-		//agregar parametro de proteccion csfr
+		//Agregar parametro de proteccion csfr
 		if (IF_MAIN.CSFR_NAME.length > 0)
 		{
 			mtCnf.post = {};
@@ -89,6 +89,8 @@ var IF_MASTERDETAIL = {
 			})
 			.on('loaded.rs.jquery.bootgrid', function (e)
 			{
+				//FIX: este wrapper es necesario para resizar el grid a 
+				//height 100%. Asegurarse que sólo se añade 1 vez.
 				if (IF_MASTERDETAIL.BOOTGRID_WRAPPER_ADDED)
 				{
 					return;
@@ -180,17 +182,17 @@ var IF_MASTERDETAIL = {
 		$("#if-md-detail .datepicker").datepicker(IF_MAIN.DATEPICKER_CONFIG);
 	}
 
-	//Debe llamarse al cerrar el detalle, sea movil o no
+	//SIEMPRE Debe llamarse al cerrar el detalle, sea movil o no
 	, detailClosed: function ()
 	{
 		if (IF_MAIN.IS_MOBILE)
 		{
-			history.back();
+			history.back(); //regresa en la pila añadida via history.pushState
 		}
 	}
 };
 
-//Sobre escribe boton atras/adelante para moviles.
+//Sobre-escribe boton atras/adelante para moviles.
 //Dejar FUERA de la clase para evitar overload de memoria cada vez 
 //que se inicialize un Maestro Detalle
 var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
