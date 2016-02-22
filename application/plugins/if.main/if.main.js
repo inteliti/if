@@ -402,3 +402,22 @@ $(window).resize(function ()
 		$(this).trigger('resizeEnd');
 	}, 250);
 });
+
+Date.prototype.toISO8601 = function()
+{
+	console.log(this);
+	
+	var day = this.getDate(), mon = this.getMonth() + 1, hour =  this.getHours(), minute = this.getMinutes(), second = this.getSeconds();
+	if (day < 10)
+		day = '0' + day;
+	if (mon < 10)
+		mon = '0' + mon;
+	if (hour < 10)
+		hour = '0' + hour;
+	if (minute < 10)
+		minute = '0' + minute;
+	if (second < 10)
+		second = '0' + second;
+	
+	return this.getFullYear() + '-' + mon + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+};
