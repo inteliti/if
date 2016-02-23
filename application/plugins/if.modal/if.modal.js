@@ -9,10 +9,7 @@
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
  * 
- * Versiones
- * 1.1.0
- * - Auto-ajusta modales para moviles
- * - Dependencias: if.main
+ * 
  * 
  *****************************************************************/
 
