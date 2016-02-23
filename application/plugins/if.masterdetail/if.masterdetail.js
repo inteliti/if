@@ -100,15 +100,22 @@ var IF_MASTERDETAIL = {
 			})
 			;
 
-		IF_MASTERDETAIL.loadDetail(detailCnf || {});
+		IF_MASTERDETAIL.loadDetail(detailCnf || {}, detailCnf.pushState || 1);
 	}
 
 	//Rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
 	//recibe los mismos parametros. Ver docs de IF_MAIN.loadCompos
-	, loadDetail: function (detailCnf)
+	, loadDetail: function (detailCnf, dontPushState)
 	{
 		IF_MAIN.confirmUnsavedData(function ()
 		{
+			//Solo aplica a moviles: mostrar panel de detalle 
+			if (IF_MAIN.IS_MOBILE && !dontPushState)
+			{
+				window.history.pushState({ifMTId: 1}, '', "#detail");
+				IF_MASTERDETAIL.showDetail();
+			}
+
 			if (!detailCnf)
 			{
 				detailCnf = {};
@@ -146,13 +153,6 @@ var IF_MASTERDETAIL = {
 
 	, _mtSelected: function (callback, e, colModel, row)
 	{
-		//Solo aplica a moviles: mostrar panel de detalle 
-		if (IF_MAIN.IS_MOBILE)
-		{
-			window.history.pushState({ifMTId: row.id}, '', "#detail");
-			IF_MASTERDETAIL.showDetail();
-		}
-
 		callback(row.id);
 	}
 
