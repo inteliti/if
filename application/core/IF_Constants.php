@@ -10,7 +10,7 @@
  * 
  *********************************************************/
 
-define('IF_VERSION', '1.0');
+define('IF_VERSION', '1.1.1');
 
 //timezone
 date_default_timezone_set('America/Caracas');
@@ -35,6 +35,7 @@ define('SHARED_URL', APP_URL . 'templates/_shared/');
 define('TMPL_URL', APP_URL . 'templates/'.$C->item('tmpl').'/');
 // Apunta a application/plugins/
 define('PLUGINS_URL', APP_URL . 'plugins/');
+define('LIBS_URL', APP_URL . 'libraries/');
 
 /*********************************************************
  * PATHS PARA USAR LADO SERVER

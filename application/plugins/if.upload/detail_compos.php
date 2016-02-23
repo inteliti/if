@@ -16,7 +16,7 @@
 			}
 			else
 			{
-				$src = $PLG_URL . "img/files/{$ext}.png";
+				$src = $PLG_URL . "img/filetype/{$ext}.png";
 			}
 			?>
 			<img src="<?= $src ?>" data-remote="<?= $v ?>"

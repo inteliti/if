@@ -36,7 +36,7 @@ var IF_UPLOAD = function (cnf)
 	var that = this;
 
 	//Procesa fotos que ya han sido cargadas
-	this.THUMBS.find('img[data-remote]').dblclick(function ()
+	this.THUMBS.find('img[data-remote]').on('dblclick doubletap',function ()
 	{
 		that._removeRemoteFile(this);
 	});
@@ -61,7 +61,7 @@ IF_UPLOAD.prototype = {
 		var file = input.files[0];
 		var fsize = file.size; //Tamano
 		var ftype = file.type; //Tipo
-
+		
 		//Solo tipos permitidos
 		var ftype_flag = true;
 		for (var i = 0; i < this.UPLOAD_FILE_TYPES.length; i++)
@@ -115,7 +115,7 @@ IF_UPLOAD.prototype = {
 	{
 		var that = this;
 		$("<img src='" + e.target.result + "' name='" + file.name + "' />")
-			.dblclick(function ()
+			.on('dblclick doubletap', function ()
 			{
 				that._removeFile(this);
 			})
@@ -126,14 +126,14 @@ IF_UPLOAD.prototype = {
 	, _thumbIcon: function (file)
 	{
 		var that = this;
-		var type = this._mimeSimple(file.type);
+		var ext = file.name.split('.').pop().toLowerCase();
 
-		$("<img src='" + this.PLG_URL + "img/files/" + type + ".png' />")
+		$("<img src='" + this.PLG_URL + "img/filetype/" + ext + ".png' />")
 			.attr({
 				'name': file.name,
 				'title': file.name
 			})
-			.dblclick(function ()
+			.on('doubleclick doubletap', function ()
 			{
 				that._removeFile(this);
 			})

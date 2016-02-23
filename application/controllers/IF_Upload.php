@@ -26,7 +26,9 @@ class IF_Upload extends IF_Controller
 		}
 		if(empty($this->CONFIG->FILE_TYPE))
 		{
-			$this->CONFIG->FILE_TYPE = array('application/pdf');
+			$this->CONFIG->FILE_TYPE = array(
+				'application/pdf', 'image/jpeg', 'image/png'
+				);
 		}
 
 		$this->upload_path_client = ASSETS_URL . $upload_dir . '/';

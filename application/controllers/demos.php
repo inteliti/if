@@ -7,10 +7,14 @@ include APPPATH . 'core/IF_Controller.php';
 
 class Demos extends IF_Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
+	}
+	
+	function index()
+	{
+		$this->masterdetail();
 	}
 
 	public function masterdetail()
@@ -18,9 +22,9 @@ class Demos extends IF_Controller
 		$this->view('demos/masterdetail/index');
 	}
 	
-	public function fotos()
+	public function upload()
 	{
-		$this->view('demos/fotos/index');
+		$this->view('demos/upload/index');
 	}
 
 	protected function view($view)

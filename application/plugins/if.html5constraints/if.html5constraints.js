@@ -1,5 +1,5 @@
 /****************************************
- * V1.0.0
+ * V2.0.0
  * Por Gregorio Bolivar para Intelliti Framework
  * 
  * Validador de formularios que hace uso de los parametros 

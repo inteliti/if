@@ -1,5 +1,5 @@
 <?php
-$PATH = APP_URL . 'plugins/if.masterdetail/';
+$PATH = APPPATH . 'plugins/if.masterdetail/';
 ?>
 <!-- if.masterdetail loader -->
 <link rel="stylesheet" type="text/css" 

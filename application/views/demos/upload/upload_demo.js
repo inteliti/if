@@ -6,7 +6,7 @@ var UPLOAD_DEMO = {
 	{
 		IF_MAIN.loadCompos({
 			target: '#upload-detail',
-			controller: 'IF_Upload/detail/' + (id || '-1') + '/mi_nombre_objeto',
+			controller: 'IF_Upload/detail_compos/' + (id || '-1') + '/mi_nombre_objeto',
 			callback: function () {
 
 			}
@@ -19,16 +19,19 @@ var UPLOAD_DEMO = {
 		//procesar resto del formulario....
 		
 		
+		toastr.info('Guardando...');
+		
+		
 		//Llamamos a nuestro objeto IF_UPLOAD
 		mi_nombre_objeto.upload(function (errorCode)
 		{
 			if(!errorCode)
 			{
-				alert('Archivos cargados exitosamente.');
+				toastr.success('Archivos cargados exitosamente.');
 			}
 			else
 			{
-				alert('Error, codigo: '+errorCode);
+				toastr.error('Error, codigo: '+errorCode);
 			}
 		});
 		
