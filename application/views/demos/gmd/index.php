@@ -10,8 +10,8 @@ if_plugin('jquery.bigslide');
 		background-color: #fafafa;
 	}
 	.section1{
-		background-color: #eee;
-		height: 750px;
+		background-color: #f0f0f0;
+		height: 500px;
 	}
 </style>
 
@@ -60,19 +60,21 @@ if_plugin('jquery.bigslide');
 				
 				<div class="col-sm-12 if_centerv">
 					
-					<h1>
-						<i class="fa fa-cogs"></i>
-						Trabajando 24/7 para ud
+					<h1 class="lead">
+						IF { Material Designs }
 					</h1>
-					<h2>
-						Con soporte a cualquier hora
-					</h2>
-					<h3>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod quam a porta maximus. Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est, scelerisque varius odio erat quis libero. Curabitur feugiat tincidunt hendrerit. Cras accumsan orci vitae magna lacinia, at euismod turpis luctus.
-					</h3>
-					<a href="#" class="btn btn-default btn-lg"
+					<p class="lead">
+						Demo de el nuevo IF en Bootstrap 3.0,
+						con implementaciones basadas en
+						Google Material Designs.
+					</p>
+					<a href="#" class="btn btn-raised btn-primary"
 					   onclick="IF_MODAL.alert('Dialogo')">
-						Abrir diálogo
+						Abrir alert()
+					</a>
+					<a href="#" class="btn btn-raised"
+					   onclick="IF_MODAL.confirm('Te gusta el nuevo IF.GMD?')">
+						Abrir confirm()
 					</a>
 					
 				</div>

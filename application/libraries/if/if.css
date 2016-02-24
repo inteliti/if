@@ -121,58 +121,7 @@ Más info en Google Material Designs
 
 
 
-/************************************************************
-BOOTSTRAP 3.X OVERWRITE
-************************************************************/
-h1{
-	font-size: 4em;
-	font-weight: 100;
-}
-h2, h3{
-	font-weight: 300;
-	line-height: 1.45em;
-}
-.btn, .btn:focus, .btn:visited, .btn:hover{
-	color: #0066cc;
-}
-.btn{
-	background-color: transparent;
-	border:0;
-	border-radius: 0;
-	font-size: 14px;
-	text-transform: uppercase;
-}
-.btn:focus, .btn:active{
-	border: 0;
-	outline: 1px dashed #CCC;
-}
-.btn:hover{
-	background-color: #dfdfe0;
-}
-.btn-default{
-	background-color: #dcdcdc;
-	background-image: none;
-	border: 0;
-	text-shadow: none;
 
-	-webkit-box-shadow: none;
-	box-shadow: none;
-}
-.btn-lg{
-	font-size: 16px;
-	padding: 20px;
-}
-@media (max-width: 768px) {
-	h1{
-		font-size: 3em;
-	}
-	h2{
-		font-size: 24px;
-	}
-	h3{
-		font-size: 18px;
-	}
-}
 
 
 
