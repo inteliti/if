@@ -2,7 +2,7 @@
 - Fraccionado helpers/if_util_helper en varios helpers, dejando solo los helpers base en if_core_helper
 - Añadido biblioteca core jquery.easing
 - if.modal actualizado a 2.0 (ver changelog)
-- Adaptaciones generales a varios plugins con el framerowk de Google Material Designs
+- Adaptaciones generales a IF para hacer uso de framerowk de Google Material Designs
 - Nueva fuente por defecto: Roboto
 - Actualizado Bootstrap a 3.3.6
 - Añadida biblioteca core font-awesome
