@@ -1,15 +1,30 @@
-/* 
-    Document   : css
-    Created on : 22/04/2014, 04:06:10 PM
-    Author     : guacho
-    Description:
-        Purpose of the stylesheet follows.
-*/
+.if_modal{
+	background-color: #fafafa;
+	display: none;
 
-.modal-lg {
-    width: 900px;
+	padding: 30px;
+	
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+
+	min-width: 300px;
+	
+	/** Elevacion Google Material Design **/
+	z-index: 24; 
+	-webkit-box-shadow: 0px 22px 24px 0px #e0e0e0;
+          box-shadow: 0px 22px 24px 0px #e0e0e0;
 }
-
-.modal-sm {
-    width: 300px;
+.if_modal .if_modal_title{
+	font-size: 24px;
+	font-weight: 300;
+	margin-top: 0;
+}
+.if_modal .if_modal_content{
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+.if_modal .if_modal_btns {
+	text-align: right;
 }

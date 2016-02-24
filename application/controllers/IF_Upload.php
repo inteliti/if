@@ -57,7 +57,7 @@ class IF_Upload extends IF_Controller
 		$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
 
 		//busca archivos ya subidos para este id
-		$dir = $this->upload_path_server . $id . '/';
+		$dir = $this->upload_path_server . $id . DIRECTORY_SEPARATOR;
 		if(is_dir($dir) && ($files = scandir($dir)))
 		{
 			unset($files[array_search('.', $files)]);
@@ -146,8 +146,6 @@ class IF_Upload extends IF_Controller
 					(time() - filectime($dir . $v . DIRECTORY_SEPARATOR) > 1000)
 				)
 				{
-					//chmod($dir . $v .'/', 0777);
-					//d("BORRANDO: $v");
 					@unlink($dir . $v . DIRECTORY_SEPARATOR);
 				}
 			}

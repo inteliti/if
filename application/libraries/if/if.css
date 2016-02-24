@@ -1,0 +1,34 @@
+body{
+	font-family: Roboto, Arial;
+}
+
+/***************************************
+GOOGLE MATERIAL DESIGNS (GMD))
+Se hace overwrite de algunas clases de Bootstrap para adaptar a GMD
+***************************************/
+.btn, .btn:focus, .btn:visited, .btn:hover{
+	color: #0066cc;
+}
+.btn{
+	background-color: transparent;
+	border:0;
+	border-radius: 0;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+.btn:focus, .btn:active{
+	border: 0;
+	outline: 1px dashed #CCC;
+}
+.btn:hover{
+	background-color: #dfdfe0;
+}
+.btn-default{
+	background-color: #f0f0f0;
+	background-image: none;
+	border: 0;
+	text-shadow: none;
+	
+	-webkit-box-shadow: none;
+          box-shadow: none;
+}

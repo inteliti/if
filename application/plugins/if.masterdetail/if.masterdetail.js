@@ -1,6 +1,6 @@
 /*****************************************************
  * Clase JavaScript de Maestro Detalle
- * v1.2.0 (detalles en changelog)
+ * v1.2.1 (detalles en changelog)
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 
@@ -100,22 +100,15 @@ var IF_MASTERDETAIL = {
 			})
 			;
 
-		IF_MASTERDETAIL.loadDetail(detailCnf || {}, detailCnf.pushState || 1);
+		IF_MASTERDETAIL.loadDetail(detailCnf || {});
 	}
 
 	//Rebota la configuracion a IF_MAIN.loadCompos, por lo tanto
 	//recibe los mismos parametros. Ver docs de IF_MAIN.loadCompos
-	, loadDetail: function (detailCnf, dontPushState)
+	, loadDetail: function (detailCnf)
 	{
 		IF_MAIN.confirmUnsavedData(function ()
 		{
-			//Solo aplica a moviles: mostrar panel de detalle 
-			if (IF_MAIN.IS_MOBILE && !dontPushState)
-			{
-				window.history.pushState({ifMTId: 1}, '', "#detail");
-				IF_MASTERDETAIL.showDetail();
-			}
-
 			if (!detailCnf)
 			{
 				detailCnf = {};
@@ -153,21 +146,44 @@ var IF_MASTERDETAIL = {
 
 	, _mtSelected: function (callback, e, colModel, row)
 	{
+		if (IF_MAIN.IS_MOBILE) 
+		{
+			IF_MASTERDETAIL.showDetail();
+		}
 		callback(row.id);
 	}
 
 	//Movil, Ocultar/Mostrar el detalle, ideal para botones customizados
 	, hideDetail: function ()
 	{
-		$('#if-md-detail').animate({"left": '1000px'}, 'fast', null, function ()
+		//regresa en la pila añadida via showDetail
+		if (location.hash == IF_MASTERDETAIL.MOBILE_DETAIL_HASH)
 		{
-			$('#if-md-detail').hide();
-		});
+			history.back();
+		}
+
+		$('#if-md-detail')
+			.animate({"left": '1000px'}, 'normal', 'easeInOutCirc', function ()
+			{
+				$('#if-md-detail').hide();
+			})
+			;
 	}
 
-	, showDetail: function ()
+	, showDetail: function (dontPushState)
 	{
-		$('#if-md-detail').animate({"left": '0'}, 'fast').show();
+		//Solo aplica a moviles: mostrar panel de detalle 
+		if (IF_MAIN.IS_MOBILE && !dontPushState)
+		{
+			window.history.pushState(
+				{ifMTId: 1}, '', IF_MASTERDETAIL.MOBILE_DETAIL_HASH
+				);
+		}
+
+		$('#if-md-detail')
+			.animate({"left": '0'}, 'normal', 'easeInOutCirc')
+			.show()
+			;
 	}
 
 	//Esta funcion se debe customizar por proyectos.
@@ -182,14 +198,7 @@ var IF_MASTERDETAIL = {
 		$("#if-md-detail .datepicker").datepicker(IF_MAIN.DATEPICKER_CONFIG);
 	}
 
-	//SIEMPRE Debe llamarse al cerrar el detalle, sea movil o no
-	, detailClosed: function ()
-	{
-		if (IF_MAIN.IS_MOBILE)
-		{
-			history.back(); //regresa en la pila añadida via history.pushState
-		}
-	}
+	, MOBILE_DETAIL_HASH: "#detail"
 };
 
 //Sobre-escribe boton atras/adelante para moviles.

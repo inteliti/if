@@ -1,3 +1,6 @@
+1.2.1
+- Añadidos nuevo easing para transiciones del detalle para moviles
+- Bugfixes varios en transiciones de detalle para moviles
 1.2.0
 - Soporte multi-idiomas, por defecto estará en inglés. Para establecer otro idioma se debe incluir MANUALMENTE alguno de los paquetes l10n.xx.js ANTES de llamar init().
 - Mejorada la experiencia movil permitiendo que el detalle esté inicialmente invisible y sólo se muestre a pantalla completa al seleccionar un elemento de la MT 

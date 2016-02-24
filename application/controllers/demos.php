@@ -14,7 +14,7 @@ class Demos extends IF_Controller
 	
 	function index()
 	{
-		$this->masterdetail();
+		$this->view('demos/index');
 	}
 
 	public function masterdetail()
@@ -26,6 +26,26 @@ class Demos extends IF_Controller
 	{
 		$this->view('demos/upload/index');
 	}
+	
+	public function modal()
+	{
+		$this->view('demos/modal/index');
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	protected function view($view)
 	{

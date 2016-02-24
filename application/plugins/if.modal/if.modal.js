@@ -1,192 +1,122 @@
 /******************************************************************
- * 
  * Clase JavaScript para utilizar ventanas modales
- * v1.1.0
+ * v2.0
  * 
- * Basado en utilidades de Bootstrap
- * Dependencias: jquery.nestable
+ * NO RETRO-COMPATIBLE, usar if.modal.1 para proyectos antiguos
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
  * 
- * 
- * 
  *****************************************************************/
 
-var IF_MODAL =
+var IF_MODAL = {
+	/**
+	 * Clase generica, configuracion:
+	 * 
+	 * - title (string): titulo
+	 * - content (string): contenido del modal, puede contener HTML
+	 * - hideTitle (bool): si true, no muestra el título. false por defecto
+	 * - btns (obj): objeto de la forma {'texto': callback} que se convertirá
+	 * en botones a ser mostrados en la parte inferior del modal.
+	 * - timeout (number): Si >= 0, el modal se auto-cierra al transcurrir el 
+	 * tiempo en milisegundos. Si < 0 el modal no se cerrará automátcamente.
+	 * - autoFocus (number): puede usarse opcionalmente con btns. Representa
+	 * un índice en el objeto btns de 0 a btn.length. Si >= 0
+	 * el botón cuyo índice sea igual en el objeto btns, recibirá el focus
+	 * de forma que se ejecute el callback de dicho boton
+	 * al usuario presionar ENTER
+	 */
+	show: function (cnf)
 	{
-		/*
-		 * 
-		 */
-		_setSm: function ()
+		var $modal = $('#ifModal'),
+			$content = $modal.find('.if_modal_content').empty(),
+			$btns = $modal.find('.if_modal_btns').empty()
+			;
+
+		//Valores por defecto
+		cnf = cnf || {};
+
+		if (cnf.title && !cnf.hideTitle)
 		{
-			$('#myModal > div').removeClass('modal-lg');
-			$('#myModal > div').addClass('modal-sm');
+			$modal.find('.if_modal_title').empty().html(cnf.title);
 		}
 
-		//-----------------------------------------------------------------
+		$content.html(cnf.content || '');
 
-		/*
-		 * 
-		 */
-		, _setLg: function ()
+		if (cnf.btns)
 		{
-			$('#myModal > div').removeClass('modal-sm');
-			$('#myModal > div').addClass('modal-lg');
-		}
-
-		//-----------------------------------------------------------------
-
-		/*
-		 * 
-		 */
-		, alert: function (m, cnf)
-		{
-			cnf = cnf || {};
-
-			IF_MODAL._setSm();
-
-			var msg = '<p>' + m + '<p>';
-			var header = '<div class="modal-header">' +
-				'<a class="close" data-dismiss="modal"></a>' +
-				'</div>';
-			var body = '<div id="ifModal" class="modal-body">' + msg + '</div>';
-			var footer = '<div class="modal-footer">' +
-				'<a data-dismiss="modal" class="btn">Cerrar</a>' +
-				'</div>';
-
-			$('#ifModal-content').html(header + body + footer);
-
-			if (!cnf.width)
+			for (var i in cnf.btns)
 			{
-				cnf.width = IF_MAIN.IS_MOBILE ?
-					(IF_MAIN.VIEWPORT.width - 20) + 'px' : '350px'
+				var callback = cnf.btns[i];
+				$("<button type=button>" + i + "</button>")
+					.addClass('btn text-right')
+					.click(callback)
+					.appendTo($btns)
 					;
 			}
-			$('#dialog').width(cnf.width);
-
-			$('#myModal').modal('show');
 		}
 
-		//-----------------------------------------------------------------
-
-		/*
-		 * 
-		 */
-		, confirm: function (m, callback, cnf)
+		window.clearTimeout(IF_MODAL.TIMEOUT);
+		if (cnf.timeout >= 0)
 		{
-			cnf = cnf || {};
+			IF_MODAL.TIMEOUT = window.setTimeout(IF_MODAL.close, cnf.timeout);
+		}
 
-			IF_MODAL._setSm();
-			var msg = '<p>' + m + '<p>';
-			var body = '<div id="ifModal" class="modal-body">' + msg + '</div>';
-			var footer = '<div class="modal-footer">' +
-				'</div>';
+		$modal.fadeIn();
 
-			$('#ifModal-content').html(body + footer);
+		if (typeof cnf.autoFocus == 'number')
+		{
+			$btns.children().eq(cnf.autoFocus).focus();
+		}
+	}
 
-			if (!cnf.width)
+	, confirm: function (m, callback, cnf)
+	{
+		cnf = cnf || {};
+		cnf.content = m;
+		cnf.title = cnf.title || 'Confirmación';
+		cnf.btns = {
+			'Aceptar': function ()
 			{
-				cnf.width = IF_MAIN.IS_MOBILE ?
-					(IF_MAIN.VIEWPORT.width - 20) + 'px' : '350px'
-					;
+				(callback || $.noop)(1);
+			},
+			'Cancelar': function ()
+			{
+				(callback || $.noop)(0);
+				IF_MODAL.close();
 			}
-			$('#dialog').width(cnf.width);
+		};
+		IF_MODAL.show(cnf);
+	}
 
-			$('<button class="btn btn-primary">Aceptar</button>')
-				.on('click', function () {
-					$('#myModal').modal('hide');
-					callback(true);
-				}).appendTo(".modal-footer");
-
-			$('<button class="btn btn-default">Cancelar</button>')
-				.on('click', function () {
-					$('#myModal').modal('hide');
-					callback(false);
-				}).appendTo(".modal-footer");
-
-			$('#myModal').modal('show');
-
-		}
-
-		//-----------------------------------------------------------------
-
-		/*
-		 * 
-		 */
-		, close: function ()
-		{
-
-			$('#myModal').modal('hide');
-		}
-
-		/*
-		 * PENDIENTE ACOMODAR
-		 */
-		, osd: function (msg, type, timeout)
-		{
-			type = type || 'info';
-
-			$('#alerts').html('<div class="alert alert-' + type + '">' +
-				'<button type="button" class="close" data-dismiss="alert"></button>' + msg + '</div>');
-
-			timeout = timeout || 2000;
-
-			window.setTimeout(function ()
+	, alert: function (m, cnf)
+	{
+		cnf = cnf || {};
+		cnf.content = m;
+		cnf.title = cnf.title || 'Mensaje';
+		cnf.btns = {
+			'Cerrar': function ()
 			{
-				IF_MODAL._close_osd();
-			}, timeout);
-		}
-		, _close_osd: function ()
-		{
-			$('#alerts').html('');
-		}
-
-		//-----------------------------------------------------------------
-
-		/*
-		 * ajaxCntrllr
-		 * 
-		 * Muestra una modal con la vista retornada desde el 
-		 * controlador usando ajax.
-		 * 
-		 * @param objetc cnf			objeto para configuracion del modal
-		 *		
-		 *		cnf.controller			controlador que trae la vista
-		 *		cnf.data				data para el controlador
-		 *		cnf.title				titulo del modal
-		 *		cnf.width				ancho
-		 *		cnf.height				alto (POR PROGRAMAR)
-		 */
-		, ajaxCntrllr: function (cntrllr, data, cnf)
-		{
-			cnf = cnf || {};
-
-			IF_MODAL._setLg();
-
-			var header = '<div class="modal-header">' +
-				'<h4 class="modal-title">' + (cnf.title || '') + '</h4>' +
-				'<a class="close" data-dismiss="modal"></a>' +
-				'</div>';
-			var body = '<div id="ifModal" class="modal-body"></div>';
-
-			$('#ifModal-content').html(header + body);
-
-			//establecemos ancho del modal
-			if (!cnf.width)
-			{
-				cnf.width = IF_MAIN.IS_MOBILE ?
-					(IF_MAIN.VIEWPORT.width - 20) + 'px' : '350px'
-					;
+				IF_MODAL.close();
 			}
-			$('#dialog').width(cnf.width);
+		};
+		cnf.autoFocus = 0;
+		IF_MODAL.show(cnf);
+	}
 
-			IF_MAIN.loadCompos({
-				controller: cntrllr,
-				data: data,
-				target: '#ifModal'
-			});
+	, osd: function (m, secs, cnf)
+	{
+		cnf = cnf || {};
+		cnf.content = m;
+		cnf.title = cnf.title || 'Mensaje';
+		cnf.timeout = secs * 1000 || 5000;
+		IF_MODAL.show(cnf);
+	}
 
-			$('#myModal').modal('show');
-		}
-	};
+	, close: function ()
+	{
+		$('#ifModal').fadeOut();
+	}
+
+	, TIMEOUT: null
+};
