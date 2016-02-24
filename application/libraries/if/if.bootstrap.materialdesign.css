@@ -1,5 +1,5 @@
 /************************************************************
-BOOTSTRAP 3.X OVERWRITE FOR MATERIAL DESIGN
+CUSTOM BOOTSTRAP 3.X OVERWRITE FOR MATERIAL DESIGN
 ************************************************************/
 h1,
 h2,
@@ -36,7 +36,7 @@ h1.lead{
 	border: none;
 	border-radius: 2px;
 	position: relative;
-	padding: 8px 30px;
+	padding: 8px 20px;
 	margin: 10px 1px;
 	font-size: 14px;
 	font-weight: 500;
@@ -108,8 +108,10 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-default,
 .btn-group-raised .btn.btn-default,
 .btn-group-raised .input-group-btn .btn.btn-default {
-  background-color: #E0E0E0;
-  color: rgba(0,0,0, 0.87);
+	background-color: #E0E0E0;
+	color: rgba(0,0,0, 0.87);
+	-webkit-box-shadow: 0px 1px 2px 0px #999;
+	box-shadow: 0px 1px 2px 0px #999;
 }
 .btn.btn-raised.btn-inverse,
 .input-group-btn .btn.btn-raised.btn-inverse,
@@ -117,8 +119,8 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-inverse,
 .btn-group-raised .btn.btn-inverse,
 .btn-group-raised .input-group-btn .btn.btn-inverse {
-  background-color: #3f51b5;
-  color: #ffffff;
+	background-color: #3f51b5;
+	color: #ffffff;
 }
 .btn.btn-raised.btn-primary,
 .input-group-btn .btn.btn-raised.btn-primary,
@@ -126,8 +128,8 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-primary,
 .btn-group-raised .btn.btn-primary,
 .btn-group-raised .input-group-btn .btn.btn-primary {
-  background-color: #009688;
-  color: rgba(255,255,255, 0.84);
+	background-color: #009688;
+	color: rgba(255,255,255, 0.84);
 }
 .btn.btn-raised.btn-success,
 .input-group-btn .btn.btn-raised.btn-success,
@@ -135,8 +137,8 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-success,
 .btn-group-raised .btn.btn-success,
 .btn-group-raised .input-group-btn .btn.btn-success {
-  background-color: #4caf50;
-  color: rgba(255,255,255, 0.84);
+	background-color: #4caf50;
+	color: rgba(255,255,255, 0.84);
 }
 .btn.btn-raised.btn-info,
 .input-group-btn .btn.btn-raised.btn-info,
@@ -144,8 +146,8 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-info,
 .btn-group-raised .btn.btn-info,
 .btn-group-raised .input-group-btn .btn.btn-info {
-  background-color: #03a9f4;
-  color: rgba(255,255,255, 0.84);
+	background-color: #03a9f4;
+	color: rgba(255,255,255, 0.84);
 }
 .btn.btn-raised.btn-warning,
 .input-group-btn .btn.btn-raised.btn-warning,
@@ -153,8 +155,8 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-warning,
 .btn-group-raised .btn.btn-warning,
 .btn-group-raised .input-group-btn .btn.btn-warning {
-  background-color: #ff5722;
-  color: rgba(255,255,255, 0.84);
+	background-color: #ff5722;
+	color: rgba(255,255,255, 0.84);
 }
 .btn.btn-raised.btn-danger,
 .input-group-btn .btn.btn-raised.btn-danger,
@@ -162,6 +164,6 @@ h1.lead{
 .input-group-btn .btn.btn-fab.btn-danger,
 .btn-group-raised .btn.btn-danger,
 .btn-group-raised .input-group-btn .btn.btn-danger {
-  background-color: #f44336;
-  color: rgba(255,255,255, 0.84);
+	background-color: #f44336;
+	color: rgba(255,255,255, 0.84);
 }

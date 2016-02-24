@@ -73,7 +73,7 @@ if_plugin('jquery.bigslide');
 						Abrir alert()
 					</a>
 					<a href="#" class="btn btn-raised"
-					   onclick="IF_MODAL.confirm('Te gusta el nuevo IF.GMD?')">
+					   onclick="IF_MODAL.confirm('¿Confirmas que te gusta el nuevo IF { Material Designs }?')">
 						Abrir confirm()
 					</a>
 					
@@ -82,35 +82,54 @@ if_plugin('jquery.bigslide');
 			</div>
 		</div>
 	</div>
-	<div class="section2 if_z_2 if_section">
+	<div class="section2 if_section">
 		<div class="container">
 			<div class="row">
 				
-				<div class="col-sm-4">
+				<div class="col-sm-4 text-center">
+					<h1>
+						<i class="fa fa-bolt"></i>
+					</h1>
 					<h3>
+						
 						Cool features
 					</h3>		
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod quam a porta maximus. Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est, scelerisque varius odio erat quis libero.
 					</p>
+					<a href="<null>" class="btn btn-primary">
+						Conoce más aqui
+					</a>
 				</div>
 				
-				<div class="col-sm-4">
+				<div class="col-sm-4 text-center">
+					<h1>
+						<i class="fa fa-usd"></i>
+					</h1>
 					<h3>
 						Superb prices
 					</h3>		
 					<p>
 						Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est, scelerisque varius odio erat quis libero. Curabitur feugiat tincidunt hendrerit.
 					</p>
+					<a href="<null>" class="btn btn-primary">
+						Conoce más aqui
+					</a>
 				</div>
 				
-				<div class="col-sm-4">
+				<div class="col-sm-4 text-center">
+					<h1>
+						<i class="fa fa-cogs"></i>
+					</h1>
 					<h3>
 						High-end tech
 					</h3>		
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod quam a porta maximus. Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est.
 					</p>
+					<a href="<null>" class="btn btn-primary">
+						Conoce más aqui
+					</a>
 				</div>
 				
 			</div>

@@ -49,7 +49,7 @@ var IF_MODAL = {
 			{
 				var callback = cnf.btns[i];
 				$("<button type=button>" + i + "</button>")
-					.addClass('btn text-right')
+					.addClass('btn margin0')
 					.click(callback)
 					.appendTo($btns)
 					;
