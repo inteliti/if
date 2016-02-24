@@ -32,6 +32,11 @@ class Demos extends IF_Controller
 		$this->view('demos/modal/index');
 	}
 	
+	function gmd()
+	{
+		$this->view('demos/gmd/index');
+	}
+	
 	
 	
 	

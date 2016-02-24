@@ -3,6 +3,11 @@
 </h2>
 <ul>
 	<li>
+		<a href="<?= INDEX_URL ?>demos/gmd">
+			Layout (Google Material Design)
+		</a>
+	</li>
+	<li>
 		<a href="<?= INDEX_URL ?>demos/masterdetail">
 			Maestro Detalle
 		</a>

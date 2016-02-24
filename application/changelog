@@ -5,6 +5,7 @@
 - Adaptaciones generales a varios plugins con el framerowk de Google Material Designs
 - Nueva fuente por defecto: Roboto
 - Actualizado Bootstrap a 3.3.6
+- Añadida biblioteca core font-awesome
 1.1.1 [23/02/16]
 - if.main movido a su propio plugin.
 - Refactorizacion y reubicacion de bibliotecas consideradas base de IF a la carpeta libraries (ej: sin estos archivos IF no funciona), la mayoría de estos archivos estaban en templates/_shared y fueron sacados de allí.

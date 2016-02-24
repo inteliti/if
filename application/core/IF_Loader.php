@@ -12,23 +12,30 @@ foreach($libs as $l)
 }
 
 //================================================
-// BOOTSTRAP
+// CSSs BASES
 //================================================
 $libs = array(
-	'bootstrap.min'
+	'bootstrap/min/bootstrap.min',
+	'bootstrap/min/bootstrap-theme.min',
+	'fontawesome/css/font-awesome.min',
+	'if/if'
 );
 foreach($libs as $l)
 {
-	$src = LIBS_URL."bootstrap/min/{$l}.js";
-	echo "<script type='text/javascript' src='{$src}'></script>";
-}
-$libs = array(
-	'bootstrap.min', 'bootstrap-theme.min'
-);
-foreach($libs as $l)
-{
-	$src = LIBS_URL."bootstrap/min/{$l}.css";
+	$src = LIBS_URL.$l.".css";
 	echo "<link rel='stylesheet' type='text/css' href='{$src}' />";
+}
+
+//================================================
+// JSs BASES
+//================================================
+$libs = array(
+	'bootstrap/min/bootstrap.min'
+);
+foreach($libs as $l)
+{
+	$src = LIBS_URL.$l.".js";
+	echo "<script type='text/javascript' src='{$src}'></script>";
 }
 
 //================================================
@@ -41,17 +48,8 @@ foreach($libs as $l)
 {
 	include_once PLUGINS_PATH."{$l}/_loader.php";
 }
-$libs = array(
-	'if'
-);
-foreach($libs as $l)
-{
-	$src = LIBS_URL."if/{$l}.css";
-	echo "<link rel='stylesheet' type='text/css' href='{$src}' />";
-}
 ?>
-<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' 
-	  rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 <script>
 	IF_MAIN.CI_INDEX = '<?= INDEX_URL; ?>';
 	IF_MAIN.CSFR_NAME = '<?= $this->security->get_csrf_token_name(); ?>';
