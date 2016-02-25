@@ -16,7 +16,7 @@ foreach($libs as $l)
 //================================================
 $libs = array(
 	'bootstrap/min/bootstrap.min',
-	'bootstrap/min/bootstrap-theme.min',
+	//'bootstrap/min/bootstrap-theme.min',
 	'if/if.bootstrap.materialdesign',
 	'fontawesome/css/font-awesome.min',
 	'if/if'
