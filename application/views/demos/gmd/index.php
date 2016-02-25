@@ -1,6 +1,5 @@
 <?php
 $demo = ASSETS_URL . 'gmd_demo/';
-if_plugin('jquery.bigslide');
 ?>
 <style>
 	#logo{
@@ -9,82 +8,36 @@ if_plugin('jquery.bigslide');
 	.if_header{
 		background-color: #fafafa;
 	}
+	.bg_parallax{
+		background: url(<?= $demo ?>intro_bg.jpg);
+	}
 	.section1{
 		background-color: #f0f0f0;
-		height: 750px;
+		height: 650px;
+	}
+	@media(max-width: 768px){
+		.section1{
+			height: 350px;
+		}
 	}
 </style>
 
-<nav id="menu" class="if_drawer" role="navigation">
-    <ul>
-		<li>
-			<h2>
-				Demo Drawer
-			</h2>
-		</li>
-        <li>
-			<a href="#">
-				<i class="fa fa-check"></i>
-				Home
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<i class="fa fa-check"></i>
-				Seccion 1
-			</a>
-		</li>
-        <li>
-			<a href="#">
-				<i class="fa fa-check"></i>
-				Seccion 2
-			</a>
-		</li>
-	</ul>
-</nav>
-
 <div class="if_drawer_push">
 
-	<div id="header" class='if_header fixed if_z_4'>
+	<div id="header" class='if_header fixed if_z_4 if_drawer_push'>
 		<img src="<?= $demo ?>logo.png" 
 			 alt="" border="0" id="logo" class="if_logo" />
-		<i class="if_fab if_z_noshadow">
-			<i class="fa fa-bars"></i>
-		</i>
+		<a class="hmbrgrmenu if_fab if_z_noshadow"></a>
 	</div>
 	<div class="if_header_push"></div>
 
-
-	<style>
-		.dem1 {
-            height: 400px;
-            background-size: cover;
-            box-sizing: border-box;
-            padding: 100px;
-        }.bg1 {
-            background: url(http://www.mrwallpaper.com/wallpapers/AUtumn-Yellow-Park-1680x1050.jpg);
-        }.bg2 {
-            background: url(http://madisonmemorial.org/wp-content/uploads/2013/09/mountain-river-autumn-nature.jpg);
-        }.bg3 {
-            background: url(http://www.listofimages.com/wp-content/uploads/2012/05/nature-photography-fields-sunflowers-yellow-flowers.jpg);
-        }.bg4 {
-            background: url(http://imgscenter.com/images/2014/09/13/6-autumn-nature-sandbox-images_2053316.jpg);
-        }
-	</style>
-
-
-	<div class="dem1 bg4" data-enllax-ratio="1.5">
-		<h1 class="text-center" style="color: #fff" data-enllax-ratio=".3" data-enllax-type="foreground">Moving Fast</h1>
-	</div>
-
-
-
-	<div class="section1 if_z_2">
+	<div class="section1 bg_parallax if_z_inset" data-enllax-ratio="1.5">
 		<div class="container if_height100">
-			<div class="row if_centerv_wrap if_height100">
+			<div class="row if_centerv_wrap if_height100 "
+				 >
 
 				<div class="col-sm-12 if_centerv"
-					 data-enllax-ratio="-.3" data-enllax-type="foreground">
+					 data-enllax-ratio=".3" data-enllax-type="foreground">
 
 					<h1 class="lead">
 						IF { Material Designs }
@@ -267,12 +220,42 @@ if_plugin('jquery.bigslide');
 	</div>
 
 </div>
+
+<nav id="menu" class="if_drawer" role="navigation">
+    <ul>
+		<li>
+			<h2>
+				Demo Drawer
+			</h2>
+		</li>
+        <li>
+			<a href="#">
+				<i class="fa fa-check"></i>
+				Home
+			</a>
+		</li>
+		<li>
+			<a href="#">
+				<i class="fa fa-check"></i>
+				Seccion 1
+			</a>
+		</li>
+        <li>
+			<a href="#">
+				<i class="fa fa-check"></i>
+				Seccion 2
+			</a>
+		</li>
+	</ul>
+</nav>
 <script>
 	$(".if_fab").bigSlide({
 		side: 'right',
-		easyClose: true,
+		easyClose: false,
 		menuWidth: '18em',
 		push: '.if_drawer_push'
 	});
 	$(window).enllax();
+	$('.hmbrgrmenu').hmbrgrmenu();
+
 </script>

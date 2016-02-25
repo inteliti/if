@@ -7,8 +7,6 @@ $src = array(
 	//SHARED_URL.'bootstrap/includes/bootstrap-theme.min', 
 	TMPL_URL . 'css/if.bootstrap.theme.materialdesign', //usaremos theme custom
 	SHARED_URL . 'fontawesome/css/font-awesome.min',
-	//plugins
-	TMPL_URL . 'js/jquery.materialripple/jquery.materialripple'
 );
 foreach($src as $l)
 {
@@ -16,21 +14,29 @@ foreach($src as $l)
 }
 
 //================================================
-// JSs
+// PLUGINS GLOBALES
 //================================================
 $src = array(
-	//plugins
-	TMPL_URL . 'js/jquery.materialripple/jquery.materialripple'
+	'jquery.enllax',
+	'jquery.bigslide',
 );
 foreach($src as $l)
 {
-	echo "<script type='text/javascript' src='{$l}.js'></script>";
+	if_plugin($l);
 }
 
 //================================================
-// PLUGINS
+// PLUGINS DE PLANTILLA
 //================================================
-if_plugin('jquery.enllax');
+$src = array(
+	'jquery.materialripple',
+	'jquery.hmbrgrmenu'
+);
+foreach($src as $l)
+{
+	if_plugin_tmpl($l);
+}
+
 ?>
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' 
 	  rel='stylesheet' type='text/css'>

@@ -28,10 +28,6 @@
 		IF_MODAL.confirm('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consectetur dolor non orci faucibus vehicula.', function (si)
 		{
 			toastr.info('Usuario pulsó: ' + (si ? 'Aceptar' : 'Cancelar'));
-			if (si)
-			{
-				IF_MODAL.close();
-			}
 		});
 	}
 	function if_osd()

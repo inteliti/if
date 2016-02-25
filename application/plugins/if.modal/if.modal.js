@@ -79,6 +79,7 @@ var IF_MODAL = {
 			'Aceptar': function ()
 			{
 				(callback || $.noop)(1);
+				IF_MODAL.close();
 			},
 			'Cancelar': function ()
 			{

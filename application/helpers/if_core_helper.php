@@ -7,8 +7,15 @@
 //Carga un plugin ubicado en plugins/
 function if_plugin($plg)
 {
-	include_once PLUGINS_PATH."$plg/_loader.php";
+	include_once PLUGINS_PATH.$plg."/_loader.php";
 }
+
+//Carga un plugin ubicado en templates/<PLANTILLA_ACTIVA>/plugins/
+function if_plugin_tmpl($plg)
+{
+	include_once TMPL_PATH."plugins/{$plg}/_loader.php";
+}
+
 
 
 //Para construir enlaces con URLs de CodeIgniter
