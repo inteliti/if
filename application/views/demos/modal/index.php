@@ -4,16 +4,16 @@
 </h1>
 <hr />
 
-<button type="button" class="btn" onclick="IF_MODAL.close()">
+<button type="button" class="btn btn-raised" onclick="IF_MODAL.close()">
 	IF_MODAL.close()
 </button>
-<button type="button" class="btn" onclick="if_alert()">
+<button type="button" class="btn btn-raised" onclick="if_alert()">
 	IF_MODAL.alert();
 </button>
-<button type="button" class="btn" onclick="if_confirm()">
+<button type="button" class="btn btn-raised" onclick="if_confirm()">
 	IF_MODAL.confirm();
 </button>
-<button type="button" class="btn" onclick="if_osd()">
+<button type="button" class="btn btn-raised" onclick="if_osd()">
 	IF_MODAL.osd();
 </button>
 

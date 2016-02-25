@@ -4,7 +4,7 @@
 <ul>
 	<li>
 		<a href="<?= INDEX_URL ?>demos/gmd">
-			Layout (Google Material Design)
+			Template (Material Designs)
 		</a>
 	</li>
 	<li>

@@ -11,7 +11,7 @@ if_plugin('jquery.bigslide');
 	}
 	.section1{
 		background-color: #f0f0f0;
-		height: 500px;
+		height: 750px;
 	}
 </style>
 
@@ -54,11 +54,37 @@ if_plugin('jquery.bigslide');
 	</div>
 	<div class="if_header_push"></div>
 
+
+	<style>
+		.dem1 {
+            height: 400px;
+            background-size: cover;
+            box-sizing: border-box;
+            padding: 100px;
+        }.bg1 {
+            background: url(http://www.mrwallpaper.com/wallpapers/AUtumn-Yellow-Park-1680x1050.jpg);
+        }.bg2 {
+            background: url(http://madisonmemorial.org/wp-content/uploads/2013/09/mountain-river-autumn-nature.jpg);
+        }.bg3 {
+            background: url(http://www.listofimages.com/wp-content/uploads/2012/05/nature-photography-fields-sunflowers-yellow-flowers.jpg);
+        }.bg4 {
+            background: url(http://imgscenter.com/images/2014/09/13/6-autumn-nature-sandbox-images_2053316.jpg);
+        }
+	</style>
+
+
+	<div class="dem1 bg4" data-enllax-ratio="1.5">
+		<h1 class="text-center" style="color: #fff" data-enllax-ratio=".3" data-enllax-type="foreground">Moving Fast</h1>
+	</div>
+
+
+
 	<div class="section1 if_z_2">
 		<div class="container if_height100">
 			<div class="row if_centerv_wrap if_height100">
 
-				<div class="col-sm-12 if_centerv">
+				<div class="col-sm-12 if_centerv"
+					 data-enllax-ratio="-.3" data-enllax-type="foreground">
 
 					<h1 class="lead">
 						IF { Material Designs }
@@ -176,7 +202,7 @@ if_plugin('jquery.bigslide');
 				</div>
 			</div>
 		</div>
-		
+
 		<hr />
 
 		<div class="section4 if_section">
@@ -248,4 +274,5 @@ if_plugin('jquery.bigslide');
 		menuWidth: '18em',
 		push: '.if_drawer_push'
 	});
+	$(window).enllax();
 </script>

@@ -1,6 +1,6 @@
 <?php
 //================================================
-// LIBRERIAS CORE, SIN ESTAS IF NO FUNCIONA
+// BIBLIOTECAS ESENCIALES
 //================================================
 $libs = array(
 	'jquery.min', 'jquery.mobile-events.min', 'jquery.easing.min',
@@ -12,45 +12,22 @@ foreach($libs as $l)
 }
 
 //================================================
-// CSSs BASES
-//================================================
-$libs = array(
-	'bootstrap/min/bootstrap.min',
-	'if/if.bootstrap.materialdesign',
-	'fontawesome/css/font-awesome.min',
-	'if/if'
-);
-foreach($libs as $l)
-{
-	$src = LIBS_URL.$l.".css";
-	echo "<link rel='stylesheet' type='text/css' href='{$src}' />";
-}
-
-//================================================
-// JSs BASES
-//================================================
-$libs = array(
-	//'bootstrap/min/bootstrap.min'
-	'bootstrap_material/js/material.min',
-);
-foreach($libs as $l)
-{
-	$src = LIBS_URL.$l.".js";
-	echo "<script type='text/javascript' src='{$src}'></script>";
-}
-
-//================================================
-// PLUGINS IF BASES
+// PLUGINS ESENCIALES
 //================================================
 $libs = array(
 	'if.main', 'if.modal'
 );
 foreach($libs as $l)
 {
-	include_once PLUGINS_PATH."{$l}/_loader.php";
+	if_plugin($l);
 }
+
+//================================================
+// PLANTILLA
+//================================================
+include_once TMPL_PATH.'_loader.php';
+
 ?>
-<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
 <script>
 	IF_MAIN.CI_INDEX = '<?= INDEX_URL; ?>';
 	IF_MAIN.CSFR_NAME = '<?= $this->security->get_csrf_token_name(); ?>';

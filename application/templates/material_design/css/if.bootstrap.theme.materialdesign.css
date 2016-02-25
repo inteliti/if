@@ -1,0 +1,856 @@
+/************************************************************
+MATERIAL DESIGN HELPER CLASSES
+************************************************************/
+html, body{
+	font-family: Roboto, Arial;
+	height: 100%;
+}
+
+/***** 
+HEADER
+Si se necesita un header, colocar logos y menus dentro de el.
+Automaticamente los centrara verticalmente.
+*****/
+.if_header{
+	position: relative;
+	height: 100px;
+}
+.if_header > *{
+	position: absolute;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+}
+.if_header.fixed{
+	position: fixed;
+	width: 100%;
+}
+.if_header_push{
+	display: block;
+	height: 100px; /** debe coincidir con el mismo height en if_header **/
+}
+
+/***** 
+HEADER COMPONENTS
+*****/
+.if_logo{
+	position: absolute;
+	top:5%; left: 5%;
+}
+.if_fab{ /** Floating action button **/
+	cursor: pointer;
+	font-style: normal;
+	font-weight: 100;
+	font-size: 24px; 
+	position: absolute;
+	top: 5%; right: 5%;
+	z-index: 8;
+	-webkit-box-shadow: 0px 10px 12px 0px #e0e0e0;
+	box-shadow: 0px 10px 12px 0px #e0e0e0;
+}
+
+/***** 
+DRAWER
+*****/
+.if_drawer{
+	background: #FAFAFA;
+	border: 0;
+	border-style: solid;
+	border-color: #e0e0e0;
+	border-left-width: 1px;
+	border-right-width: 1px;
+	z-index: 16;
+	position: fixed;
+	width: 18em;
+	border-radius: 0;
+	
+	-webkit-box-shadow: -10px 4px 12px 0px rgba(0,0,0, 0.25);
+	box-shadow: -10px 4px 12px 0px rgba(0,0,0, 0.25);
+}
+.if_drawer ul, .if_drawer li{
+	list-style: none;
+	margin: 0; padding: 0;
+}
+.if_drawer li h2{
+	font-weight: 300;
+	font-size: 24px;
+	margin: 20px 0;
+}
+.if_drawer li > *{
+	color: #212121;
+	display: block;
+	font-size: 16px;
+	font-weight: 300;
+	padding: 15px 40px;
+	text-decoration: none;
+}
+.if_drawer a:hover{
+	background-color: #EAEAEA;
+}
+.if_drawer_push{
+	/* añadir a los paneles que van a ser empujados cuando el drawer abra */
+	position: relative;
+}
+
+
+/***** 
+ELEVACIONES
+Más info en Google Material Designs
+*****/
+.if_z_noshadow{
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+}
+.if_z_2{
+	z-index: 2;
+	-webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0, 0.25);
+	box-shadow: 0px 1px 2px 0px rgba(0,0,0, 0.25);
+}
+.if_z_4{
+	z-index: 4;
+	-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0, 0.25);
+	box-shadow: 0px 2px 4px 0px rgba(0,0,0, 0.25);
+}
+.if_z_6{
+	z-index: 6;
+	-webkit-box-shadow: 0px 4px 6px 0px rgba(0,0,0, 0.25);
+	box-shadow: 0px 4px 6px 0px rgba(0,0,0, 0.25);
+}
+.if_z_8{
+	z-index: 8;
+	-webkit-box-shadow: 0px 6px 8px 0px rgba(0,0,0, 0.25);
+	box-shadow: 0px 6px 8px 0px rgba(0,0,0, 0.25);
+}
+.if_z_12{
+	z-index: 12;
+	-webkit-box-shadow: 0px 10px 12px 0px rgba(0,0,0, 0.25);
+	box-shadow: 0px 10px 12px 0px rgba(0,0,0, 0.25);
+}
+
+
+
+
+
+
+
+/************************************************************
+FUNCIONES DE UTILIDAD
+************************************************************/
+/** Marginado de secciones **/
+.if_section{
+	padding: 100px 0;
+}
+
+/** 100% height **/
+.if_height100{
+	height: 100%;
+}
+
+/** Centrado vertical **/
+.if_centerv_wrap{
+	position: relative;
+}
+.if_centerv{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%) !important;
+}
+
+/** Otros **/
+.margin0{
+	margin: 0;
+}
+
+
+/************************************************************
+CUSTOM BOOTSTRAP 3.X OVERWRITE FOR MATERIAL DESIGN
+************************************************************/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4 {
+	font-family: 'Roboto', 'Helvetica', 'Arial';
+	font-weight: 300;
+}
+h5,
+h6 {
+	font-weight: 400;
+}
+h1.lead{
+	font-size: 48px;
+	font-weight: 100;
+}
+@media(max-width: 768px)
+{
+	h1.lead{
+		font-size: 36px;
+	}
+}
+
+
+
+.btn,
+.input-group-btn .btn {
+	border: none;
+	border-radius: 2px;
+	position: relative;
+	padding: 8px 20px;
+	margin: 10px 1px;
+	font-size: 14px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0;
+	text-shadow: none;
+	-webkit-transition: -webkit-box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	-o-transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	outline: 0;
+	cursor: pointer;
+	text-decoration: none;
+	background: transparent;
+}
+.btn::-moz-focus-inner,
+.input-group-btn .btn::-moz-focus-inner {
+	border: 0;
+}
+.btn:not(.btn-raised),
+.input-group-btn .btn:not(.btn-raised) {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.btn:not(.btn-raised),
+.input-group-btn .btn:not(.btn-raised),
+.btn:not(.btn-raised).btn-default,
+.input-group-btn .btn:not(.btn-raised).btn-default {
+	color: rgba(0,0,0, 0.87);
+}
+.btn:not(.btn-raised).btn-inverse,
+.input-group-btn .btn:not(.btn-raised).btn-inverse {
+	color: #3f51b5;
+}
+.btn:not(.btn-raised).btn-primary,
+.input-group-btn .btn:not(.btn-raised).btn-primary {
+	color: #009688;
+}
+.btn:not(.btn-raised).btn-success,
+.input-group-btn .btn:not(.btn-raised).btn-success {
+	color: #4caf50;
+}
+.btn:not(.btn-raised).btn-info,
+.input-group-btn .btn:not(.btn-raised).btn-info {
+	color: #03a9f4;
+}
+.btn:not(.btn-raised).btn-warning,
+.input-group-btn .btn:not(.btn-raised).btn-warning {
+	color: #ff5722;
+}
+.btn:not(.btn-raised).btn-danger,
+.input-group-btn .btn:not(.btn-raised).btn-danger {
+	color: #f44336;
+}
+.btn:not(.btn-raised):not(.btn-link):hover,
+.input-group-btn .btn:not(.btn-raised):not(.btn-link):hover,
+.btn:not(.btn-raised):not(.btn-link):focus,
+.input-group-btn .btn:not(.btn-raised):not(.btn-link):focus {
+	background-color: rgba(153, 153, 153, 0.2);
+}
+.btn.btn-raised,
+.input-group-btn .btn.btn-raised,
+.btn.btn-fab,
+.input-group-btn .btn.btn-fab,
+.btn-group-raised .btn,
+.btn-group-raised .input-group-btn .btn,
+.btn.btn-raised.btn-default,
+.input-group-btn .btn.btn-raised.btn-default,
+.btn.btn-fab.btn-default,
+.input-group-btn .btn.btn-fab.btn-default,
+.btn-group-raised .btn.btn-default,
+.btn-group-raised .input-group-btn .btn.btn-default {
+	background-color: #E0E0E0;
+	color: rgba(0,0,0, 0.87);
+	-webkit-box-shadow: 0px 1px 2px 0px #999;
+	box-shadow: 0px 1px 2px 0px #999;
+}
+.btn.btn-raised.btn-inverse,
+.input-group-btn .btn.btn-raised.btn-inverse,
+.btn.btn-fab.btn-inverse,
+.input-group-btn .btn.btn-fab.btn-inverse,
+.btn-group-raised .btn.btn-inverse,
+.btn-group-raised .input-group-btn .btn.btn-inverse {
+	background-color: #3f51b5;
+	color: #ffffff;
+}
+.btn.btn-raised.btn-primary,
+.input-group-btn .btn.btn-raised.btn-primary,
+.btn.btn-fab.btn-primary,
+.input-group-btn .btn.btn-fab.btn-primary,
+.btn-group-raised .btn.btn-primary,
+.btn-group-raised .input-group-btn .btn.btn-primary {
+	background-color: #009688;
+	color: rgba(255,255,255, 0.84);
+}
+.btn.btn-raised.btn-success,
+.input-group-btn .btn.btn-raised.btn-success,
+.btn.btn-fab.btn-success,
+.input-group-btn .btn.btn-fab.btn-success,
+.btn-group-raised .btn.btn-success,
+.btn-group-raised .input-group-btn .btn.btn-success {
+	background-color: #4caf50;
+	color: rgba(255,255,255, 0.84);
+}
+.btn.btn-raised.btn-info,
+.input-group-btn .btn.btn-raised.btn-info,
+.btn.btn-fab.btn-info,
+.input-group-btn .btn.btn-fab.btn-info,
+.btn-group-raised .btn.btn-info,
+.btn-group-raised .input-group-btn .btn.btn-info {
+	background-color: #03a9f4;
+	color: rgba(255,255,255, 0.84);
+}
+.btn.btn-raised.btn-warning,
+.input-group-btn .btn.btn-raised.btn-warning,
+.btn.btn-fab.btn-warning,
+.input-group-btn .btn.btn-fab.btn-warning,
+.btn-group-raised .btn.btn-warning,
+.btn-group-raised .input-group-btn .btn.btn-warning {
+	background-color: #ff5722;
+	color: rgba(255,255,255, 0.84);
+}
+.btn.btn-raised.btn-danger,
+.input-group-btn .btn.btn-raised.btn-danger,
+.btn.btn-fab.btn-danger,
+.input-group-btn .btn.btn-fab.btn-danger,
+.btn-group-raised .btn.btn-danger,
+.btn-group-raised .input-group-btn .btn.btn-danger {
+	background-color: #f44336;
+	color: rgba(255,255,255, 0.84);
+}
+
+
+
+.alert {
+  border: 0;
+  border-radius: 0;
+}
+.alert,
+.alert.alert-default {
+  background-color: rgba(255,255,255, 0.84);
+  color: rgba(255,255,255, 0.84);
+}
+.alert a,
+.alert.alert-default a,
+.alert .alert-link,
+.alert.alert-default .alert-link {
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-inverse {
+  background-color: #3f51b5;
+  color: #ffffff;
+}
+.alert.alert-inverse a,
+.alert.alert-inverse .alert-link {
+  color: #ffffff;
+}
+.alert.alert-primary {
+  background-color: #009688;
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-primary a,
+.alert.alert-primary .alert-link {
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-success {
+  background-color: #4caf50;
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-success a,
+.alert.alert-success .alert-link {
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-info {
+  background-color: #03a9f4;
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-info a,
+.alert.alert-info .alert-link {
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-warning {
+  background-color: #ff5722;
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-warning a,
+.alert.alert-warning .alert-link {
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-danger {
+  background-color: #f44336;
+  color: rgba(255,255,255, 0.84);
+}
+.alert.alert-danger a,
+.alert.alert-danger .alert-link {
+  color: rgba(255,255,255, 0.84);
+}
+.alert-info,
+.alert-danger,
+.alert-warning,
+.alert-success {
+  color: rgba(255,255,255, 0.84);
+}
+.alert-default a,
+.alert-default .alert-link {
+  color: rgba(0,0,0, 0.87);
+}
+
+
+
+
+.text-warning {
+  color: #ff5722;
+}
+.text-primary {
+  color: #009688;
+}
+.text-danger {
+  color: #f44336;
+}
+.text-success {
+  color: #4caf50;
+}
+.text-info {
+  color: #03a9f4;
+}
+
+
+
+.navbar {
+  background-color: #009688;
+  border: 0;
+  border-radius: 0;
+}
+.navbar .navbar-brand {
+  position: relative;
+  height: 60px;
+  line-height: 30px;
+  color: inherit;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+  color: inherit;
+  background-color: transparent;
+}
+.navbar .navbar-text {
+  color: inherit;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.navbar .navbar-nav > li > a {
+  color: inherit;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.navbar .navbar-nav > li > a:hover,
+.navbar .navbar-nav > li > a:focus {
+  color: inherit;
+  background-color: transparent;
+}
+.navbar .navbar-nav > .active > a,
+.navbar .navbar-nav > .active > a:hover,
+.navbar .navbar-nav > .active > a:focus {
+  color: inherit;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.navbar .navbar-nav > .disabled > a,
+.navbar .navbar-nav > .disabled > a:hover,
+.navbar .navbar-nav > .disabled > a:focus {
+  color: inherit;
+  background-color: transparent;
+  opacity: 0.9;
+}
+.navbar .navbar-toggle {
+  border: 0;
+}
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+  background-color: transparent;
+}
+.navbar .navbar-toggle .icon-bar {
+  background-color: inherit;
+  border: 1px solid;
+}
+.navbar .navbar-default .navbar-toggle,
+.navbar .navbar-inverse .navbar-toggle {
+  border-color: transparent;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+.navbar .navbar-nav > .open > a,
+.navbar .navbar-nav > .open > a:hover,
+.navbar .navbar-nav > .open > a:focus {
+  background-color: transparent;
+  color: inherit;
+}
+@media (max-width: 767px) {
+  .navbar .navbar-nav .navbar-text {
+    color: inherit;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .navbar .navbar-nav .open .dropdown-menu > .dropdown-header {
+    border: 0;
+    color: inherit;
+  }
+  .navbar .navbar-nav .open .dropdown-menu .divider {
+    border-bottom: 1px solid;
+    opacity: 0.08;
+  }
+  .navbar .navbar-nav .open .dropdown-menu > li > a {
+    color: inherit;
+  }
+  .navbar .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: inherit;
+    background-color: transparent;
+  }
+  .navbar .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: inherit;
+    background-color: transparent;
+  }
+  .navbar .navbar-nav .open .dropdown-menu > .disabled > a,
+  .navbar .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+  .navbar .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: inherit;
+    background-color: transparent;
+  }
+}
+.navbar .navbar-link {
+  color: inherit;
+}
+.navbar .navbar-link:hover {
+  color: inherit;
+}
+.navbar .btn-link {
+  color: inherit;
+}
+.navbar .btn-link:hover,
+.navbar .btn-link:focus {
+  color: inherit;
+}
+.navbar .btn-link[disabled]:hover,
+fieldset[disabled] .navbar .btn-link:hover,
+.navbar .btn-link[disabled]:focus,
+fieldset[disabled] .navbar .btn-link:focus {
+  color: inherit;
+}
+.navbar .navbar-form {
+  margin-top: 16px;
+}
+.navbar .navbar-form .form-group {
+  margin: 0;
+  padding: 0;
+}
+.navbar .navbar-form .form-group .material-input:before,
+.navbar .navbar-form .form-group.is-focused .material-input:after {
+  background-color: inherit;
+}
+.navbar .navbar-form .form-group .form-control,
+.navbar .navbar-form .form-control {
+  border-color: inherit;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  height: 28px;
+  font-size: 14px;
+  line-height: 1.42857143;
+}
+.navbar,
+.navbar.navbar-default {
+  background-color: #009688;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-default .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar .navbar-form input.form-control::-moz-placeholder,
+.navbar.navbar-default .navbar-form input.form-control::-moz-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-default .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar .navbar-form input.form-control:-ms-input-placeholder,
+.navbar.navbar-default .navbar-form input.form-control:-ms-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-default .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar .navbar-form input.form-control::-webkit-input-placeholder,
+.navbar.navbar-default .navbar-form input.form-control::-webkit-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar .dropdown-menu,
+.navbar.navbar-default .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar .dropdown-menu li > a,
+.navbar.navbar-default .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar .dropdown-menu li > a:hover,
+.navbar.navbar-default .dropdown-menu li > a:hover,
+.navbar .dropdown-menu li > a:focus,
+.navbar.navbar-default .dropdown-menu li > a:focus {
+  color: #009688;
+  background-color: #eeeeee;
+}
+.navbar .dropdown-menu .active > a,
+.navbar.navbar-default .dropdown-menu .active > a {
+  background-color: #009688;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar .dropdown-menu .active > a:hover,
+.navbar.navbar-default .dropdown-menu .active > a:hover,
+.navbar .dropdown-menu .active > a:focus,
+.navbar.navbar-default .dropdown-menu .active > a:focus {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-inverse {
+  background-color: #3f51b5;
+  color: #ffffff;
+}
+.navbar.navbar-inverse .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-inverse .navbar-form input.form-control::-moz-placeholder {
+  color: #ffffff;
+}
+.navbar.navbar-inverse .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-inverse .navbar-form input.form-control:-ms-input-placeholder {
+  color: #ffffff;
+}
+.navbar.navbar-inverse .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-inverse .navbar-form input.form-control::-webkit-input-placeholder {
+  color: #ffffff;
+}
+.navbar.navbar-inverse .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar.navbar-inverse .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar.navbar-inverse .dropdown-menu li > a:hover,
+.navbar.navbar-inverse .dropdown-menu li > a:focus {
+  color: #3f51b5;
+  background-color: #eeeeee;
+}
+.navbar.navbar-inverse .dropdown-menu .active > a {
+  background-color: #3f51b5;
+  color: #ffffff;
+}
+.navbar.navbar-inverse .dropdown-menu .active > a:hover,
+.navbar.navbar-inverse .dropdown-menu .active > a:focus {
+  color: #ffffff;
+}
+.navbar.navbar-primary {
+  background-color: #009688;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-primary .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-primary .navbar-form input.form-control::-moz-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-primary .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-primary .navbar-form input.form-control:-ms-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-primary .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-primary .navbar-form input.form-control::-webkit-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-primary .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar.navbar-primary .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar.navbar-primary .dropdown-menu li > a:hover,
+.navbar.navbar-primary .dropdown-menu li > a:focus {
+  color: #009688;
+  background-color: #eeeeee;
+}
+.navbar.navbar-primary .dropdown-menu .active > a {
+  background-color: #009688;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-primary .dropdown-menu .active > a:hover,
+.navbar.navbar-primary .dropdown-menu .active > a:focus {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-success {
+  background-color: #4caf50;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-success .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-success .navbar-form input.form-control::-moz-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-success .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-success .navbar-form input.form-control:-ms-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-success .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-success .navbar-form input.form-control::-webkit-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-success .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar.navbar-success .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar.navbar-success .dropdown-menu li > a:hover,
+.navbar.navbar-success .dropdown-menu li > a:focus {
+  color: #4caf50;
+  background-color: #eeeeee;
+}
+.navbar.navbar-success .dropdown-menu .active > a {
+  background-color: #4caf50;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-success .dropdown-menu .active > a:hover,
+.navbar.navbar-success .dropdown-menu .active > a:focus {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-info {
+  background-color: #03a9f4;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-info .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-info .navbar-form input.form-control::-moz-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-info .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-info .navbar-form input.form-control:-ms-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-info .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-info .navbar-form input.form-control::-webkit-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-info .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar.navbar-info .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar.navbar-info .dropdown-menu li > a:hover,
+.navbar.navbar-info .dropdown-menu li > a:focus {
+  color: #03a9f4;
+  background-color: #eeeeee;
+}
+.navbar.navbar-info .dropdown-menu .active > a {
+  background-color: #03a9f4;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-info .dropdown-menu .active > a:hover,
+.navbar.navbar-info .dropdown-menu .active > a:focus {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-warning {
+  background-color: #ff5722;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-warning .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-warning .navbar-form input.form-control::-moz-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-warning .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-warning .navbar-form input.form-control:-ms-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-warning .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-warning .navbar-form input.form-control::-webkit-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-warning .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar.navbar-warning .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar.navbar-warning .dropdown-menu li > a:hover,
+.navbar.navbar-warning .dropdown-menu li > a:focus {
+  color: #ff5722;
+  background-color: #eeeeee;
+}
+.navbar.navbar-warning .dropdown-menu .active > a {
+  background-color: #ff5722;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-warning .dropdown-menu .active > a:hover,
+.navbar.navbar-warning .dropdown-menu .active > a:focus {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-danger {
+  background-color: #f44336;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-danger .navbar-form .form-group input.form-control::-moz-placeholder,
+.navbar.navbar-danger .navbar-form input.form-control::-moz-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-danger .navbar-form .form-group input.form-control:-ms-input-placeholder,
+.navbar.navbar-danger .navbar-form input.form-control:-ms-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-danger .navbar-form .form-group input.form-control::-webkit-input-placeholder,
+.navbar.navbar-danger .navbar-form input.form-control::-webkit-input-placeholder {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-danger .dropdown-menu {
+  border-radius: 2px;
+}
+.navbar.navbar-danger .dropdown-menu li > a {
+  font-size: 16px;
+  padding: 13px 16px;
+}
+.navbar.navbar-danger .dropdown-menu li > a:hover,
+.navbar.navbar-danger .dropdown-menu li > a:focus {
+  color: #f44336;
+  background-color: #eeeeee;
+}
+.navbar.navbar-danger .dropdown-menu .active > a {
+  background-color: #f44336;
+  color: rgba(255,255,255, 0.84);
+}
+.navbar.navbar-danger .dropdown-menu .active > a:hover,
+.navbar.navbar-danger .dropdown-menu .active > a:focus {
+  color: rgba(255,255,255, 0.84);
+}
+.navbar-inverse {
+  background-color: #3f51b5;
+}
+@media (max-width: 1199px) {
+  .navbar .navbar-brand {
+    height: 50px;
+    padding: 10px 15px;
+  }
+  .navbar .navbar-form {
+    margin-top: 10px;
+  }
+  .navbar .navbar-nav > li > a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}
