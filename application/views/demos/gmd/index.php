@@ -69,7 +69,7 @@ if_plugin('jquery.bigslide');
 						Google Material Designs.
 					</p>
 					<a href="#" class="btn btn-raised btn-primary"
-					   onclick="IF_MODAL.alert('Dialogo')">
+					   onclick="IF_MODAL.alert('Demo de el nuevo IF en Bootstrap 3.0, con implementaciones basadas en Google Material Designs.')">
 						Abrir alert()
 					</a>
 					<a href="#" class="btn btn-raised"

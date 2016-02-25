@@ -16,7 +16,6 @@ foreach($libs as $l)
 //================================================
 $libs = array(
 	'bootstrap/min/bootstrap.min',
-	//'bootstrap/min/bootstrap-theme.min',
 	'if/if.bootstrap.materialdesign',
 	'fontawesome/css/font-awesome.min',
 	'if/if'
@@ -51,7 +50,7 @@ foreach($libs as $l)
 	include_once PLUGINS_PATH."{$l}/_loader.php";
 }
 ?>
-<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' rel='stylesheet' type='text/css'>
 <script>
 	IF_MAIN.CI_INDEX = '<?= INDEX_URL; ?>';
 	IF_MAIN.CSFR_NAME = '<?= $this->security->get_csrf_token_name(); ?>';
