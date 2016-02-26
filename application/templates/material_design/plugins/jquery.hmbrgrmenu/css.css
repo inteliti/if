@@ -1,9 +1,7 @@
-/* Icon 3 */
-
 .hmbrgrmenu{
 	display: block;
-	width: 35px;
-	height: 30px;
+	width: 30px;
+	height: 26px;
 	-webkit-transform: rotate(0deg);
 	-moz-transform: rotate(0deg);
 	-o-transform: rotate(0deg);
@@ -17,10 +15,10 @@
 .hmbrgrmenu span{
 	display: block;
 	position: absolute;
-	height: 5px;
+	height: 4px;
 	width: 100%;
 	background: #212121;
-	border-radius: 9px;
+	border-radius: 4px;
 	opacity: 1;
 	left: 0;
 	-webkit-transform: rotate(0deg);
@@ -36,10 +34,10 @@
 	top: 0px;
 }
 .hmbrgrmenu span:nth-child(2),.hmbrgrmenu span:nth-child(3) {
-	top: 12px;
+	top: 10px;
 }
 .hmbrgrmenu span:nth-child(4) {
-	top: 24px;
+	top: 20px;
 }
 .hmbrgrmenu.open span:nth-child(1) {
 	top: 18px;

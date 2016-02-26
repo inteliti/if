@@ -14,11 +14,13 @@ foreach($src as $l)
 }
 
 //================================================
-// PLUGINS GLOBALES
+// PLUGINS GLOBALES USADOS POR ESTA PLANTILLA
 //================================================
 $src = array(
 	'jquery.enllax',
 	'jquery.bigslide',
+	'jquery.scrollto',
+	'jquery.fadethis',
 );
 foreach($src as $l)
 {
@@ -36,12 +38,25 @@ foreach($src as $l)
 {
 	if_plugin_tmpl($l);
 }
-
 ?>
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700' 
 	  rel='stylesheet' type='text/css'>
 <script>
 	$(function () {
-		$('.btn, .ripple').materialripple();
+		$('.nav a, .btn, .ripple').materialripple();
+		$(".if_fab").bigSlide({
+			side: 'right',
+			easyClose: false,
+			menuWidth: '320px',
+			push: '.if_drawer_push'
+		});
+		$(window).enllax();
+		$('.hmbrgrmenu').hmbrgrmenu();
+		
+		$(window).fadeThis({
+			reverse: false
+		});
+		
+		
 	});
 </script>

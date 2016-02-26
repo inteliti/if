@@ -1,5 +1,6 @@
 $.fn.hmbrgrmenu = function (options)
 {
+	options = options || {};
 	$(this)
 		.addClass('hmbrgrmenu')
 		.append('<span></span><span></span><span></span><span></span>')

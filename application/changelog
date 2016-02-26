@@ -2,11 +2,11 @@
 - Fraccionado helpers/if_util_helper en varios helpers, dejando solo los helpers base en if_core_helper
 - Añadido biblioteca core jquery.easing
 - if.modal actualizado a 2.0 (ver changelog)
-- Adaptaciones generales a IF para hacer uso de framerowk de Google Material Designs
+- Nueva plantilla por defecto para IF basada en Google Material Designs
 - Nueva fuente por defecto: Roboto
 - Actualizado Bootstrap a 3.3.6
 - Añadida biblioteca font-awesome
-- Ahora las plantillas deberan tener un archivo _loader.php que se encargará de cargar todos los recursos que la plantilla necesita.
+- Ahora las plantillas deben tener un archivo _loader.php que se encargará de cargar todos los recursos que la plantilla necesita.
 1.1.1 [23/02/16]
 - if.main movido a su propio plugin.
 - Refactorizacion y reubicacion de bibliotecas consideradas base de IF a la carpeta libraries (ej: sin estos archivos IF no funciona), la mayoría de estos archivos estaban en templates/_shared y fueron sacados de allí.

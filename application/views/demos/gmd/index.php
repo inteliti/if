@@ -8,16 +8,28 @@ $demo = ASSETS_URL . 'gmd_demo/';
 	.if_header{
 		background-color: #fafafa;
 	}
-	.bg_parallax{
-		background: url(<?= $demo ?>intro_bg.jpg);
-	}
-	.section1{
+	#section-home{
 		background-color: #f0f0f0;
+		background: url(<?= $demo ?>intro_bg.jpg);
 		height: 650px;
 	}
 	@media(max-width: 768px){
-		.section1{
+		#section-home{
 			height: 350px;
+		}
+	}
+	#section-features img{
+		width: 150px;
+		margin: 0 20px 20px 0;
+		float: left;
+	}
+	#section-features .text-right img{
+		margin: 0 0 20px 20px;
+		float: right;
+	}
+	@media(max-width: 768px){
+		#section-features img{
+			width: 100px;
 		}
 	}
 </style>
@@ -31,7 +43,12 @@ $demo = ASSETS_URL . 'gmd_demo/';
 	</div>
 	<div class="if_header_push"></div>
 
-	<div class="section1 bg_parallax if_z_inset" data-enllax-ratio="1.5">
+
+
+	<div class="bg_parallax if_z_inset"
+		 id='section-home'
+		 data-enllax-ratio="1.5">
+
 		<div class="container if_height100">
 			<div class="row if_centerv_wrap if_height100 "
 				 >
@@ -40,7 +57,7 @@ $demo = ASSETS_URL . 'gmd_demo/';
 					 data-enllax-ratio=".3" data-enllax-type="foreground">
 
 					<h1 class="lead">
-						IF { Material Designs }
+						IF { Material Design }
 					</h1>
 					<p class="lead">
 						Demo de el nuevo IF en Bootstrap 3.0,
@@ -61,7 +78,72 @@ $demo = ASSETS_URL . 'gmd_demo/';
 			</div>
 		</div>
 	</div>
-	<div class="section2 if_section">
+
+
+
+
+	<div class="if_section" id="section-features">
+		<div class="container">
+			<div class="row slide-left">
+				<div class="col-md-12 ">
+					
+					<img src="<?= $demo ?>a1.jpg"
+						 alt="" border="0" />
+					
+					<h1 class='lead'>
+						Responsive
+					</h1>
+					<p class='lead'>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod quam a porta maximus. Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est, scelerisque varius odio erat quis libero.
+					</p>
+
+				</div>
+			</div>
+			
+			<div class="row slide-right">
+				<div class="col-md-12 text-right">
+					
+					<img src="<?= $demo ?>a2.jpg"
+						 alt="" border="0" />
+					
+					<h1 class='lead'>
+						Lightweight
+					</h1>
+					<p class='lead'>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod quam a porta maximus. Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est, scelerisque varius odio erat quis libero.
+					</p>
+					
+				</div>
+			</div>
+			
+			<div class="row slide-left">
+				<div class="col-md-12">
+					
+					<img src="<?= $demo ?>a3.jpg"
+						 alt="" border="0" />
+					
+					<h1 class='lead'>
+						Cross-browser
+					</h1>
+					<p class='lead'>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod quam a porta maximus. Donec efficitur, ipsum eget blandit vestibulum, diam felis porttitor est, scelerisque varius odio erat quis libero.
+					</p>
+
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+
+	<hr />
+
+
+
+
+
+	<div class="if_section" id='section-about'>
 		<div class="container">
 			<div class="row">
 
@@ -106,9 +188,15 @@ $demo = ASSETS_URL . 'gmd_demo/';
 		</div>
 	</div>
 
+
+
+
 	<hr />
 
-	<div class="section3 if_section">
+
+
+
+	<div class="section3 if_section" id='section-components'>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -152,15 +240,7 @@ $demo = ASSETS_URL . 'gmd_demo/';
 							Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
 						</p>
 					</div>
-				</div>
-			</div>
-		</div>
 
-		<hr />
-
-		<div class="section4 if_section">
-			<div class="container">
-				<div class="row">
 
 					<div class="navbar navbar-default">
 						<div class="container-fluid">
@@ -212,10 +292,11 @@ $demo = ASSETS_URL . 'gmd_demo/';
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
+
+		<hr />
 
 	</div>
 
@@ -229,33 +310,37 @@ $demo = ASSETS_URL . 'gmd_demo/';
 			</h2>
 		</li>
         <li>
-			<a href="#">
+			<a href="javascript:goTo('section-home')" class="ripple">
 				<i class="fa fa-check"></i>
-				Home
+				Inicio
 			</a>
 		</li>
 		<li>
-			<a href="#">
+			<a href="javascript:goTo('section-features')" class="ripple">
 				<i class="fa fa-check"></i>
-				Seccion 1
+				Features
 			</a>
 		</li>
         <li>
-			<a href="#">
+			<a href="javascript:goTo('section-about')" class="ripple">
 				<i class="fa fa-check"></i>
-				Seccion 2
+				Acerca
+			</a>
+		</li>
+		<li>
+			<a href="javascript:goTo('section-components')" class="ripple">
+				<i class="fa fa-check"></i>
+				Componentes Bootstrap
 			</a>
 		</li>
 	</ul>
 </nav>
 <script>
-	$(".if_fab").bigSlide({
-		side: 'right',
-		easyClose: false,
-		menuWidth: '18em',
-		push: '.if_drawer_push'
-	});
-	$(window).enllax();
-	$('.hmbrgrmenu').hmbrgrmenu();
+
+	function goTo(where)
+	{
+		$('.hmbrgrmenu').click();
+		$(window).scrollTo('#' + where, 1000, {offset: -80});
+	}
 
 </script>
