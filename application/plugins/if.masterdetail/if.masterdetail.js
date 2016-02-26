@@ -227,6 +227,15 @@ var IF_MASTERDETAIL_MOBILE_POPSTATE = function (e)
 };
 $(window).bind('resizeEnd', function ()
 {
+	//Bugfix: movil dispara evento resize al mostrar el teclado
+	//lo cual estaba causando que el detalle se cerrara.
+	//Comprobar si es el ancho el que se está cambiando
+	if(IF_MAIN.VIEWPORT.width==IF_MASTERDETAIL.VIEWPORT_WIDTH_RESIZED)
+	{
+		return;
+	}
+	IF_MASTERDETAIL.VIEWPORT_WIDTH_RESIZED = IF_MAIN.VIEWPORT.width;
+	
 	if (IF_MAIN.IS_MOBILE)
 	{
 		$(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
