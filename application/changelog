@@ -1,5 +1,5 @@
 1.2.0 [24/02/16]
-- Fraccionado helpers/if_util_helper en varios helpers, dejando solo los helpers base en if_core_helper
+- Fraccionado helpers/if_util_helper en varios helpers, dejando solo los helpers base en if_core_helper. Por defecto solo se carga if_core_helper.
 - Añadido biblioteca core jquery.easing
 - if.modal actualizado a 2.0 (ver changelog)
 - Nueva plantilla por defecto para IF basada en Google Material Designs

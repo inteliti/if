@@ -16,8 +16,6 @@ function if_plugin_tmpl($plg)
 	include_once TMPL_PATH."plugins/{$plg}/_loader.php";
 }
 
-
-
 //Para construir enlaces con URLs de CodeIgniter
 //Ej de uso: <a href="<?= a('Usuario/details/122') ? >">Usuario #122</a>
 function a($codeigniterUrl)

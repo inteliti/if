@@ -156,6 +156,11 @@ var IF_MASTERDETAIL = {
 	//Movil, Ocultar/Mostrar el detalle, ideal para botones customizados
 	, hideDetail: function ()
 	{
+		if(!IF_MAIN.IS_MOBILE)
+		{
+			return;
+		}
+		
 		//regresa en la pila añadida via showDetail
 		if (location.hash == IF_MASTERDETAIL.MOBILE_DETAIL_HASH)
 		{
