@@ -1,3 +1,5 @@
+1.2.1 [03/03/16]
+- Agregada libreria para implementación de Servicios REST (https://github.com/chriskacerguis/codeigniter-restserver). Controladores REST deben ir dentro del directorio API, los cuales deben heredar de IF_API_Controller que esta en core
 1.2.0 [24/02/16]
 - Fraccionado helpers/if_util_helper en varios helpers, dejando solo los helpers base en if_core_helper. Por defecto solo se carga if_core_helper.
 - Añadido biblioteca core jquery.easing

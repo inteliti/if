@@ -12,6 +12,8 @@
  * 
  *********************************************************/
 
+require APPPATH . '/libraries/REST_Controller.php';
+
 class IF_Controller extends CI_Controller
 {
 	/**

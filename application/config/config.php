@@ -31,7 +31,7 @@ $config['base_url'] = '/if/';
  | modifica esta variable sin tocar nada mas
  |   
  */
-$config['tmpl'] = 'tmpl1';
+$config['tmpl'] = 'material_design';
 
 /*
 |--------------------------------------------------------------------------
