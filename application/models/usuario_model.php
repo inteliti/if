@@ -41,9 +41,11 @@ class Usuario_Model extends IF_Model
 	
     public $sp_methods = array(
 		'login'		=> 'sp_login',
-		'get'		=> 'sp_get_usuario',
+		//'get'		=> 'sp_get_usuario',
 		//'count'	=> 'count_usuarios',
     );
+	
+	public $has_many = array('notes');
 	
     public $f_methods = array(
         

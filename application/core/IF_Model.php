@@ -63,11 +63,30 @@ class IF_Model extends CI_Model
 	 *		* $var string field => nombre del campo (identifica el campo en la BD).
 	 *		* $var string label => etiqueta del campo (identifica el campo en la vista).
 	 *		* $var string rules => reglas de validacion (utiliza form_validation de CI).
+	 *		* $var string belong_to => nombre de modelo al que pertenece (relacion con otra tabla)
 	 *		* $var any default => valor por defecto del campo.
 	 *
 	 * @var array
 	 */
 	protected $model = array();
+	
+	/**
+	 * Array para definir relaciones con otros modelos
+	 * 
+	 *		*
+	 *		*
+	 *		*
+	 */
+    protected $has_many = array();
+	
+	/**
+	 * Atributo que indica si el id de las relaciones de pertenencia a otras tablas son con sufijo, si es falso se asume prefijo
+	 * 
+	 * ejemplo_id (sufijo) TRUE
+	 * id_ejemplo (prefijo) FALSE
+	 * 
+	 */
+	protected $belong_to_id_sufix = TRUE;
 	
 	/**
 	 * Salta las validaciones al guardar y actualizar.
@@ -97,6 +116,7 @@ class IF_Model extends CI_Model
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->helper('inflector');
 		$this->_fetch_table();
 	}
 	
@@ -310,6 +330,11 @@ class IF_Model extends CI_Model
 	 */
 	public function store(&$D, $skip_validation = FALSE)
 	{
+		if(!empty($this->has_many))
+		{
+			$has_many_data = $this->_extract_has_many_data($D);
+		}
+		
 		$this->_remove_extra_data($D);
 		
 		if ($skip_validation === FALSE)
@@ -322,10 +347,8 @@ class IF_Model extends CI_Model
 		}
 		
 		$this->_run_before_store($D);
-		
 		$id = $D->id;
 		unset($D->id);
-		
 		$D = $this->sanitizeAll($D);
 		
 		if($id<=0)
@@ -345,9 +368,79 @@ class IF_Model extends CI_Model
 		$this->skip_validation = FALSE;
 		
 		$r = $this->get($id);
+		
+		if(isset($has_many_data))
+		{
+			$r_has_many = $this->_store_has_many_data($id,$has_many_data,$skip_validation);
+			$r = (object) array_merge((array) $r, (array) $r_has_many);
+		}
+		
 		$r->success = TRUE;
 		
 		return $r;
+	}
+	
+    /**
+	 * Registra multiples filas en la base de datos (INSERTS & UPDATES).
+	 * 
+	 * $D_ARRAY: array con datos que se desean registrar
+	 * $skip_validation: boolean que indica si se desea saltar validacion antes de registrar
+     */
+    public function store_many(&$D_ARRAY, $skip_validation = FALSE)
+    {
+        $r = array();
+		
+        foreach ($D_ARRAY as $D_KEY => $D_ROW)
+        {
+            $r[] = $this->store($D_ROW, $skip_validation);
+        }
+		
+        return $r;
+    }
+	
+    /**
+	 * Registra multiples filas en la base de datos (INSERTS & UPDATES).
+	 * 
+	 * $D_ARRAY: array con datos que se desean registrar
+	 * $skip_validation: boolean que indica si se desea saltar validacion antes de registrar
+     */
+    private function _store_has_many_data($id, $has_many_data,$skip_validation = FALSE)
+    {
+        $r = array();
+
+        foreach ($has_many_data as $model_data => $rows_data)
+        {
+			$_curr_model = singular ( ucfirst ( $model_data ) ) .'_model';
+			
+			//actualiza id de tabla foranea
+			$this->_set_belong_to_id_has_many_data($id,$rows_data);
+			
+			//carga modelo de tabla relacionada
+			$this->load->model($_curr_model);
+			
+            $r[$model_data] = $this->{$_curr_model}->store_many($rows_data, $skip_validation);
+        }
+		
+        return $r;
+    }
+	
+	
+    /**
+	 * Actualiza registros con el id del registro al que pertenece una fila
+	 * 
+	 * @param $id: id de la tabla al que pertence
+	 * @param $rows_data: array de registros que pertencen a ese registro de ese id
+	 * 
+	 * @return array() con belong_to_id actualizado
+     */
+	private function _set_belong_to_id_has_many_data($id,&$rows_data)
+	{	
+		$_belong_to_id = $this->belong_to_id_sufix ? singular($this->_table) . '_id' : 'id_' . singular($this->_table);
+		
+		foreach($rows_data as &$row)
+		{
+			$row->{$_belong_to_id} = $id;
+		}
 	}
 	
 	/**
@@ -410,9 +503,11 @@ class IF_Model extends CI_Model
 		{
 			return TRUE;
 		}
+
 		$this->load->library('form_validation');
 		
 		$array_data = (array) $data;
+		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($array_data);
 		$this->form_validation->set_error_delimiters('<label class="error">','</label>');
 		
@@ -427,11 +522,14 @@ class IF_Model extends CI_Model
 					{
 						array_push($rulesModel, $atributo);
 					}
+
 				}
 			}
 			
 			$this->form_validation->set_rules($rulesModel);
-			return $this->form_validation->run();
+			$r = $this->form_validation->run();
+			
+			return $r;
 		}
 		else
 		{
@@ -538,15 +636,46 @@ class IF_Model extends CI_Model
 	
 	/**
 	 * Consigue nombre de la tabla asociada al modelo.
+	 * 
 	 *
 	 */
 	private function _fetch_table()
 	{
 		if ($this->_table == NULL)
 		{
-			$this->load->helper('inflector');
 			$class = preg_replace('/(_m|_model|_M|_Model)?$/', '', get_class($this));
 			$this->_table = plural(strtolower($class));
 		}
 	}
+	
+	/**
+	 * Extrae arrays de datos de otros modelos relacionados a este modelo
+	 * Por ejemplo: Posts de un usuario
+	 * 
+	 * @param Object
+	 * @return mixed
+	 *
+	 */
+	private function _extract_has_many_data(&$D)
+	{
+		$has_many_data = array();
+		
+		//se recorre el objeto
+		foreach($D as $key => $value)
+		{
+			//si el valor del campo es un array 
+			//puede pertenecer a otro modelo
+			if(is_array($value) && in_array($key, $this->has_many))
+			{
+				//agrega fila a array de data de otros modelos
+				$has_many_data[$key] = $value;
+				//elimina elemento del objeto data
+				unset($D->$key);
+			}	
+		}
+		
+		return $has_many_data;
+	}
+	
+	
 }

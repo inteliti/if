@@ -1,3 +1,5 @@
+1.2.2 [03/03/16]
+- Agregada posbilidad a metodo store en IF_Model que permite guardar array de fillas que pertence a una tabla relacion. Relaciones 1 a N.
 1.2.1 [03/03/16]
 - Agregada libreria para implementación de Servicios REST (https://github.com/chriskacerguis/codeigniter-restserver). Controladores REST deben ir dentro del directorio API, los cuales deben heredar de IF_API_Controller que esta en core
 1.2.0 [24/02/16]

@@ -8,12 +8,12 @@ class Usuario extends IF_Controller {
 	{
 		parent::__construct();
 		
-		if(!$this->session->userdata('auth'))
+	/*	if(!$this->session->userdata('auth'))
 		{
 			$this->load->helper('url');
-			redirect('/sys/iniciar', 'refresh');
+			redirect('/IF_Sys/login', 'refresh');
 		}
-		
+		*/
 		$this->load->model('usuario_model','usuario_m');
 	}
 	
@@ -81,4 +81,41 @@ class Usuario extends IF_Controller {
 		
 		echo json_encode($r);
 	}
+	
+	
+	public function test_has_many()
+	{
+		
+		
+		
+		$_usuario = array(
+			'id' => -1,
+			'usuario' => 'test888',
+			'clave' => '1111',
+			'rol_id' => 1,
+			'acceso_invalid' => 1,
+			'notes' => array()
+		);
+		
+		$usuario = (object) $_usuario;
+		
+		for($i=0;$i<=10;$i++)
+		{
+			$_note = array(
+				'id' => -1,
+				'note' => 'test ' . $i,
+				'usuario_id' => -1,
+			);
+			
+			$note = (object) $_note;
+			
+			array_push($usuario->notes, $note);
+		}
+		
+		$usuario = $this->usuario_m->store($usuario);
+		
+		d($usuario);
+		
+	}
+	
 }
