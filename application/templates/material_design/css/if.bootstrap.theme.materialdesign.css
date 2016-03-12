@@ -7,6 +7,7 @@ html{
 }
 html, body{
 	font-family: Roboto, Arial;
+	font-size: 16px;
 	height: 100%;
 }
 
@@ -38,7 +39,7 @@ HEADER COMPONENTS
 *****/
 .if_logo{
 	position: absolute;
-	top:5%; left: 5%;
+	left: 30px;
 }
 .if_fab{ /** Floating action button **/
 	cursor: pointer;
@@ -46,7 +47,7 @@ HEADER COMPONENTS
 	font-weight: 100;
 	font-size: 24px; 
 	position: absolute;
-	top: 5%; right: 5%;
+	right: 30px;
 	z-index: 8;
 	-webkit-box-shadow: 0px 10px 12px 0px #e0e0e0;
 	box-shadow: 0px 10px 12px 0px #e0e0e0;
@@ -103,8 +104,8 @@ Más info en Google Material Designs
 	box-shadow: none !important;
 }
 .if_z_inset{
-	-webkit-box-shadow: inset 0 -5px 8px rgba(0,0,0, 0.10);
-	box-shadow: inset 0 -5px 8px rgba(0,0,0, 0.10);
+	-webkit-box-shadow: inset 0 -50px 50px rgba(0,0,0, 0.20);
+	box-shadow: inset 0 -50px 50px rgba(0,0,0, 0.20);
 }
 .if_z_2{
 	z-index:2;
