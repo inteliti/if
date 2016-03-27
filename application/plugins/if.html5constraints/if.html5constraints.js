@@ -1,5 +1,5 @@
 /****************************************
- * V2.0.0
+ * V2.0.1
  * Por Gregorio Bolivar para Intelliti Framework
  * 
  * Validador de formularios que hace uso de los parametros 
@@ -32,39 +32,40 @@ $.fn.ifValidate = function ()
 {
 	if (!this[0].checkValidity())
 	{
-		this.find('input,select,textarea,checkbox,radio').each(function (i)
-		{
-			var $this = $(this)
-				,$parent = $this.parent()
-				, validityObj = this.validity
-				;
-				
-			$parent
-				.removeClass('has-error')
-				.find('small.help-block.error')
-				.remove()
-			;
-
-			if (!validityObj.valid)
+		this.find('input,select,textarea,checkbox,radio')
+			.not(':hidden')
+			.each(function (i)
 			{
-				var errMsg = '<small class="help-block error">'
-					+ this.validationMessage
-					+ '</small>'
+				var $this = $(this)
+					, $parent = $this.parent()
+					, validityObj = this.validity
 					;
-					
-				$parent.addClass('has-error');
-				
-				if($parent.is('.input-group'))
-				{
-					$parent.after(errMsg);
-				}
-				else
-				{
-					$parent.append(errMsg);
-				}
 
-			}
-		});
+				$parent
+					.removeClass('has-error')
+					.find('small.help-block.error')
+					.remove()
+					;
+
+				if (!validityObj.valid)
+				{
+					var errMsg = '<small class="help-block error">'
+						+ this.validationMessage
+						+ '</small>'
+						;
+
+					$parent.addClass('has-error');
+
+					if ($parent.is('.input-group'))
+					{
+						$parent.after(errMsg);
+					} else
+					{
+						$parent.append(errMsg);
+					}
+
+				}
+			});
 
 		return false;
 	}
