@@ -4,7 +4,7 @@
  * 
  * Clase principal JavaScript del framework if.
  * 
- * Dependencias: jquery, jquery.validation
+ * Dependencias: jquery
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
