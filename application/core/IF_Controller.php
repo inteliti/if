@@ -73,12 +73,12 @@ class IF_Controller extends CI_Controller
 		{
 			$sort_order = NULL;
 		}
-		//$filter = empty($in['searchPhrase'])	? ''		: $in['filter'];
+		$filter = empty($in['searchPhrase'])	? ''		: $in['filter'];
 		$limit	= empty($in['rowCount'])	? NULL		: intval($in['rowCount']);
 		$page	= empty($in['current'])	? 1			: intval($in['current']);
 
-		//$where = $this->filter2SqlWhere($filter);
-		$where = '1=1';
+		$where = $this->search_phrase_2_sql_where($filter);
+		//$where = '1=1';
 		if($additionalWhere)
 		{
 			$where .= " AND ({$additionalWhere})";
@@ -154,6 +154,14 @@ class IF_Controller extends CI_Controller
 		$R->rows	= array();
 		
 		return $R;
+	}
+	
+	/**
+	 * Este metodo debe sobrescribirse en el controlador para configurar el manejor de la busqueda
+	 */
+	protected function search_phrase_2_sql_where($search_phrase='')
+	{
+		return '1=1';
 	}
 	
 	/**

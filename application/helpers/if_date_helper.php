@@ -33,7 +33,7 @@ function dateToDB(
 		$dbFormat = DATE_MYSQL_FORMAT
 )
 {
-	$timestamp = getTimeStamp($inFormat, $dateToDB);
+	$timestamp = getTimeStamp($dateToDB,$inFormat);
 	return date($dbFormat, $timestamp);
 }
 
