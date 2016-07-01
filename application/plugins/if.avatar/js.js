@@ -1,5 +1,8 @@
 var IF_AVATAR = {
 	SEL: '#ifAvatar ',
+	
+	localstream: null,
+	
 	upload: function(formSel, uploadTo, callback)
 	{
 		var selct = IF_AVATAR.SEL + '#upl ';
@@ -64,29 +67,9 @@ var IF_AVATAR = {
 		$(IF_AVATAR.SEL + '#upl #file').fadeIn();
 	}
 
-	, camSuccess: function(uploadPath, fileName)
+	//
+	, stopWebCam: function()
 	{
-		var selct = IF_AVATAR.SEL + '#cam ',
-				token = Math.random(),
-				img = uploadPath + fileName + '.jpg?'+token
-				;
-		$(selct + '#flashContent object').hide();
-		$(selct + '#flashContent')
-				.addClass('avatar')
-				.append('<img src="' + img + '" alt="" />')
-				;
-		$(selct + '#msg').fadeIn();
-	}
-
-	, camAgain: function()
-	{
-		var selct = IF_AVATAR.SEL + '#cam '
-				;
-		$(selct + '#flashContent object').show();
-		$(selct + '#flashContent')
-				.removeClass('avatar')
-				.find('img').remove()
-				;
-		$(selct + '#msg').fadeOut();
+		IF_AVATAR.localstream.getTracks()[0].stop();
 	}
 };

@@ -18,7 +18,7 @@ function echoMimes($mimes)
 </span>
 
 <h4>
-	Seleccione una imagen de su PC
+	Seleccione una imagen
 </h4>
 
 <small>
@@ -29,7 +29,7 @@ function echoMimes($mimes)
 	<span class="text-primary"><?= $UPLOAD_FILE_SIZE_MAX ?>KB</span>
 </small>
 
-<br />
+<br /><br />
 <div id="file">
 	<form enctype="multipart/form-data">
 		<input type="file" name="file" value="<null>" />

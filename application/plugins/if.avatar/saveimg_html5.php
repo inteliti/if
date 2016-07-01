@@ -13,8 +13,8 @@ fwrite($fp, $decodedData);
 fclose($fp);
 
 //150 x 150
-if($_POST['square'] == 1)
-{
+/*if($_POST['square'] == 1)
+{*/
 	$img = imagecreatefromjpeg($uploadPath.$filename.'.jpg');
 	$img2 = ImageCreateTrueColor(150, 150);
 
@@ -22,4 +22,4 @@ if($_POST['square'] == 1)
 			$img2, $img, 0, 0, 25, 0, 150, 150, 150, 150
 	);
 	imagejpeg($img2, $uploadPath.$filename.'.jpg', 100);
-}
+//}
