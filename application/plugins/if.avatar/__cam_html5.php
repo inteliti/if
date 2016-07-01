@@ -16,17 +16,16 @@ if(empty($FILE_NAME))
 	
 </div>
 
-<h4>
-	Tomar foto con la WebCam
-</h4>
-
 <p>
-	<button id="startbutton">Tomar foto</button>
+	<button class="btn btn-success" id="startbutton">Tomar foto con WebCam &gt;&gt;&gt;</button>
 	
-	<input type="checkbox" id="square" checked="checked" />
-	<small>Foto carnet</small>
+	<!--<input type="checkbox" id="square" checked="checked" />
+	<small>Foto carnet</small>-->
 	
-	<div id="msgcam" class="text-primary"></div>
+	<div id="msgcam" class="hidden text-primary">
+		<i class="uploading"></i>
+		<span>Subiendo imagen...</span>
+	</div>
 </p>
 
 
@@ -57,6 +56,8 @@ if(empty($FILE_NAME))
 				var vendorURL = window.URL || window.webkitURL;
 				video.src = vendorURL.createObjectURL(stream);
 			}
+			
+			IF_AVATAR.localstream = stream;
 			video.play();
 		},
 				function(err)
@@ -110,29 +111,35 @@ if(empty($FILE_NAME))
 
 		function setstate(s)
 		{
-			var msgcam = $("#msgcam");
+			$('#msgcam').removeClass('hidden');
+			
 			if (s == 'uploading')
 			{
-				msgcam.show().html('Subiendo imagen...');
+				$("#msgcam span").show().html('Subiendo imagen...');
 			}
 			else if (s == 'uploaded')
 			{
-				msgcam.show().html('Imagen subida satisfactoriamente.');
+				$("#msgcam span").show().html('Imagen subida satisfactoriamente.');
+				$("#msgcam i").addClass('success');
 			}
 			else if (s == 'upload_error')
 			{
-				msgcam.show().html('ERROR al subir imagen.');
+				$("#msgcam span").show().html('ERROR al subir imagen.');
 			}
 		}
 
 	})();
 	
-	$('#square').click(function() {
+	IF_HOTKEY.registerTemp('enter', function(){
+		$('#startbutton').click();
+	});
+	
+	/*$('#square').click(function() {
 		var chk = $(this).is(":checked");
 
 		if (chk)
 			$('#mark').addClass('mark');
 		else
 			$('#mark').removeClass('mark');
-	});
+	});*/
 </script>

@@ -1,6 +1,6 @@
 <?php
 $PATH = PLUGINS_URL . 'if.avatar/';
-;
+
 ?>
 <!-- cwf.masterdetail loader -->
 <link rel="stylesheet" type="text/css" href="<?= $PATH; ?>css.css" />
