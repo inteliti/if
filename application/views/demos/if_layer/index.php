@@ -46,20 +46,19 @@ if_plugin('if.layer');
 		Abrir layer*
 	</button>
 	<button type="button" class="btn"
-			onclick="closeLastLayer()">
-		Cerrar último layer
+			onclick="openLayerEv()">
+		Abrir layer con eventos*
 	</button>
 	<button type="button" class="btn"
-			onclick="openLayerEv()">
-		Abrir layer con eventos
+			onclick="closeLastLayer()">
+		Cerrar último layer
 	</button>
 	<br />
 	*Cada vez que pulse el botón se abrirá un nuevo layer
 </div>
 <script>
 	IF_LAYER.init({
-		container: '#layers',
-		animation: 'right'
+		container: '#layers'
 	});
 
 	var LAYER_COUNT = 0;
@@ -72,7 +71,7 @@ if_plugin('if.layer');
 	function openLayerEv()
 	{
 		IF_LAYER.open({
-			controller: 'demos/if_layer_compos' + (++LAYER_COUNT),
+			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT),
 			beforeOpen: function (index)
 			{
 				alert('beforeOpen (layer index: ' + index + ')');
