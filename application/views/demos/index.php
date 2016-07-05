@@ -9,17 +9,22 @@
 	</li>
 	<li>
 		<a href="<?= INDEX_URL ?>demos/masterdetail">
-			Maestro Detalle
+			if.masterdetail
 		</a>
 	</li>
 	<li>
 		<a href="<?= INDEX_URL ?>demos/upload">
-			Upload
+			if.upload
+		</a>
+	</li>
+	<li>
+		<a href="<?= INDEX_URL ?>demos/if_layer">
+			if.layer
 		</a>
 	</li>
 	<li>
 		<a href="<?= INDEX_URL ?>demos/modal">
-			Modales
+			if.modal
 		</a>
 	</li>
 </ul>

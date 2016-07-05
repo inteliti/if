@@ -1,6 +1,6 @@
 /******************************************************************
  * Clase JavaScript MAIN basado en cwf.main
- * v1.2.0
+ * v1.2.1
  * 
  * Clase principal JavaScript del framework if.
  * 
@@ -420,4 +420,23 @@ Date.prototype.toISO8601 = function()
 		second = '0' + second;
 	
 	return this.getFullYear() + '-' + mon + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+};
+
+//Utilidades
+//Serializa un formulario como un JSON
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
 };

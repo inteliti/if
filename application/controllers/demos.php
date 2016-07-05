@@ -37,8 +37,15 @@ class Demos extends IF_Controller
 		$this->view('demos/gmd/index');
 	}
 	
+	function if_layer()
+	{
+		$this->view('demos/if_layer/index');
+	}
 	
-	
+	function dummy_compos($param="")
+	{
+		echo "¡Hola Mundo! ".$param;
+	}
 	
 	
 	

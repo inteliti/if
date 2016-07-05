@@ -1,0 +1,14 @@
+.if_layer_container{
+	position: relative;
+}
+.if_layer{
+	background-color: #fafafa;
+	width: 0;
+	height: 100%;
+	position: absolute;
+	top:0;left:0;
+
+	-webkit-box-shadow: 2px 0px 15px 0px rgba(0,0,0,.5);
+	box-shadow: 2px 0px 15px 0px  rgba(0,0,0,.5);
+
+}
