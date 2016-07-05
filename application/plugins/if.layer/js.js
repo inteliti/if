@@ -16,6 +16,8 @@ var IF_LAYER = {
 	 * layers
 	 * - animation (opcional): left o right. Dirección de animación
 	 * de apertura/cierre. left por defecto.
+	 * - limit (opcional): establecer un límite a la cantidad de layers
+	 * que se pueden abrir (infinito por defecto).
 	 * @returns {void}
 	 */
 	init: function (cnf)
@@ -57,6 +59,12 @@ var IF_LAYER = {
 	 */
 	, open: function (cnf)
 	{
+		if(IF_LAYER.CNF.limit && IF_LAYER.LAYERS>=IF_LAYER.CNF.limit)
+		{
+			console.debug('Límite de layers alcanzado.');
+			return;
+		}
+		
 		var INDEX = ++IF_LAYER.LAYERS;
 
 		//apagar overflow de contenedor padre

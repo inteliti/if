@@ -18,7 +18,8 @@
 <script>
 	IF_LAYER.init({
 		container: '#if-md-detail',
-		animation: 'right'
+		animation: 'right',
+		limit: '5'
 	});
 	function openLayer()
 	{
