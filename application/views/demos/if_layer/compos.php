@@ -10,6 +10,12 @@
 
 	<hr />
 	<button type="button" class="btn btn-primary" 
+			onclick="IF_LAYER.open({
+				controller: 'demos/if_layer_compos'
+			})">
+		Abrir layer sobre este
+	</button>
+	<button type="button" class="btn btn-primary" 
 			onclick="IF_LAYER.close()">
 		Cerrar este Layer
 	</button>

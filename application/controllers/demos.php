@@ -42,9 +42,10 @@ class Demos extends IF_Controller
 		$this->view('demos/if_layer/index');
 	}
 	
-	function if_layer_compos($layerNo="")
+	function if_layer_compos($layerNo="?")
 	{
-		$this->view('demos/if_layer/compos');
+		$D = new stdClass();
+		$this->view('demos/if_layer/compos', $D);
 	}
 	
 	
