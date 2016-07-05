@@ -42,9 +42,9 @@ class Demos extends IF_Controller
 		$this->view('demos/if_layer/index');
 	}
 	
-	function dummy_compos($param="")
+	function if_layer_compos($layerNo="")
 	{
-		echo "¡Hola Mundo! ".$param;
+		$this->view('demos/if_layer/compos');
 	}
 	
 	

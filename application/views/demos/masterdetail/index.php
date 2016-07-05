@@ -1,4 +1,7 @@
 <?php include PLUGINS_PATH . "if.masterdetail/_loader.php"; ?>
+<?php
+if_plugin('if.layer');
+?>
 
 <!--
 Este es el Markup base OBLIGATORIO para IF_MASTERDETAIL
@@ -44,11 +47,11 @@ Ejemplo de llamada a init()
 		mtSelected: function (id)
 		{
 			IF_MASTERDETAIL.loadDetail({
-				controller: 'demos/masterdetail_detail/'+id
+				controller: 'demos/masterdetail_detail/' + id
 			});
 		}
 	},
-	{
-		controller: 'demos/masterdetail_intro'
-	});
+		{
+			controller: 'demos/masterdetail_intro'
+		});
 </script>

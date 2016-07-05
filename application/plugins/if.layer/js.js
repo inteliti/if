@@ -14,15 +14,24 @@ var IF_LAYER = {
 	 * @param {object} cnf
 	 * - Container: selector jquery con el contenedor que contendrá los
 	 * layers
+	 * - animation (opcional): left o right. Dirección de animación
+	 * de apertura/cierre. left por defecto.
 	 * @returns {void}
 	 */
 	init: function (cnf)
 	{
+		//Configuración por defecto
+		if (!cnf.animation)
+		{
+			cnf.animation = 'left';
+		}
+
 		IF_LAYER.CONTAINER = $(cnf.container);
+		IF_LAYER.CNF = cnf;
 		IF_LAYER.LAYERS = 0;
 
 		$(IF_LAYER.CONTAINER).addClass('if_layer_container');
-		
+
 		IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW =
 			IF_LAYER.CONTAINER.css('overflow')
 			;
@@ -59,31 +68,44 @@ var IF_LAYER = {
 			"<div class=if_layer id=if_layer-" + INDEX + "></div>"
 			)
 			.appendTo(IF_LAYER.CONTAINER)
-			.animate({
-				width: 100 - (INDEX * 3) + '%'
-			}, {
-				duration: 400,
-				complete: function ()
-				{
-					(cnf.afterOpen || $.noop)();
-				}
-			})
 			.css({
 				'z-index': 10 + INDEX
 			})
 			.load(
 				cnf.controller ? IF_MAIN.CI_INDEX + cnf.controller : cnf.url,
 				cnf.data || {},
-				cnf.afterLoad || $.noop
-				)
+				function ()
+				{
+					(cnf.afterLoad || $.noop)(INDEX);
+				}
+			)
 			;
 
-		(cnf.afterOpen || $.noop)(INDEX);
-	}
+		var animObj = {
+			duration: 400,
+			complete: function ()
+			{
+				(cnf.afterOpen || $.noop)(INDEX);
+			}
+		};
 
-	, get: function (index)
-	{
-		return $("#if_layer-" + index);
+		//Apertura
+		if (IF_LAYER.CNF.animation == 'right')
+		{
+			$o
+				.css({
+					left: '101%'
+				})
+				.animate({
+					width: '100%',
+					left: (INDEX * 3) + '%'
+				}, animObj);
+		} else
+		{
+			$o.animate({
+				width: 100 - (INDEX * 3) + '%'
+			}, animObj);
+		}
 	}
 
 	/**
@@ -92,31 +114,50 @@ var IF_LAYER = {
 	 */
 	, close: function (cb)
 	{
-		var $l = IF_LAYER.get(IF_LAYER.LAYERS)
-			.animate({
-				width: 0
-			}, {
-				duration: 400,
-				complete: function ()
+		var $l = IF_LAYER.get(IF_LAYER.LAYERS);
+
+		var animObj = {
+			duration: 400,
+			complete: function ()
+			{
+				IF_LAYER.LAYERS--;
+				$l.remove();
+				(cb || $.noop)();
+
+				if (IF_LAYER.LAYERS <= 0)
 				{
-					IF_LAYER.LAYERS--;
-					$l.remove();
-					(cb || $.noop)();
+					IF_LAYER.LAYERS = 0;
 
-					if (IF_LAYER.LAYERS <= 0)
-					{
-						IF_LAYER.LAYERS = 0;
-
-						//Reactivar overflow de contenedor padre
-						IF_LAYER.CONTAINER.css(
-							'overflow'
-							, IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW
-							)
-							;
-					}
+					//Reactivar overflow de contenedor padre
+					IF_LAYER.CONTAINER.css(
+						'overflow'
+						, IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW
+						)
+						;
 				}
-			})
-			;
+			}
+		};
+		
+		//eliminar contenido interno del layer
+		$l.empty();
 
+		if (IF_LAYER.CNF.animation == 'right')
+		{
+			$l.animate({
+				width: 0,
+				left: '101%'
+			}, animObj);
+		} else
+		{
+			$l.animate({
+				width: 0
+			}, animObj);
+		}
+
+	}
+
+	, get: function (index)
+	{
+		return $("#if_layer-" + index);
 	}
 };

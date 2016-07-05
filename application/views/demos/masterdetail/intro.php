@@ -12,3 +12,18 @@
    class="btn btn-default">
 	Prueba: reload MT
 </a>
+
+
+
+<script>
+	IF_LAYER.init({
+		container: '#if-md-detail',
+		animation: 'right'
+	});
+	function openLayer()
+	{
+		IF_LAYER.open({
+			controller:'demos/if_layer_compos'
+		});
+	}
+</script>
