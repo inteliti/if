@@ -1,3 +1,6 @@
+1.2.2
+- Bugfix: detalle se estaba abriendo cuando la resolucion era exactamente 768px
+- Bugfix: disparaba _mtSelected() cuando se ordenaba por columna
 1.2.1
 - Añadidos nuevo easing para transiciones del detalle para moviles
 - Bugfixes varios en transiciones de detalle para moviles

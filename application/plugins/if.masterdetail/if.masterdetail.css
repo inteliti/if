@@ -65,7 +65,7 @@ BOOTGRID OVERWRITE
 /*****************************
 MOVIL, RESPONSIVE
 *****************************/
-@media (max-width: 768px)
+@media (max-width: 767px)
 {
 	#if-md-detail{
 		padding: 20px;

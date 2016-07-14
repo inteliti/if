@@ -1,6 +1,6 @@
 /*****************************************************
  * Clase JavaScript de Maestro Detalle
- * v1.2.1 (detalles en changelog)
+ * v1.2.2 (detalles en changelog)
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 
@@ -78,13 +78,13 @@ var IF_MASTERDETAIL = {
 
 		$table
 			.bootgrid(mtCnf)
-			.on('click.rs.jquery.bootgrid', function (e, colModel, row)
+			.on('selected.rs.jquery.bootgrid', function (e, rows)
 			{
 				//Extrañamente, en este scope no existen funciones
 				//basicas de JS como alert() o console.debug()
 				//Cambiar de scope...
 				IF_MASTERDETAIL._mtSelected(
-					(mtCnf.mtSelected || $.noop), e, colModel, row
+					(mtCnf.mtSelected || $.noop), e, rows[0]
 					);
 			})
 			.on('loaded.rs.jquery.bootgrid', function (e)
@@ -144,7 +144,7 @@ var IF_MASTERDETAIL = {
 	{
 	}
 
-	, _mtSelected: function (callback, e, colModel, row)
+	, _mtSelected: function (callback, e, row)
 	{
 		if (IF_MAIN.IS_MOBILE) 
 		{
@@ -244,6 +244,7 @@ $(window).bind('resizeEnd', function ()
 	if (IF_MAIN.IS_MOBILE)
 	{
 		$(window).bind('popstate', IF_MASTERDETAIL_MOBILE_POPSTATE);
+		
 		IF_MASTERDETAIL.hideDetail();
 	} else
 	{
