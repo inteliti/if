@@ -28,6 +28,13 @@ class IF_Model extends CI_Model
 	protected $_table;
 	
 	/**
+	 * La variable usada para identificar la tabla en el query. Solo configurar si se usa $query
+	 *
+	 * @var string
+	 */
+	protected $table_var = '';
+	
+	/**
 	 * Nombre de columna de clave primaria de la tabla en la BD, por defecto 'id'.
 	 *
 	 * @var string
@@ -54,6 +61,13 @@ class IF_Model extends CI_Model
 	 * @var string
 	 */
 	protected $query = FALSE;
+
+	/**
+	 * String con el query para contar los registros de la BD
+	 *
+	 * @var string
+	 */
+	protected $query_count = FALSE;
 	
 	/**
 	 * Un array con todos los campos del modelo.
@@ -199,8 +213,10 @@ class IF_Model extends CI_Model
 	 */
 	public function get($id=-1)
 	{
-        $rows = $this->getWhere($this->primary_key.'='.$id);
-		return $rows && $rows[0]? $rows[0] : FALSE;
+		$pk = $this->table_var.'.'.$this->primary_key;
+		
+        $rows = $this->getWhere($pk.'='.$id);
+		return $rows && $rows[0] ? $rows[0] : FALSE;
     }
 	
 	/**
@@ -213,15 +229,17 @@ class IF_Model extends CI_Model
 	 */
 	public function getWhere($where='1=1', $order=NULL , $limit_begin=0 , $limit_offset=9999)
 	{
-		$order_clause = !empty($order) ? $order : $this->primary_key . " ASC";
+		$pk = $this->table_var.'.'.$this->primary_key;
+		
+		$order_clause = !empty($order) ? $order : $pk . " ASC";
 		
 		//Si el procedimientos almacenado get existe es llamado 
 		if(array_key_exists('get', $this->sp_methods))
 		{
 			return $this->call($this->sp_methods['get'], 
-					array($this->db->escape($where) ,
-								"'{$order_clause}'" ,
-								$limit_begin ,
+					array($this->db->escape($where),
+								"'{$order_clause}'",
+								$limit_begin,
 								$limit_offset));
 		}
 		//Sino se hace de la manera tradicional
@@ -231,7 +249,7 @@ class IF_Model extends CI_Model
 			if($this->query)
 			{
 				//return $this->db->query($this->query, array($where, $order_clause, $limit_begin, $limit_offset)); 
-				return $this->db->query(sprintf($this->query,$where,
+				return $this->db->query(sprintf($this->query, $where,
 						$order_clause, $limit_begin, $limit_offset))->result(); 
 			}
 			//sino se utiliza active record de codeigniter
@@ -327,39 +345,49 @@ class IF_Model extends CI_Model
 	 * 
 	 * $D: objeto con datos que se desean registrar
 	 * $skip_validation: boolean que indica si se desea saltar validacion antes de registrar
+         * $is_nuevo: boolean que indica si el registro a guardar es nuevo o no
 	 */
-	public function store(&$D, $skip_validation = FALSE)
+	public function store(&$D, $skip_validation = FALSE, $is_nuevo = FALSE)
 	{
 		if(!empty($this->has_many))
 		{
 			$has_many_data = $this->_extract_has_many_data($D);
 		}
+	
+		$_D = clone $D;		//variable temporal
+		//d($D);
 		
 		$this->_remove_extra_data($D);
+		//d($D);
 		
-		if ($skip_validation === FALSE)
+		//validamos datos a guardar
+		if (!$skip_validation && !$this->_run_validation($D))
 		{
-			if ( ! $this->_run_validation($D))
-			{
-				$_errors = $this->_errors();
-				return (object) array_merge((array) $D, (array) $_errors);
-			}
+			$_errors = $this->_errors();
+			return (object) array_merge((array) $_D, (array) $_errors);
 		}
+		unset($_D);
 		
 		$this->_run_before_store($D);
-		$id = $D->id;
-		unset($D->id);
+		
+		$pk = $this->primary_key;
+		$id = $D->$pk;
+		
 		$D = $this->sanitizeAll($D);
 		
-		if($id<=0)
+		if($is_nuevo || $id <= 0)				//insert
 		{
 			$this->db->insert($this->_table, $D);
-			$id = $this->db->insert_id();
+			
+			if($id <= 0)
+			{
+				$id = $this->db->insert_id();
+			}
 		}
-		else
+		else									//update
 		{
 			$this->db->update($this->_table, $D, array(
-				'id' => $id
+				$this->primary_key => $id
 			));
 		}
 		
@@ -376,6 +404,7 @@ class IF_Model extends CI_Model
 		}
 		
 		$r->success = TRUE;
+		//d($r);
 		
 		return $r;
 	}
@@ -452,7 +481,9 @@ class IF_Model extends CI_Model
 	{
 		$o = new stdClass();
 		
-		$key = explode('.', $this->primary_key);
+		$pk = $this->table_var.'.'.$this->primary_key;
+		
+		$key = explode('.', $pk);
 		
 		$key = count($key) == 2 ? $key[1] : $key[0];
 		
@@ -492,7 +523,7 @@ class IF_Model extends CI_Model
 	 * 
 	 * $data: objeto de datos que hay que validar
 	 */
-	private function _run_validation($data)
+	protected function _run_validation($data)
 	{
 		if ($this->skip_validation)
 		{
@@ -522,7 +553,6 @@ class IF_Model extends CI_Model
 					{
 						array_push($rulesModel, $atributo);
 					}
-
 				}
 			}
 			
@@ -541,7 +571,7 @@ class IF_Model extends CI_Model
 	 * Genera un objeto con los errores asociados a cada campo luego de una validacion.
 	 * 
 	 */
-	private function _errors()
+	protected function _errors()
 	{
 		$errors = array();
 		
@@ -584,7 +614,7 @@ class IF_Model extends CI_Model
 	 * @param array $data The array of actions
 	 * @return mixed
 	 */
-	private function _remove_extra_data(&$D)
+	protected function _remove_extra_data(&$D)
 	{
 		if (empty($this->model))
 		{
