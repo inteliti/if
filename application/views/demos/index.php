@@ -13,6 +13,11 @@
 		</a>
 	</li>
 	<li>
+		<a href="<?= INDEX_URL ?>demos/if_avatar">
+			if.avatar
+		</a>
+	</li>
+	<li>
 		<a href="<?= INDEX_URL ?>demos/upload">
 			if.upload
 		</a>

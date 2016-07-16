@@ -48,18 +48,24 @@ class Demos extends IF_Controller
 		$this->view('demos/if_layer/compos', $D);
 	}
 	
+	function if_avatar()
+	{
+		$this->view('demos/if_avatar/index');
+	}
 	
 	
 	
 	
 	
+	function ajax_data($delay=0)
+	{
+		if($delay)
+		{
+			sleep($delay);
+		}
+		echo "Cargado dinámicamente con AJAX: ".date('d/m/Y');
+	}
 	
-	
-	
-	
-	
-	
-
 	protected function view($view)
 	{
 		$D = new stdClass();

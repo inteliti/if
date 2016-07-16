@@ -16,6 +16,9 @@
 <button type="button" class="btn btn-raised" onclick="if_osd()">
 	IF_MODAL.osd();
 </button>
+<button type="button" class="btn btn-raised" onclick="if_ajax()">
+	IF_MODAL.show({...modal customizado...})
+</button>
 
 
 <script>
@@ -33,5 +36,22 @@
 	function if_osd()
 	{
 		IF_MODAL.osd('Este mensaje se cerrará atomaticamente en 5 segundos', 5);
+	}
+	function if_ajax()
+	{
+		IF_MODAL.show({
+			title: 'Modal customizado (ver fuente)',
+			controller: 'demos/ajax_data/2',
+			callback: function ()
+			{
+				alert('Contenido cargado (callback)');
+			},
+			btns: {
+				'Ok': function ()
+				{
+					IF_MODAL.close();
+				}
+			}
+		});
 	}
 </script>

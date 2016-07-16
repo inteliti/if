@@ -1,6 +1,7 @@
 /******************************************************************
+ * 
  * Clase JavaScript para utilizar ventanas modales
- * v2.0
+ * v2.1.0
  * 
  * NO RETRO-COMPATIBLE, usar if.modal.1 para proyectos antiguos
  * 
@@ -13,17 +14,28 @@ var IF_MODAL = {
 	/**
 	 * Clase generica, configuracion:
 	 * 
-	 * - title (string): titulo
-	 * - content (string): contenido del modal, puede contener HTML
-	 * - hideTitle (bool): si true, no muestra el título. false por defecto
-	 * - btns (obj): objeto de la forma {'texto': callback} que se convertirá
-	 * en botones a ser mostrados en la parte inferior del modal.
-	 * - timeout (number): Si >= 0, el modal se auto-cierra al transcurrir el 
-	 * tiempo en milisegundos. Si < 0 el modal no se cerrará automátcamente.
-	 * - autoFocus (number): puede usarse opcionalmente con btns. Representa
-	 * un índice en el objeto btns de 0 a btn.length. Si >= 0
-	 * el botón cuyo índice sea igual en el objeto btns, recibirá el focus
-	 * de forma que se ejecute el callback de dicho boton
+	 * - title (string|opcional): titulo de la ventana
+	 * - content (string|opcional): contenido del modal, puede contener HTML.
+	 * - url (string|opcional): si se indica, el modal intentará cargar su
+	 * contenido a traves de AJAX usando este URL. Tiene precedencia
+	 * sobre content.
+	 * - controller (string|opcional): controlador CODEIGNITER para cargar
+	 * contenido del modal a traves de AJAX. Tiene precedencia sobre url.
+	 * - data (obj|opcional): data a pasar con la llamada AJAX.
+	 * - callback (fn|opcional): se ejecuta luego de cargarse contenido
+	 * con AJAX.
+	 * - hideTitle (bool|opcional): si true, no muestra el título. 
+	 * false por defecto
+	 * - btns (obj|opcional): objeto de la forma {'texto': callback} 
+	 * que se convertirá en botones a ser mostrados en la parte 
+	 * inferior del modal.
+	 * - timeout (number|opcional): Si >= 0, el modal se auto-cierra
+	 * al transcurrir el  tiempo en milisegundos.  Si < 0 el modal no
+	 * se cerrará automátcamente.
+	 * - autoFocus (number|opcional): puede usarse opcionalmente 
+	 * con btns. Representa un índice en el objeto btns de 0 a btn.length.
+	 * Si >= 0 el botón cuyo índice sea igual en el objeto btns, 
+	 * recibirá el focus de forma que se ejecute el callback de dicho boton
 	 * al usuario presionar ENTER
 	 */
 	show: function (cnf)
@@ -36,13 +48,33 @@ var IF_MODAL = {
 		//Valores por defecto
 		cnf = cnf || {};
 
+		//titulo
 		if (cnf.title && !cnf.hideTitle)
 		{
 			$modal.find('.if_modal_title').empty().html(cnf.title);
 		}
 
-		$content.html(cnf.content || '');
+		//contenido
+		if (cnf.url || cnf.controller)
+		{
+			$content
+				.empty()
+				.addClass('if_modal_loading')
+				.load(
+					cnf.controller ? IF_MAIN.CI_INDEX + cnf.controller : cnf.url,
+					cnf.data || {},
+					function (r)
+					{
+						$content.removeClass('if_modal_loading');
+						(cnf.callback || $.noop)(r);
+					}
+				);
+		} else
+		{
+			$content.html(cnf.content || '');
+		}
 
+		//botones
 		if (cnf.btns)
 		{
 			for (var i in cnf.btns)
@@ -56,14 +88,17 @@ var IF_MODAL = {
 			}
 		}
 
+		//timeout
 		window.clearTimeout(IF_MODAL.TIMEOUT);
 		if (cnf.timeout >= 0)
 		{
 			IF_MODAL.TIMEOUT = window.setTimeout(IF_MODAL.close, cnf.timeout);
 		}
 
+		//mostrar
 		$modal.fadeIn();
 
+		//autofocus
 		if (typeof cnf.autoFocus == 'number')
 		{
 			$btns.children().eq(cnf.autoFocus).focus();
@@ -78,12 +113,12 @@ var IF_MODAL = {
 		cnf.btns = {
 			'Aceptar': function ()
 			{
-				(callback || $.noop)(1);
+				(callback || $.noop)(true);
 				IF_MODAL.close();
 			},
 			'Cancelar': function ()
 			{
-				(callback || $.noop)(0);
+				(callback || $.noop)(false);
 				IF_MODAL.close();
 			}
 		};
@@ -116,7 +151,12 @@ var IF_MODAL = {
 
 	, close: function ()
 	{
-		$('#ifModal').fadeOut();
+		$('#ifModal')
+			.fadeOut('normal', function ()
+			{
+				$('#ifModal').find('.if_modal_content').empty();
+			})
+			;
 	}
 
 	, TIMEOUT: null
