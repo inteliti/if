@@ -1,47 +1,34 @@
-#ifAvatar{
-	width: 480px;
-	height: 250px;
-	
+#ifAvatar #msgcam,
+#ifAvatar #msg{
+	display: none;
+	width: 100%;
+	text-align: center;
 }
-#ifAvatar .avatar img{
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover{
+	background-color: #fafafa;
+}
+
+
+/*************************************
+UPLOAD
+*************************************/
+#ifAvatar #upl{
+	display: none;
+	width: 410px;
+}
+#ifAvatar #upl input{
+	border: 1px solid #e0e0e3;
+	color: #fff;
+}
+#ifAvatar #upl .avatar img{
 	background: #fff;
 	border: 1px solid #e0e0e3;
 	float: left;
 	padding: 2px;
 	margin: 0 10px 0 0;
 	width: 150px; height: 150px;
-}
-#ifAvatar #file
-{
-	float: left;
-}
-
-/** icon **/
-#ifAvatar #msg i,
-#ifAvatar #msgcam i{
-	background: url('uploading.gif') no-repeat 0 50%;
-	display: block;
-	float: left;
-	margin: 2px 5px 0 0;
-	width: 16px; height: 16px;
-}
-#ifAvatar #msg i.uploading{
-	
-}
-#ifAvatar #msg i.success,
-#ifAvatar #msgcam i.success{
-	background-image: url('tick.png');
-}
-
-/*************************************
-UPLOAD
-*************************************/
-#ifAvatar #upl input{
-	border: 1px solid #e0e0e3;
-	color: #fff;
-	margin-bottom: 5px;
-	width: 275px;
-	height: 30px;
 }
 
 /*************************************

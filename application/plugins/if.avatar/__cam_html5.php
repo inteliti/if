@@ -5,50 +5,46 @@ if(empty($FILE_NAME))
 }
 ?>
 
-
-
 <div id="html5Cam">
 
 	<video id="video" class="foto"></video>
 	<canvas id="canvas"></canvas>
 
 	<span id="mark" class="mark"></span>
-	
+
 </div>
 
 <p>
-	<button class="btn btn-success" id="startbutton">Tomar foto con WebCam &gt;&gt;&gt;</button>
-	
-	<!--<input type="checkbox" id="square" checked="checked" />
-	<small>Foto carnet</small>-->
-	
-	<div id="msgcam" class="hidden text-primary">
-		<i class="uploading"></i>
-		<span>Subiendo imagen...</span>
-	</div>
+	<button class="btn btn-primary btn-block" id="startbutton">
+		<i class="fa fa-camera"></i>
+		Tomar foto con WebCam
+	</button>
 </p>
+<div id="msgcam" class="">
+	<span>Subiendo imagen...</span>
+</div>
 
 
 <script>
-	(function() {
+	(function () {
 
 		var
-				SEL = '#ifAvatar ',
-				video = document.querySelector(SEL + '#video'),
-				canvas = document.querySelector(SEL + '#canvas'),
-				startbutton = document.querySelector(SEL + '#startbutton'),
-				width = 200,
-				height = 150;
+			SEL = '#ifAvatar ',
+			video = document.querySelector(SEL + '#video'),
+			canvas = document.querySelector(SEL + '#canvas'),
+			startbutton = document.querySelector(SEL + '#startbutton'),
+			width = 200,
+			height = 150;
 
 		navigator.getMedia = (navigator.getUserMedia ||
-				navigator.webkitGetUserMedia ||
-				navigator.mozGetUserMedia ||
-				navigator.msGetUserMedia);
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.msGetUserMedia);
 
 		navigator.getMedia({
 			video: true,
 			audio: false
-		}, function(stream)
+		}, function (stream)
 		{
 			if (navigator.mozGetUserMedia) {
 				video.mozSrcObject = stream;
@@ -56,14 +52,14 @@ if(empty($FILE_NAME))
 				var vendorURL = window.URL || window.webkitURL;
 				video.src = vendorURL.createObjectURL(stream);
 			}
-			
+
 			IF_AVATAR.localstream = stream;
 			video.play();
 		},
-				function(err)
-				{
-					console.log("An error occured! " + err);
-				}
+			function (err)
+			{
+				console.log("An error occured! " + err);
+			}
 		);
 
 		video.setAttribute('width', width);
@@ -71,7 +67,7 @@ if(empty($FILE_NAME))
 		canvas.setAttribute('width', width);
 		canvas.setAttribute('height', height);
 
-		startbutton.addEventListener('click', function(ev)
+		startbutton.addEventListener('click', function (ev)
 		{
 			canvas.width = width;
 			canvas.height = height;
@@ -85,10 +81,10 @@ if(empty($FILE_NAME))
 		function upload()
 		{
 			var head = /^data:image\/(png|jpeg);base64,/,
-					data = '',
-					fd = new FormData(),
-					xhr = new XMLHttpRequest()
-					;
+				data = '',
+				fd = new FormData(),
+				xhr = new XMLHttpRequest()
+				;
 
 			setstate('uploading');
 
@@ -99,11 +95,11 @@ if(empty($FILE_NAME))
 			fd.append('upload_path', '<?= $UPLOAD_PATH ?>');
 			fd.append('square', $('#square').is(":checked") ? 1 : 0);
 			xhr.open('POST', '<?= $PLG_URL ?>saveimg_html5.php');
-			xhr.addEventListener('error', function(ev) {
+			xhr.addEventListener('error', function (ev) {
 				console.log('Upload Error!');
 				setstate('upload_error');
 			}, false);
-			xhr.addEventListener('load', function(ev) {
+			xhr.addEventListener('load', function (ev) {
 				setstate('uploaded');
 			}, false);
 			xhr.send(fd);
@@ -111,35 +107,22 @@ if(empty($FILE_NAME))
 
 		function setstate(s)
 		{
-			$('#msgcam').removeClass('hidden');
-			
+			$('#msgcam').show();
+
 			if (s == 'uploading')
 			{
 				$("#msgcam span").show().html('Subiendo imagen...');
-			}
-			else if (s == 'uploaded')
+			} else if (s == 'uploaded')
 			{
-				$("#msgcam span").show().html('Imagen subida satisfactoriamente.');
-				$("#msgcam i").addClass('success');
-			}
-			else if (s == 'upload_error')
+				$("#msgcam span").show().html(
+					'Imagen subida satisfactoriamente.'
+					);
+				IF_AVATAR.callbackWebcam();
+			} else if (s == 'upload_error')
 			{
 				$("#msgcam span").show().html('ERROR al subir imagen.');
 			}
 		}
 
 	})();
-	
-	IF_HOTKEY.registerTemp('enter', function(){
-		$('#startbutton').click();
-	});
-	
-	/*$('#square').click(function() {
-		var chk = $(this).is(":checked");
-
-		if (chk)
-			$('#mark').addClass('mark');
-		else
-			$('#mark').removeClass('mark');
-	});*/
 </script>

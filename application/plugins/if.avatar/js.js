@@ -15,18 +15,34 @@ var IF_AVATAR = {
 	/**
 	 * Llamar a esta funcion para mostrar la ventana de carga de avatar.
 	 * Configuración:
-	 * - controller: Ruta del controlador CODEIGNITER que procesara 
-	 * la imagen (el cual debe heredar de If_Avatar_controller) 
+	 * - controller: controlador CODEIGNITER que procesara la imagen
+	 * (el cual debe heredar de controlador IF_Avatar.php) 
+	 * - id: id NUMERICO de la persona duena del avatar
 	 * - title (opcional): título del modal
-	 * - 
+	 * - callbackWebcam (opcional): callback cuando se suba una foto con webcam
+	 * - callbackUpload (opcional): callback cuando se suba una foto de archivo
 	 * @returns {undefined}
 	 */
-	show: function (CNF)
+	open: function (CNF)
 	{
 		IF_MODAL.show({
-			title: CNF.title || '',
-			
+			title: CNF.title || 'Avatar',
+			controller: CNF.controller+'/detail_compos/'+CNF.id,
+			btns: {
+				'Cerrar': function ()
+				{
+					IF_MODAL.close();
+				}
+			}
 		});
+		
+		IF_AVATAR.callbackWebcam = CNF.callbackWebcam || $.noop;
+		IF_AVATAR.callbackUpload = CNF.callbackUpload || $.noop;
+	}
+	
+	,close: function ()
+	{
+		IF_MODAL.close();
 	}
 
 	, upload: function (formSel, uploadTo, callback)
@@ -68,14 +84,13 @@ var IF_AVATAR = {
 			callback(false);
 		} else
 		{
-			$(selct + '#msg i').addClass('success');
-			$(selct + '#msg span').html('Imagen subida exitosamente.');
+			$(selct + '#msg').show();
 
 			//show image
 			var token = Math.random();
 			$(selct + 'img').attr('src', e + '?' + token);
 
-			callback(true);
+			IF_AVATAR.callbackUpload();
 		}
 	}
 
