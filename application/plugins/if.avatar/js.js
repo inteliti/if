@@ -10,8 +10,6 @@
 var IF_AVATAR = {
 	SEL: '#ifAvatar ',
 	localstream: null,
-	
-	
 	/**
 	 * Llamar a esta funcion para mostrar la ventana de carga de avatar.
 	 * Configuración:
@@ -21,28 +19,51 @@ var IF_AVATAR = {
 	 * - title (opcional): título del modal
 	 * - callbackWebcam (opcional): callback cuando se suba una foto con webcam
 	 * - callbackUpload (opcional): callback cuando se suba una foto de archivo
+	 * - callbackDelete (opcional): callback cuando se elimina el avatar
 	 * @returns {undefined}
 	 */
 	open: function (CNF)
 	{
 		IF_MODAL.show({
 			title: CNF.title || 'Avatar',
-			controller: CNF.controller+'/detail_compos/'+CNF.id,
+			controller: CNF.controller + '/detail_compos/' + CNF.id,
 			btns: {
-				'Cerrar': function ()
+				'Borrar Avatar': function ()
+				{
+					IF_AVATAR._elim(CNF.controller, CNF.id);
+				}
+				, 'Cerrar': function ()
 				{
 					IF_MODAL.close();
 				}
 			}
 		});
-		
+
 		IF_AVATAR.callbackWebcam = CNF.callbackWebcam || $.noop;
 		IF_AVATAR.callbackUpload = CNF.callbackUpload || $.noop;
+		IF_AVATAR.callbackDelete = CNF.callbackDelete || $.noop;
 	}
-	
-	,close: function ()
+
+	, close: function ()
 	{
 		IF_MODAL.close();
+	}
+
+	//elimina el avatar (funcion PRIVADA)
+	, _elim: function (controller, id)
+	{
+		IF_MODAL.confirm(
+			'¿Eliminar el avatar permanentemente?', function (si)
+			{
+				IF_MODAL.show({
+					hideTitle: true,
+					controller: controller+'/delete/'+id,
+					callback: IF_AVATAR.callbackDelete,
+					timeout: 2500
+				});
+			},{
+				dontClose: true
+			});
 	}
 
 	, upload: function (formSel, uploadTo, callback)
@@ -87,8 +108,8 @@ var IF_AVATAR = {
 			$(selct + '#msg').show();
 
 			//show image
-			var token = Math.random();
-			$(selct + 'img').attr('src', e + '?' + token);
+			var token = Math.random().toString().replace('.','');
+			$(selct + 'img').prop('src', e + '?' + token);
 
 			IF_AVATAR.callbackUpload();
 		}

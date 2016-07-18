@@ -4,23 +4,30 @@
  * URLs, Redirect
  * *************************************************** */
 
-//Carga un plugin ubicado en plugins/
+//Carga uno o mas plugins ubicado en plugins/
 function if_plugin($plg)
 {
-	include_once PLUGINS_PATH.$plg."/_loader.php";
+	if(!is_array($plg))
+	{
+		$plg = array($plg);
+	}
+	foreach($plg as $v)
+	{
+		include_once IF_PATH_PLUGINS_SERVER.$v."/_loader.php";
+	}
 }
 
 //Carga un plugin ubicado en templates/<PLANTILLA_ACTIVA>/plugins/
 function if_plugin_tmpl($plg)
 {
-	include_once TMPL_PATH."plugins/{$plg}/_loader.php";
+	include_once IF_PATH_TMPL_SERVER."plugins/{$plg}/_loader.php";
 }
 
 //Para construir enlaces con URLs de CodeIgniter
 //Ej de uso: <a href="<?= a('Usuario/details/122') ? >">Usuario #122</a>
 function a($codeigniterUrl)
 {
-	return INDEX_URL . trim($codeigniterUrl, '/') . '/';
+	return IF_PATH_INDEX_CLIENT . trim($codeigniterUrl, '/') . '/';
 }
 
 /* * ***************************************************

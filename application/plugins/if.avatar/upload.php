@@ -47,7 +47,8 @@ else
 }
 
 imagedestroy($src);
-imagepng($dst, $file); // adjust format as needed
+imagejpeg($dst, $file); // adjust format as needed
 imagedestroy($dst);
 
+//RETORNAR ARCHIVO PARA CLIENTE
 echo 1;

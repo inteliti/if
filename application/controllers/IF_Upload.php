@@ -28,11 +28,11 @@ class IF_Upload extends IF_Controller
 		{
 			$this->CONFIG->FILE_TYPE = array(
 				'application/pdf', 'image/jpeg', 'image/png'
-				);
+			);
 		}
 
-		$this->upload_path_client = ASSETS_URL . $upload_dir . '/';
-		$this->upload_path_server = ASSETS_PATH . $upload_dir .
+		$this->upload_path_client = IF_PATH_ASSETS_CLIENT . $upload_dir . '/';
+		$this->upload_path_server = IF_PATH_ASSETS_SERVER . $upload_dir .
 			DIRECTORY_SEPARATOR
 		;
 
@@ -52,8 +52,8 @@ class IF_Upload extends IF_Controller
 		$D->ID = $id;
 		$D->FILES = array();
 		$D->CONFIG = $this->CONFIG;
-		$D->PLG_URL = PLUGINS_URL . 'if.upload/';
-		$D->CONTROLLER = INDEX_URL . get_class($this) . '/ajax_save';
+		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.upload/';
+		$D->CONTROLLER = IF_PATH_INDEX_CLIENT . get_class($this) . '/ajax_save';
 		$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
 
 		//busca archivos ya subidos para este id
@@ -113,8 +113,10 @@ class IF_Upload extends IF_Controller
 		//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 
-		$tempName = 'iftemp-' . md5(time()) ;
-		mkdir(ASSETS_PATH . $upload_dir . $tempName. DIRECTORY_SEPARATOR, 0777);
+		$tempName = 'iftemp-' . md5(time());
+		mkdir(IF_PATH_ASSETS_SERVER . $upload_dir .
+			$tempName . DIRECTORY_SEPARATOR
+			, 0777);
 		return $tempName;
 	}
 
@@ -125,8 +127,9 @@ class IF_Upload extends IF_Controller
 		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 		$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
 
-		@rename(ASSETS_PATH . $upload_dir . $tempName,
-				ASSETS_PATH . $upload_dir . $elementId . DIRECTORY_SEPARATOR
+		@rename(IF_PATH_ASSETS_SERVER . $upload_dir . $tempName,
+				IF_PATH_ASSETS_SERVER . $upload_dir . $elementId
+				. DIRECTORY_SEPARATOR
 		);
 	}
 

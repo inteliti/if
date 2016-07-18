@@ -41,6 +41,7 @@ var IF_MODAL = {
 	show: function (cnf)
 	{
 		var $modal = $('#ifModal'),
+			$title = $modal.find('.if_modal_title'),
 			$content = $modal.find('.if_modal_content').empty(),
 			$btns = $modal.find('.if_modal_btns').empty()
 			;
@@ -49,9 +50,13 @@ var IF_MODAL = {
 		cnf = cnf || {};
 
 		//titulo
+		if (cnf.hideTitle)
+		{
+			$title.empty();
+		}
 		if (cnf.title && !cnf.hideTitle)
 		{
-			$modal.find('.if_modal_title').empty().html(cnf.title);
+			$title.html(cnf.title);
 		}
 
 		//contenido
@@ -105,6 +110,15 @@ var IF_MODAL = {
 		}
 	}
 
+	/**
+	 * Configuracion adicional:
+	 * - dontClose: NO cierra el modal automáticamente al pulsar los botones
+	 * 
+	 * @param {type} m
+	 * @param {type} callback
+	 * @param {type} cnf
+	 * @returns {undefined}
+	 */
 	, confirm: function (m, callback, cnf)
 	{
 		cnf = cnf || {};
@@ -114,12 +128,16 @@ var IF_MODAL = {
 			'Aceptar': function ()
 			{
 				(callback || $.noop)(true);
-				IF_MODAL.close();
+
+				if (!cnf.dontClose)
+					IF_MODAL.close();
 			},
 			'Cancelar': function ()
 			{
 				(callback || $.noop)(false);
-				IF_MODAL.close();
+
+				if (!cnf.dontClose)
+					IF_MODAL.close();
 			}
 		};
 		IF_MODAL.show(cnf);
@@ -154,6 +172,7 @@ var IF_MODAL = {
 		$('#ifModal')
 			.fadeOut('normal', function ()
 			{
+				//liberar memoria
 				$('#ifModal').find('.if_modal_content').empty();
 			})
 			;

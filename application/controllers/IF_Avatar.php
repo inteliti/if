@@ -10,7 +10,6 @@ include_once APPPATH . 'core/IF_Controller.php';
  */
 class IF_Avatar extends IF_Controller
 {
-
 	public function __construct($upload_dir = 'avatar/', $config = NULL)
 	{
 		parent::__construct();
@@ -32,7 +31,10 @@ class IF_Avatar extends IF_Controller
 		}
 
 		$this->upload_path_server = str_replace(
-			'\\', '/', ASSETS_PATH . $upload_dir . '/'
+			'\\', '/', IF_PATH_ASSETS_SERVER . $upload_dir . '/'
+		);
+		$this->upload_path_client = str_replace(
+			'\\', '/', IF_PATH_ASSETS_CLIENT . $upload_dir . '/'
 		);
 	}
 
@@ -46,5 +48,11 @@ class IF_Avatar extends IF_Controller
 		
 		$this->load->view('../plugins/if.avatar/detail_compos.php', $D);
 	}
-
+	
+	public function delete($id)
+	{
+		$filename = 'p'.$id.'.jpg';
+		@unlink($this->upload_path_server.$filename);
+		echo "<i class='fa fa-check'></i> Avatar eliminado satisfactoriamente.";
+	}
 }

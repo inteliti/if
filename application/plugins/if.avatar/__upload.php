@@ -50,11 +50,15 @@ function echoMimes($mimes)
 			   value="<?= $UPLOAD_PATH ?>" />
 	</form>
 
-	<strong><small class="text-danger" id="error"></small></strong>
+	<br />
+	<div class="text-center text-danger" id="error"></div>
 
-	<div id="msg" class="">
+	<div id="msg" class="text-primary">
 		<br />
-		<span>Imagen subida exitosamente.</span>
+		<span>
+			<i class="fa fa-check"></i>
+			Imagen subida exitosamente.
+		</span>
 	</div>
 
 </div>

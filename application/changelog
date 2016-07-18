@@ -1,3 +1,6 @@
+1.2.3 [18/07/16]
+- Cambiadas las constantes en core/IF_Constants con mejor notación y para
+mayor claridad de código (se mantienen constantes LEGACY).
 1.2.2 [03/03/16]
 - Agregada posbilidad a metodo store en IF_Model que permite guardar array de fillas que pertence a una tabla relacion. Relaciones 1 a N.
 1.2.1 [03/03/16]

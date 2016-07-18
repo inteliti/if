@@ -1,19 +1,21 @@
 <?php
-if_plugin('if.modal');
-if_plugin('if.avatar');
-if_plugin('toastr');
-?>
+if_plugin(array('if.modal', 'if.avatar', 'toastr'));
 
+$filename = 'avatar/p10.jpg';
+$avatar = ASSETS_URL . (
+	file_exists(ASSETS_PATH . $filename) ? $filename : 'avatar/none.jpg'
+	);
+?>
 
 <h1>
 	if.avatar DEMO
 </h1>
 <hr />
-Imagen cargada:
+
+
 <div>
-	<img src="<?= ASSETS_URL ?>avatar/p10.jpg" alt="" border="0"
-		 id="img"
-		 style="border:1px solid #a0a0a0;padding:5px;"/>
+	<img src="<?= $avatar ?>" alt="" border="0" id="img"
+		 style="border:1px solid #a0a0a0;padding:5px;width:150px"/>
 </div>
 
 <button type="button" class="btn btn-default" 
@@ -25,6 +27,10 @@ Imagen cargada:
 	{
 		var rand = Math.random();
 		$("#img").attr('src', '<?= ASSETS_URL ?>avatar/p10.jpg?' + rand);
+	}
+	function noneImg()
+	{
+		$("#img").attr('src', '<?= ASSETS_URL ?>avatar/none.jpg');
 	}
 	function avatar()
 	{
@@ -40,9 +46,14 @@ Imagen cargada:
 			},
 			callbackUpload: function ()
 			{
-				IF_AVATAR.close();
+				//IF_AVATAR.close();
 				updImg();
 				toastr.success('Callback: carga con UPLOAD');
+			},
+			callbackDelete: function ()
+			{
+				noneImg();
+				toastr.success('Callback: avatar ELIMINADO');
 			}
 		});
 	}
