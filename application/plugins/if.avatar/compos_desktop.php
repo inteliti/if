@@ -1,8 +1,3 @@
-<?php
-$PLG_URL = PLUGINS_URL . 'if.avatar/';
-$PLG_PATH = PLUGINS_PATH . 'if.avatar/';
-$this->load->helper("url");
-?>
 <div id="ifAvatar">
 	<ul class="nav nav-tabs">
 		<li class="active cam">

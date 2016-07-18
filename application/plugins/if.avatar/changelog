@@ -1,1 +1,5 @@
 1.2.0
+- Adaptaciones generales para IF.
+- Añadido controllers/IF_Avatar.php
+- Versión movil.
+- Refractorización y liempiza de código.

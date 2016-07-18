@@ -1,39 +1,14 @@
-<?php
-
-function echoMimes($mimes)
-{
-	$a = array();
-	foreach($mimes as $m)
-	{
-		$a[] = strtoupper(str_replace('image/', '', $m));
-	}
-	echo implode(', ', $a);
-}
-?>
-
-<span class="avatar">
-	<img src="<?= $PLG_URL; ?>up3.png" alt="" border="0"
-		 id="result_img"/>
-</span>
-
-<h4>
-	Seleccione una imagen
-</h4>
-
-<small>
-	&SmallCircle; Formatos permitidos: 
-	<span class="text-primary"><?= echoMimes($UPLOAD_FILE_TYPES) ?></span>
+<div id="ifAvatar" class="mobile">
+	<p>
+		Pulse este icono para tomar una foto (si su dispositivo tiene cámara)
+		o subir una imagen ya almacenada.
+	</p>
 	<br />
-	&SmallCircle; Tamaño maximo permitido: 
-	<span class="text-primary"><?= $UPLOAD_FILE_SIZE_MAX ?>KB</span>
-</small>
-
-<i class="clearfix"></i>
-<br />
-
-<div>
 	<form enctype="multipart/form-data" id="forma_upload">
-		<input type="file" name="file" id="file" class="form-control"  />
+		<div class="add_file">
+			<i class="fa fa-upload"></i>
+			<input type="file" name="file" id="file"  />
+		</div>
 
 		<input type="hidden" name="avatar_folder" 
 			   value="<?= $AVATAR_FOLDER ?>" />
@@ -59,7 +34,14 @@ function echoMimes($mimes)
 
 </div>
 <script>
-	$('#ifAvatar form #file').change(function ()
+	var IF_AVATAR_FILE = $("#ifAvatar .add_file #file");
+
+	$("#ifAvatar .add_file .fa").click(function ()
+	{
+		IF_AVATAR_FILE.click();
+	});
+
+	IF_AVATAR_FILE.change(function ()
 	{
 		var types = <?= json_encode($UPLOAD_FILE_TYPES) ?>;
 		var fileSize = <?= $UPLOAD_FILE_SIZE_MAX ?>;

@@ -26,7 +26,8 @@ var IF_AVATAR = {
 	{
 		IF_MODAL.show({
 			title: CNF.title || 'Avatar',
-			controller: CNF.controller + '/detail_compos/' + CNF.id,
+			controller: CNF.controller + '/detail_compos/'
+				+ CNF.id + '/' + (IF_MAIN.IS_MOBILE ? '1' : '0'),
 			btns: {
 				'Borrar Avatar': function ()
 				{
@@ -55,25 +56,26 @@ var IF_AVATAR = {
 		IF_MODAL.confirm(
 			'¿Eliminar el avatar permanentemente?', function (si)
 			{
+				if (!si) {
+					IF_AVATAR.close();
+					return;
+				}
+
 				IF_MODAL.show({
 					hideTitle: true,
-					controller: controller+'/delete/'+id,
+					controller: controller + '/delete/' + id,
 					callback: IF_AVATAR.callbackDelete,
 					timeout: 2500
 				});
-			},{
-				dontClose: true
-			});
+			}, {
+			dontClose: true
+		});
 	}
 
-	, upload: function (formSel, uploadTo, callback)
+	, upload: function (formSel, uploadTo)
 	{
-		var selct = IF_AVATAR.SEL + '#upl ';
-		$(selct + '#error').html('');
-
-		//show progress
-		//$(selct + '#file').hide();
-		$(selct + '#msg').removeClass('hidden');
+		IF_AVATAR._clear();
+		IF_AVATAR._msg('Subiendo imagen...');
 
 		var formData = new FormData($(formSel)[0]);
 		$.ajax({
@@ -82,12 +84,14 @@ var IF_AVATAR = {
 			data: formData,
 			success: function (e)
 			{
-				IF_AVATAR._uplSuccess(e, callback);
+				IF_AVATAR._uplSuccess(e);
 			},
 			error: function (e)
 			{
-				IF_AVATAR._uplError(e);
-				callback(false);
+				IF_AVATAR._error(
+					'Ha ocurrido un error y no se ha podido subir el archivo, '
+					+ 'intente nuevamente.'
+					);
 			},
 			//Tell JQuery not to process data or worry about content-type
 			cache: false,
@@ -96,39 +100,62 @@ var IF_AVATAR = {
 		});
 	}
 
-	, _uplSuccess: function (e, callback)
+	, _uplSuccess: function (e)
 	{
-		var selct = IF_AVATAR.SEL + '#upl ';
 		if (e == 0)
 		{
-			IF_AVATAR._uplError();
-			callback(false);
-		} else
+			IF_AVATAR._error('No se pudo subir la imagen.');
+		}
+		else
 		{
-			$(selct + '#msg').show();
-
+			IF_AVATAR._msg('Imagen subida satisfactoriamente.');
+			
 			//show image
-			var token = Math.random().toString().replace('.','');
-			$(selct + 'img').prop('src', e + '?' + token);
+			var token = Math.random().toString().replace('.', '');
+			$(IF_AVATAR.SEL + '#result_img').prop('src', e + '?' + token);
 
 			IF_AVATAR.callbackUpload();
 		}
 	}
 
-	, _uplError: function (e)
+	, _msg: function (msg)
 	{
-		alert('Ha ocurrido un error y no se ha podido subir el archivo, '
-			+ 'intente nuevamente	.');
-		IF_AVATAR._uplShowInput();
+		$(IF_AVATAR.SEL + '#msg').html(msg);
 	}
 
-	, _uplShowInput: function ()
+	, _error: function (msg)
 	{
-		$(IF_AVATAR.SEL + '#upl #msg').hide();
-		$(IF_AVATAR.SEL + '#upl #file').fadeIn();
+		$(IF_AVATAR.SEL + '#error').html(msg);
 	}
 
-	//
+	, _clear: function ()
+	{
+		$(IF_AVATAR.SEL + '#msg').empty();
+		$(IF_AVATAR.SEL + '#error').empty();
+	}
+
+	, _uplFileChange: function (types, fileSize, plgnURL)
+	{
+		var file = $(IF_AVATAR.SEL + '#file')[0].files[0];
+
+		if (file.size > (fileSize * 1024))
+		{
+			IF_AVATAR._error('El tamaño excede el m&aacute;ximo permitido.');
+			return;
+		}
+
+		if ($.inArray(file.type.toLowerCase(), types) < 0)
+		{
+			IF_AVATAR._error('Formato de archivo no permitido.');
+			return;
+		}
+
+		IF_AVATAR.upload(
+			IF_AVATAR.SEL+'#forma_upload',
+			plgnURL + 'upload.php'
+			);
+	}
+
 	, stopWebCam: function ()
 	{
 		IF_AVATAR.localstream.getTracks()[0].stop();

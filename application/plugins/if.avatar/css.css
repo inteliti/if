@@ -1,13 +1,11 @@
-#ifAvatar #msgcam,
-#ifAvatar #msg{
-	display: none;
-	width: 100%;
-	text-align: center;
-}
 .nav-tabs>li.active>a,
 .nav-tabs>li.active>a:focus,
 .nav-tabs>li.active>a:hover{
 	background-color: #fafafa;
+}
+#ifAvatar #msg,
+#ifAvatar #error{
+	margin-top: 10px;
 }
 
 
@@ -57,4 +55,20 @@ CAM HTML5
 	background-color: transparent;
 	border-left: white dashed 1px;
 	border-right: white dashed 1px;
+}
+
+/*************************************
+MOBILE
+*************************************/
+#ifAvatar .add_file{
+	text-align: center;
+}
+#ifAvatar .add_file .fa{
+	font-size: 3em;
+}
+#ifAvatar .add_file input{
+	width: 1px; height: 1px;
+	visibility: hidden;
+	position: absolute;
+	top: -100px; left: -100px;
 }

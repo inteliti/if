@@ -10,14 +10,15 @@ include_once APPPATH . 'core/IF_Controller.php';
  */
 class IF_Avatar extends IF_Controller
 {
+
 	public function __construct($upload_dir = 'avatar/', $config = NULL)
 	{
 		parent::__construct();
 
-		//Asegurarse que $upload_dir termina en /
+//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/');
 
-		//Default Config
+//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
 		if(empty($this->CONFIG->FILE_SIZE_MAX))
 		{
@@ -38,21 +39,27 @@ class IF_Avatar extends IF_Controller
 		);
 	}
 
-	public function detail_compos($id = -1)
+	public function detail_compos($id = -1, $isMobile = false)
 	{
 		$D = new stdClass();
 		$D->UPLOAD_PATH = $this->upload_path_server;
+		$D->AVATAR_FOLDER = $this->upload_path_client;
 		$D->UPLOAD_FILE_TYPES = $this->CONFIG->FILE_TYPE;
 		$D->UPLOAD_FILE_SIZE_MAX = $this->CONFIG->FILE_SIZE_MAX / 1000;
 		$D->FILE_NAME = "p" . $id;
-		
-		$this->load->view('../plugins/if.avatar/detail_compos.php', $D);
+		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.avatar/';
+		$D->PLG_PATH = IF_PATH_PLUGINS_SERVER . 'if.avatar/';
+
+		$vista = $isMobile ? 'compos_mobile' : 'compos_desktop';
+
+		$this->load->view("../plugins/if.avatar/{$vista}.php", $D);
 	}
-	
+
 	public function delete($id)
 	{
-		$filename = 'p'.$id.'.jpg';
-		@unlink($this->upload_path_server.$filename);
-		echo "<i class='fa fa-check'></i> Avatar eliminado satisfactoriamente.";
+		$filename = 'p' . $id . '.jpg';
+		@unlink($this->upload_path_server . $filename);
+		echo "<i class='fa fa-check'></i> Eliminado satisfactoriamente.";
 	}
+
 }

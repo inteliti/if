@@ -50,5 +50,6 @@ imagedestroy($src);
 imagejpeg($dst, $file); // adjust format as needed
 imagedestroy($dst);
 
-//RETORNAR ARCHIVO PARA CLIENTE
-echo 1;
+//RETORNAR PATH DE ARCHIVO PARA CLIENTE
+$avatarFolder = $_POST['avatar_folder'];
+echo $avatarFolder.$filename;

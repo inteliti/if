@@ -14,15 +14,13 @@ if(empty($FILE_NAME))
 
 </div>
 
-<p>
-	<button class="btn btn-primary btn-block" id="startbutton">
-		<i class="fa fa-camera"></i>
-		Tomar foto con WebCam
-	</button>
-</p>
-<div id="msgcam" class="">
-	<span>Subiendo imagen...</span>
-</div>
+<button class="btn btn-primary btn-block" id="startbutton">
+	<i class="fa fa-camera"></i>
+	Tomar foto con WebCam
+</button>
+
+<div class="text-center text-danger" id="error"></div>
+<div class="text-center text-primary" id="msg"></div>
 
 
 <script>
@@ -107,20 +105,16 @@ if(empty($FILE_NAME))
 
 		function setstate(s)
 		{
-			$('#msgcam').show();
-
 			if (s == 'uploading')
 			{
-				$("#msgcam span").show().html('Subiendo imagen...');
+				IF_AVATAR._msg('Subiendo imagen...');
 			} else if (s == 'uploaded')
 			{
-				$("#msgcam span").show().html(
-					'Imagen subida satisfactoriamente.'
-					);
+				IF_AVATAR._msg('Imagen subida satisfactoriamente.');
 				IF_AVATAR.callbackWebcam();
 			} else if (s == 'upload_error')
 			{
-				$("#msgcam span").show().html('ERROR al subir imagen.');
+				IF_AVATAR._error('Error al subir foto. Intente de nuevo.');
 			}
 		}
 

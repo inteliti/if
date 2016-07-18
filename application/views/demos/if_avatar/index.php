@@ -36,17 +36,17 @@ $avatar = ASSETS_URL . (
 	{
 		IF_AVATAR.open({
 			title: 'Cambia tu avatar',
-			controller: 'IF_Avatar',
+			controller: 'IF_Avatar',//DEBERIA ser un controlador que HEREDE de
+									//IF_Avatar, lo hago asi por cuestiones
+									//de DEMO
 			id: '10',
 			callbackWebcam: function ()
 			{
-				IF_AVATAR.close();
 				updImg();
 				toastr.success('Callback: carga con WEBCAM');
 			},
 			callbackUpload: function ()
 			{
-				//IF_AVATAR.close();
 				updImg();
 				toastr.success('Callback: carga con UPLOAD');
 			},
