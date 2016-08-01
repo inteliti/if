@@ -1,3 +1,5 @@
+1.2.4 [01/08/16]
+- Añadido soporte para minifacion de vistas (ENABLE_MOBILE_VIEWS)
 1.2.3 [18/07/16]
 - Cambiadas las constantes en core/IF_Constants con mejor notación y para
 mayor claridad de código (se mantienen constantes LEGACY).

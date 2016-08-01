@@ -46,6 +46,9 @@ class IF_Controller extends CI_Controller
 			return FALSE;
 		}
 		
+		//Establecer a TRUE para cargar vistas minificadas
+		$this->ENABLE_MOBILE_VIEWS = FALSE;
+		
 		//$this->session->set_userdata('ultima_actividad',time());
 	}
 	
@@ -238,17 +241,71 @@ class IF_Controller extends CI_Controller
 	 * $view: vista para cargar en el template
 	 * $D: datos para la vista
 	 * $page: pagina del template que se desea cargar
-	 * $return_data: devuelve la vista HTML que puede ser utilizada con otro fin que no sea enviar al navegador
+	 
 	 */
-	protected function tmpl( $view , $D = NULL , $page='index' , $return_data = FALSE)
+	protected function tmpl( $view , $D = NULL , $page='index' )
 	{
 		$D = (object) $D;
 		$D->VIEW = $view;
-		if($return_data)
+
+		if(!empty($this->ENABLE_MOBILE_VIEWS))
 		{
-			return $this->load->view('../templates/'.$this->config->item('tmpl').'/'.$page, $D , $return_data);
+			$view = $this->load->view(
+				'../templates/' . $this->config->item('tmpl') . '/' . $page
+				, $D
+				, TRUE
+			);
+			$this->forMobile($view);
 		}
-		$this->load->view('../templates/'.$this->config->item('tmpl').'/'.$page, $D );
+		else
+		{
+			$this->load->view(
+				'../templates/' . $this->config->item('tmpl') . '/' . $page
+				, $D
+			);
+		}
+	}
+	
+	/**
+	 * Cargar las vistas usando este método Y NO $this->load->view()
+	 * directamente.
+	 */
+	protected function view($view, $data = NULL, $returnHtml = FALSE)
+	{
+		if(!empty($this->ENABLE_MOBILE_VIEWS))
+		{
+			$this->forMobile($this->load->view($view, $data, TRUE));
+		}
+		else
+		{
+			$this->load->view($view, $data, $returnHtml);
+		}
+	}
+	
+	/**
+	 * Minificador. Remueve espacios, comentarios y saltos de línea.
+	 * Ideal para retornar vistas comprimidas al móvil.
+	 * Debe recibir el HTML de la vista.
+	 * 
+	 * *********************************
+	 * C U I D A D O
+	 * *********************************
+	 * TODA sentencia Javascript incluída en las vistas debe estar 
+	 * correctamente finalizada con punto y coma o causará errores de sintaxis.
+	 * En pocas palabras: EL JAVASCRIPT DEBE ESTAR IMPECABLE.
+	 */
+	protected function forMobile($view)
+	{
+		//Comentarios - Test area: https://regex101.com/r/iZ5wL6/1
+		$view = preg_replace('#<!--(.*)-->#Uis', '', $view); //html
+		$view = preg_replace('#(?<!:|\\\\)\/\/.*|\/\*([\s\S]*?)\*\/#i'
+			, '', $view); //js
+			
+		//Espacios
+		$view = preg_replace('#\s+#', ' ', $view);
+		$view = str_replace('# <#', '<', $view);
+		
+		echo $view;
 	}
 
 	/**
