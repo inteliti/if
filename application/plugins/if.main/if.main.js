@@ -52,7 +52,7 @@ var IF_MAIN = {
 				width: $win.width(),
 				height: $win.height()
 			};
-			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width < 768;
+			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width <= 768;
 		}).resize();
 	}
 
