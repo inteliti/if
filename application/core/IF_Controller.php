@@ -303,7 +303,11 @@ class IF_Controller extends CI_Controller
 			
 		//Espacios
 		$view = preg_replace('#\s+#', ' ', $view);
-		$view = str_replace('# <#', '<', $view);
+		$view = preg_replace('#> #', '>', $view);
+		
+		//JS
+		$view = preg_replace('#\s+([{}])\s+#', '$1', $view);
+		$view = preg_replace('#([\'"])\s+[+]\s+([\'"])#', '$1+$2', $view);
 		
 		echo $view;
 	}
