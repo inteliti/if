@@ -1,5 +1,5 @@
 /******************************************************************
- * v1.0.0
+ * v1.1.0
  * 
  * Dependencias: if.main v1.2.0+
  * 
@@ -37,6 +37,17 @@ var IF_LAYER = {
 		IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW =
 			IF_LAYER.CONTAINER.css('overflow')
 			;
+
+		//Escuchar DOM del contenedor
+		IF_LAYER.CONTAINER.observe("childlist", function (record)
+		{
+			var nodos = record.addedNodes;
+			var nodoNuevo = $(record.addedNodes[0]);
+			if (nodos.length > 1 || !nodoNuevo.hasClass('if_layer'))
+			{
+				IF_LAYER.restoreContainer();
+			}
+		});
 	}
 
 	/**
@@ -59,16 +70,17 @@ var IF_LAYER = {
 	 */
 	, open: function (cnf)
 	{
-		if(IF_LAYER.CNF.limit && IF_LAYER.LAYERS>=IF_LAYER.CNF.limit)
+		if (IF_LAYER.CNF.limit && IF_LAYER.LAYERS >= IF_LAYER.CNF.limit)
 		{
 			console.debug('Límite de layers alcanzado.');
 			return;
 		}
-		
+
 		var INDEX = ++IF_LAYER.LAYERS;
 
 		//apagar overflow de contenedor padre
 		IF_LAYER.CONTAINER.css('overflow', 'hidden');
+		IF_LAYER.CONTAINER_RESTORED = 0;
 
 		(cnf.beforeOpen || $.noop)(INDEX);
 
@@ -77,7 +89,8 @@ var IF_LAYER = {
 			)
 			.appendTo(IF_LAYER.CONTAINER)
 			.css({
-				'z-index': 10 + INDEX
+				'z-index': 10 + INDEX,
+				top: IF_LAYER.CONTAINER.scrollTop() + 'px'
 			})
 			.load(
 				cnf.controller ? IF_MAIN.CI_INDEX + cnf.controller : cnf.url,
@@ -135,17 +148,11 @@ var IF_LAYER = {
 				if (IF_LAYER.LAYERS <= 0)
 				{
 					IF_LAYER.LAYERS = 0;
-
-					//Reactivar overflow de contenedor padre
-					IF_LAYER.CONTAINER.css(
-						'overflow'
-						, IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW
-						)
-						;
+					IF_LAYER.restoreContainer();
 				}
 			}
 		};
-		
+
 		//eliminar contenido interno del layer
 		$l.empty();
 
@@ -162,6 +169,22 @@ var IF_LAYER = {
 			}, animObj);
 		}
 
+	}
+
+	, restoreContainer: function ()
+	{
+		if (IF_LAYER.CONTAINER_RESTORED)
+		{
+			return;
+		}
+
+		IF_LAYER.CONTAINER.css(
+			'overflow'
+			, IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW
+			)
+			;
+		IF_LAYER.CONTAINER_RESTORED = 1;
+		console.debug('container restored');
 	}
 
 	, get: function (index)

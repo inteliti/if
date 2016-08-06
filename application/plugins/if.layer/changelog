@@ -1,2 +1,5 @@
+1.1.0
+- Bugfix: contenedores con scroll no renderizaban correctamente el layer
+- Añadido jquery.mutation para esuchar cambios al contenedor
 1.0.0
 - Inicial
