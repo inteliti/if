@@ -89,7 +89,7 @@ var IF_LAYER = {
 			)
 			.appendTo(IF_LAYER.CONTAINER)
 			.css({
-				'z-index': 10 + INDEX,
+				'z-index': 101 + INDEX,
 				top: IF_LAYER.CONTAINER.scrollTop() + 'px'
 			})
 			.load(
@@ -184,7 +184,7 @@ var IF_LAYER = {
 			)
 			;
 		IF_LAYER.CONTAINER_RESTORED = 1;
-		console.debug('container restored');
+		IF_LAYER.LAYERS = 0;
 	}
 
 	, get: function (index)
