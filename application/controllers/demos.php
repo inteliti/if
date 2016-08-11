@@ -66,7 +66,7 @@ class Demos extends IF_Controller
 		echo "Cargado dinámicamente con AJAX: ".date('d/m/Y');
 	}
 	
-	protected function view($view)
+	protected function view($view, $data=NULL, $returnHtml = false)
 	{
 		$D = new stdClass();
 		$D->VIEW = $view;
