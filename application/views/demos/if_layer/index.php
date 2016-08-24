@@ -65,7 +65,9 @@ if_plugin('if.layer');
 	function openLayer()
 	{
 		IF_LAYER.open({
-			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT)
+			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT),
+			title: 'Título del layer #'+LAYER_COUNT,
+			animation:'right'
 		});
 	}
 	function openLayerEv()
@@ -90,4 +92,5 @@ if_plugin('if.layer');
 	{
 		IF_LAYER.close();
 	}
+	openLayer();
 </script>

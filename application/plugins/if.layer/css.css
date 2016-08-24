@@ -7,9 +7,43 @@
 	height: 100%;
 	position: absolute;
 	top:0;left:0;
-	overflow:auto;
+	overflow:hidden;
 
 	-webkit-box-shadow: 2px 0px 15px 0px rgba(0,0,0,.5);
 	box-shadow: 2px 0px 15px 0px  rgba(0,0,0,.5);
 
+}
+.if_layer *{
+	/** border:1px solid red; /**/
+}
+.if_layer_header{
+	height: 60px;
+}
+.if_layer_header > *{
+	display: inline-block;
+	line-height: 60px;
+	height: 60px;
+	float:left;
+}
+.if_layer_header > i{
+	color:#303030;
+	cursor: pointer;
+	padding: 0 20px;
+}
+.if_layer_header > b{
+	font-size: 20px;
+	font-weight: normal;
+	white-space: nowrap;
+}
+.if_layer_content{
+	display: block;
+	overflow: auto;
+	height: calc(100% - 60px);
+}
+.if_layer.right .if_layer_header i{
+	float: right;
+	margin-right: 20px;
+}
+.if_layer.right .if_layer_header b{
+	padding-left: 50px;
 }

@@ -6,8 +6,7 @@
 	<title>IF</title>
 	
 	<?php include APPPATH . 'core/IF_Loader.php'; ?>
-	
-	<link rel='stylesheet' type='text/css' href='<?= TMPL_URL ?>css/app.css' />
+
 </head>
 <body>
 	<div class="container" id="canvas">
