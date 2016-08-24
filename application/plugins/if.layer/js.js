@@ -1,5 +1,5 @@
 /******************************************************************
- * v1.3.0
+ * v1.3.1
  * 
  * Dependencias: if.main v1.2.0+
  * 
@@ -9,7 +9,7 @@
 
 var IF_LAYER = {
 	/**
-	 * Debe llamarse una única vez cuando se carga el plugin.
+	 * Inicializa el singleton (debe llamarse una unica vez)
 	 * 
 	 * @param {object} cnf
 	 * - Container: selector jquery con el contenedor que contendrá los
@@ -45,7 +45,7 @@ var IF_LAYER = {
 			var nodoNuevo = $(record.addedNodes[0]);
 			if (nodos.length > 1 && !nodoNuevo.hasClass('if_layer'))
 			{
-				IF_LAYER.restoreContainer();
+				IF_LAYER._restoreContainer();
 			}
 		});
 	}
@@ -61,10 +61,17 @@ var IF_LAYER = {
 	 * - controller: controlador CODEIGNITER que se llamará dentro del layer
 	 * a través de AJAX (tiene prioridad sobre url)
 	 * - title (string|opcional): Título del header
-	 * - data (opcional): data a pasar por AJAX
-	 * - beforeOpen (opcional): evento que se dispara ANTES de abrir el layer
-	 * - afterOpen (opcional): evento que se dispara DESPUES de abrir el layer
-	 * - afterLoad (opcional): evento que se dispara DESPUES de cargar
+	 * - data (obj|opcional): data a pasar por AJAX
+	 * - beforeOpen (fn|opcional): se dispara ANTES de abrir el layer
+	 * (el layer aun no existe en DOM)
+	 * - afterOpen (fn|opcional): se dispara DESPUES que la animación de
+	 * apertura del layer finaliza (el layer ya existe en DOM) pero ANTES
+	 * de la carga del contenido
+	 * - afterLoad (fn|opcional): se dispara DESPUES de cargar el contenido
+	 * - beforeClose (fn|opcional) se dispara al llamar al método close()
+	 * pero ANTES de cerrar el layer (el layer aun existe en el DOM)
+	 * - afterClose (fn|opcional): se dispara DESPUES de finalizar la animación
+	 * de cierre del layer (el layer ya NO existe en DOM)
 	 *  el contenido AJAX en el layer
 	 *  
 	 * @returns {void}
@@ -100,6 +107,8 @@ var IF_LAYER = {
 				'z-index': 101 + INDEX,
 				top: IF_LAYER.CONTAINER.scrollTop() + 'px'
 			})
+			.data('beforeClose', cnf.beforeClose || $.noop)
+			.data('afterClose', cnf.afterClose || $.noop)
 			;
 
 		//boton de cierre
@@ -158,20 +167,24 @@ var IF_LAYER = {
 		}
 	}
 
-	/**
-	 * @param {fn} cb Callback (opcional)
-	 * @returns {undefined}
-	 */
-	, close: function (cb)
+	, close: function ()
 	{
-		var $l = IF_LAYER.get(IF_LAYER.LAYERS);
+		var
+			INDEX = IF_LAYER.LAYERS,
+			$l = IF_LAYER.get(INDEX),
+			afterClose
+			;
+			
+		$l.data('beforeClose')(INDEX);
 
 		var animObj = {
 			duration: 400,
 			complete: function ()
 			{
+				afterClose = $l.data('afterClose');
+
 				IF_LAYER.LAYERS--;
-				$l.remove();
+				$l.remove(); //layer YA no existe
 
 				//Reactivar overflow del layer inferior
 				IF_LAYER.get(IF_LAYER.LAYERS)
@@ -179,14 +192,13 @@ var IF_LAYER = {
 					.css('overflow', 'auto')
 					;
 
-				//Callback
-				(cb || $.noop)();
-
 				if (IF_LAYER.LAYERS <= 0)
 				{
 					IF_LAYER.LAYERS = 0;
-					IF_LAYER.restoreContainer();
+					IF_LAYER._restoreContainer();
 				}
+
+				afterClose(INDEX);
 			}
 		};
 
@@ -205,17 +217,16 @@ var IF_LAYER = {
 				width: 0
 			}, animObj);
 		}
-
-
-
 	}
 
-	, restoreContainer: function ()
+	, _restoreContainer: function ()
 	{
 		if (IF_LAYER.CONTAINER_RESTORED)
 		{
 			return;
 		}
+
+		//_('container restored');
 
 		IF_LAYER.CONTAINER.css(
 			'overflow'
@@ -232,8 +243,3 @@ var IF_LAYER = {
 		return $("#if_layer-" + index);
 	}
 };
-
-function _(w)
-{
-	console.debug(w);
-}

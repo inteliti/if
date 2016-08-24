@@ -13,9 +13,6 @@
 	box-shadow: 2px 0px 15px 0px  rgba(0,0,0,.5);
 
 }
-.if_layer *{
-	/** border:1px solid red; /**/
-}
 .if_layer_header{
 	height: 60px;
 }

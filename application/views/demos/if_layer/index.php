@@ -1,5 +1,5 @@
 <?php
-if_plugin('if.layer');
+if_plugin(array('if.layer', 'toastr'));
 ?>
 
 <div id="layers" 
@@ -46,7 +46,7 @@ if_plugin('if.layer');
 		Abrir layer*
 	</button>
 	<button type="button" class="btn"
-			onclick="openLayerEv()">
+			onclick="openLayerEvents()">
 		Abrir layer con eventos*
 	</button>
 	<button type="button" class="btn"
@@ -66,25 +66,33 @@ if_plugin('if.layer');
 	{
 		IF_LAYER.open({
 			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT),
-			title: 'Título del layer #'+LAYER_COUNT,
-			animation:'right'
+			title: 'Título del layer #' + LAYER_COUNT,
+			animation: 'right'
 		});
 	}
-	function openLayerEv()
+	function openLayerEvents()
 	{
 		IF_LAYER.open({
 			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT),
 			beforeOpen: function (index)
 			{
-				alert('beforeOpen (layer index: ' + index + ')');
-			},
-			afterOpen: function (index)
+				toastr.info('beforeOpen [layer index: ' + index + ']');
+			}
+			, afterOpen: function (index)
 			{
-				alert('afterOpen (layer index: ' + index + ')');
+				toastr.info('afterOpen [layer index: ' + index + ']');
 			}
 			, afterLoad: function (index)
 			{
-				alert('afterLoad (layer index: ' + index + ')');
+				toastr.info('afterLoad [layer index: ' + index + ']');
+			}
+			, beforeClose: function (index)
+			{
+				toastr.info('beforeClose [layer index: ' + index + ']');
+			}
+			, afterClose: function (index)
+			{
+				toastr.info('afterClose [layer index: ' + index + ']');
 			}
 		});
 	}
