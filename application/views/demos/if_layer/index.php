@@ -66,14 +66,14 @@ if_plugin(array('if.layer', 'toastr'));
 	{
 		IF_LAYER.open({
 			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT),
-			title: 'Título del layer #' + LAYER_COUNT,
-			animation: 'right'
+			title: 'Título del layer #' + LAYER_COUNT
 		});
 	}
 	function openLayerEvents()
 	{
 		IF_LAYER.open({
 			controller: 'demos/if_layer_compos/' + (++LAYER_COUNT),
+			title: 'Título del layer #' + LAYER_COUNT,
 			beforeOpen: function (index)
 			{
 				toastr.info('beforeOpen [layer index: ' + index + ']');
