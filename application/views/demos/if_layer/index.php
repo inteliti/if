@@ -57,7 +57,7 @@ if_plugin(array('if.layer', 'toastr'));
 	*Cada vez que pulse el botón se abrirá un nuevo layer
 </div>
 <script>
-		
+	
 	IF_LAYER.init({
 		container: '#layers',
 		limit: 10,

@@ -1,12 +1,13 @@
 /******************************************************************
- * v1.3.2
+ * Singleton para la generación de layers
  * 
- * Dependencias: if.main v1.2.0+
- * 
- * Derechos Reservados (c) 2016 INTELITI SOLUCIONES, C.A.
- * Para su uso sólo con autorización.
+ * @namespace IF_LAYER
+ * @version 1.3.2
+ * @requires if.main 1.2+
+ * @author Gregorio Bolivar
+ * @copyright 2016 INTELITI SOLUCIONES, C.A.
+ * @license Para su uso sólo con autorización.
  *****************************************************************/
-
 var IF_LAYER = {
 	/**
 	 * Inicializa el Singleton (debe llamarse una unica vez)
@@ -225,6 +226,12 @@ var IF_LAYER = {
 		}
 	}
 
+	/**
+	 * 
+	 * 
+	 * @private
+	 * @returns {undefined}
+	 */
 	, _restoreContainer: function ()
 	{
 		if (IF_LAYER.CONTAINER_RESTORED)
