@@ -113,6 +113,8 @@ class Demos extends IF_Controller
 	
 	function masterdetail_detail($id)
 	{
+		sleep(4);
+		
 		$D = new stdClass();
 		$D->ID = $id;
 		
