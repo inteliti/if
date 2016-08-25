@@ -1,5 +1,5 @@
 /******************************************************************
- * v1.3.1
+ * v1.3.2
  * 
  * Dependencias: if.main v1.2.0+
  * 
@@ -9,15 +9,17 @@
 
 var IF_LAYER = {
 	/**
-	 * Inicializa el singleton (debe llamarse una unica vez)
+	 * Inicializa el Singleton (debe llamarse una unica vez)
 	 * 
-	 * @param {object} cnf
-	 * - Container: selector jquery con el contenedor que contendrá los
-	 * layers
-	 * - animation (opcional): left o right. Dirección de animación
-	 * de apertura/cierre. left por defecto.
-	 * - limit (opcional): establecer un límite a la cantidad de layers
+	 * @param {object} cnf Objeto de configuración
+	 * @param {string} cnf.container Selector jquery con el contenedor
+	 * que contendrá los layers
+	 * @param {string} [cnf.animation=left] left o right. Dirección de animación
+	 * de apertura/cierre.
+	 * @param {int} [cnf.limit] Establecer un límite a la cantidad de layers
 	 * que se pueden abrir (infinito por defecto).
+	 * @param {fn} [cnf.onLimit] Se dispara cuando se alcanza el límite
+	 * de layers impuestos por limit.
 	 * @returns {void}
 	 */
 	init: function (cnf)
@@ -31,8 +33,9 @@ var IF_LAYER = {
 		IF_LAYER.CONTAINER = $(cnf.container);
 		IF_LAYER.CNF = cnf;
 		IF_LAYER.LAYERS = 0;
+		IF_LAYER._onLimit = cnf.onLimit || $.noop;
 
-		$(IF_LAYER.CONTAINER).addClass('if_layer_container');
+		IF_LAYER.CONTAINER.addClass('if_layer_container');
 
 		IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW =
 			IF_LAYER.CONTAINER.css('overflow')
@@ -56,31 +59,30 @@ var IF_LAYER = {
 	 * que se está abriendo, se puede entonces usar IF_LAYER.get(INDICE)
 	 * para obtener un objeto jQuery con el layer.
 	 * 
-	 * @param {object} cnf
-	 * - url: url que se llamará dentro del layer a través de AJAX
-	 * - controller: controlador CODEIGNITER que se llamará dentro del layer
-	 * a través de AJAX (tiene prioridad sobre url)
-	 * - title (string|opcional): Título del header
-	 * - data (obj|opcional): data a pasar por AJAX
-	 * - beforeOpen (fn|opcional): se dispara ANTES de abrir el layer
+	 * @param {object} cnf Objeto de configuración
+	 * @param {string} cnf.url URL para cargar contenido en el layer a
+	 *  través de AJAX
+	 * @param {string} cnf.controller Controlador CODEIGNITER que se 
+	 * llamará dentro del layer a través de AJAX (tiene prioridad sobre cnf.url)
+	 * @param {string} [cnf.title] Título del header
+	 * @param {object} [cnf.data] Data a pasar en la llamada AJAX
+	 * @param {fn} [cnf.beforeOpen] Se dispara ANTES de abrir el layer
 	 * (el layer aun no existe en DOM)
-	 * - afterOpen (fn|opcional): se dispara DESPUES que la animación de
+	 * @param {fn} [cnf.afterOpen] Se dispara DESPUES que la animación de
 	 * apertura del layer finaliza (el layer ya existe en DOM) pero ANTES
 	 * de la carga del contenido
-	 * - afterLoad (fn|opcional): se dispara DESPUES de cargar el contenido
-	 * - beforeClose (fn|opcional) se dispara al llamar al método close()
+	 * @param {fn} [cnf.afterLoad] Se dispara DESPUES de cargar el contenido
+	 * @param {fn} [cnf.beforeClose] Se dispara al llamar al método close()
 	 * pero ANTES de cerrar el layer (el layer aun existe en el DOM)
-	 * - afterClose (fn|opcional): se dispara DESPUES de finalizar la animación
+	 * @param {fn} [cnf.afterClose] Se dispara DESPUES de finalizar la animación
 	 * de cierre del layer (el layer ya NO existe en DOM)
-	 *  el contenido AJAX en el layer
-	 *  
 	 * @returns {void}
 	 */
 	, open: function (cnf)
 	{
 		if (IF_LAYER.CNF.limit && IF_LAYER.LAYERS >= IF_LAYER.CNF.limit)
 		{
-			console.debug('Límite de layers alcanzado.');
+			IF_LAYER._onLimit();
 			return;
 		}
 
@@ -167,6 +169,10 @@ var IF_LAYER = {
 		}
 	}
 
+	/**
+	 * Cierra el último layer abierto.
+	 * @returns {void}
+	 */
 	, close: function ()
 	{
 		var
@@ -174,7 +180,7 @@ var IF_LAYER = {
 			$l = IF_LAYER.get(INDEX),
 			afterClose
 			;
-			
+
 		$l.data('beforeClose')(INDEX);
 
 		var animObj = {
@@ -226,8 +232,6 @@ var IF_LAYER = {
 			return;
 		}
 
-		//_('container restored');
-
 		IF_LAYER.CONTAINER.css(
 			'overflow'
 			, IF_LAYER.CONTAINER_ORIGINAL_OVERFLOW
@@ -238,6 +242,11 @@ var IF_LAYER = {
 
 	}
 
+	/**
+	 * Retorna un objeto jQuery con el layer cuyo índice es index
+	 * @param {int} index Indice (desde 1) del layer
+	 * @returns {jQuery}
+	 */
 	, get: function (index)
 	{
 		return $("#if_layer-" + index);

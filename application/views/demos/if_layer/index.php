@@ -57,8 +57,14 @@ if_plugin(array('if.layer', 'toastr'));
 	*Cada vez que pulse el botón se abrirá un nuevo layer
 </div>
 <script>
+		
 	IF_LAYER.init({
-		container: '#layers'
+		container: '#layers',
+		limit: 10,
+		onLimit: function ()
+		{
+			toastr.error('Se alcanzó el límite máximo de layers (10).');
+		}
 	});
 
 	var LAYER_COUNT = 0;
