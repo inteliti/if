@@ -3,10 +3,10 @@
 }
 .if_layer{
 	background-color: #fafafa;
-	width: 0;
+	width: 100%;
 	height: 100%;
 	position: absolute;
-	top:0;left:0;
+	top:0;
 	overflow:hidden;
 
 	-webkit-box-shadow: 2px 0px 15px 0px rgba(0,0,0,.5);
@@ -23,9 +23,9 @@
 	float:left;
 }
 .if_layer_header > i{
-	color:#303030;
+	background: transparent url(a.png) no-repeat 50% 50%;
 	cursor: pointer;
-	padding: 0 20px;
+	padding: 0 25px;
 }
 .if_layer_header > b{
 	font-size: 20px;
@@ -37,10 +37,11 @@
 	overflow: auto;
 	height: calc(100% - 60px);
 }
-.if_layer.right .if_layer_header i{
+.if_layer.r .if_layer_header i{
+	background-image: url(b.png);
 	float: right;
-	margin-right: 20px;
+	margin-right: 25px;
 }
-.if_layer.right .if_layer_header b{
+.if_layer.r .if_layer_header b{
 	padding-left: 50px;
 }
