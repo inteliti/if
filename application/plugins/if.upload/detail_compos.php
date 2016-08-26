@@ -29,15 +29,17 @@
 	</ul>
 </div>
 <script>
-	var <?= $NOMBRE_OBJETO ?> = new IF_UPLOAD({
+	var cnf = {
 		id: '<?= $ID; ?>',
 		upload_url: '<?= $CONTROLLER; ?>',
 		plg_url: '<?= addslashes($PLG_URL) ?>',
 		namespace: '#<?= $NAMESPACE; ?>',
 		upload_files_types: <?= json_encode($CONFIG->FILE_TYPE) ?>,
 		upload_file_size_max: <?= $CONFIG->FILE_SIZE_MAX ?>,
-		file_count: <?= $CONFIG->FILE_COUNT ?>
-	});
+		file_count: <?= $CONFIG->FILE_COUNT ?>,
+		image_size_max: <?= json_encode($CONFIG->IMAGE_SIZE_MAX) ?>
+	};
+	var <?= $NOMBRE_OBJETO ?> = new IF_UPLOAD(cnf);
 
 	//Cambiar el mensaje en mobiles
 	$("#<?= $NAMESPACE; ?> .text-zoom").html(
@@ -45,9 +47,22 @@
 		IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_MOBILE :
 		IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_DESKTOP
 		);
+
 	$("#<?= $NAMESPACE; ?> .text-del").html(
 		IF_MAIN.IS_MOBILE ?
 		IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_MOBILE :
 		IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_DESKTOP
 		);
+
+	if (cnf.image_size_max)
+	{
+		$("<li></li>")
+			.html(
+				IF_UPLOAD.L10N.VIEW_IMAGE_SIZE_MAX.replace(
+					'%1', cnf.image_size_max[0] + 'x' + cnf.image_size_max[1]
+					)
+				)
+			.appendTo("#<?= $NAMESPACE; ?> .texts")
+			;
+	}
 </script>

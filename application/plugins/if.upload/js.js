@@ -20,9 +20,10 @@ var IF_UPLOAD = function (cnf)
 	this.FILE_COUNT = cnf.file_count;
 	this.UPLOAD_FILE_TYPES = cnf.upload_files_types;
 	this.UPLOAD_FILE_SIZE_MAX = cnf.upload_file_size_max;
+	this.IMAGE_SIZE_MAX = cnf.image_size_max;
 	this.DELETE_CONFIRMATION = cnf.delete_confirmation;
 	this.THUMBS = $(this.NAMESPACE + '.thumbs');
-
+	
 	//Revisa si el navegador soporta todas las caracteristicas de File API
 	if (
 		!window.File || !window.FileReader || !window.FileList ||
@@ -122,8 +123,6 @@ IF_UPLOAD.prototype = {
 			this._thumbIcon(file);
 			addBtn();
 		}
-
-		//anadir nuevo boton para subir otro archivo
 
 	}
 

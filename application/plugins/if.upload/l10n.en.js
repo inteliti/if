@@ -7,5 +7,6 @@ IF_UPLOAD.L10N = {
 	VIEW_TEXT_DELETE_FILE_DESKTOP: 'Double-click on a file to delete it.',
 	VIEW_TEXT_DELETE_FILE_MOBILE: "Quickly touch a file twice to delete it.",
 	VIEW_TEXT_CLICK_TO_ZOOM_DESKTOP: 'Click an image to zoom.',
-	VIEW_TEXT_CLICK_TO_ZOOM_MOBILE: 'Touch an image to zoom.'
+	VIEW_TEXT_CLICK_TO_ZOOM_MOBILE: 'Touch an image to zoom.',
+	VIEW_IMAGE_SIZE_MAX: 'Max image size: %1px'
 };
