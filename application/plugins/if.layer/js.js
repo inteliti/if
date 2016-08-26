@@ -2,7 +2,7 @@
  * Singleton para la generación de layers
  * 
  * @namespace IF_LAYER
- * @version 1.4.0
+ * @version 1.4.1
  * @requires if.main 1.2+
  * @author Gregorio Bolivar
  * @copyright 2016 INTELITI SOLUCIONES, C.A.
@@ -103,14 +103,13 @@ var IF_LAYER = {
 		var $o = $(
 			"<div class=if_layer id=if_layer-" + INDEX + ">"
 			+ "<div class=if_layer_header>"
-			+ "<i title='Cerrar'></i>"
-			+ "<b>" + (cnf.title || '&nbsp;') + "</b>"
+			+ "<i></i><b>" + (cnf.title || '&nbsp;') + "</b>"
 			+ "</div>"
 			+ "<div class=if_layer_content></div>"
 			+ "</div>"
 			)
 			.appendTo(IF_LAYER.CONTAINER)
-			.addClass(IS_DIR_RIGHT?'r':'')
+			.addClass(IS_DIR_RIGHT ? 'r' : '')
 			.css({
 				'z-index': 101 + INDEX,
 				top: IF_LAYER.CONTAINER.scrollTop() + 'px',
@@ -197,17 +196,10 @@ var IF_LAYER = {
 			}
 		};
 
-		if (IF_LAYER.CNF.animation == 'right')
-		{
-			$l.animate({
-				left: '101%'
-			}, animObj);
-		} else
-		{
-			$l.animate({
-				left: '-101%'
-			}, animObj);
-		}
+		//Animación
+		$l.animate({
+			left: IF_LAYER.CNF.animation == 'right' ? '101%' : '-101%'
+		}, animObj);
 	}
 
 	/**

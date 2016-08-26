@@ -23,7 +23,7 @@
 	float:left;
 }
 .if_layer_header > i{
-	background: transparent url(a.png) no-repeat 50% 50%;
+	background: transparent url(l.png) no-repeat 50% 50%;
 	cursor: pointer;
 	padding: 0 25px;
 }
@@ -38,7 +38,7 @@
 	height: calc(100% - 60px);
 }
 .if_layer.r .if_layer_header i{
-	background-image: url(b.png);
+	background-image: url(r.png);
 	float: right;
 	margin-right: 25px;
 }

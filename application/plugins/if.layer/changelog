@@ -1,7 +1,12 @@
+1.4.1
+- Eliminado title del botón de cierre
+- Refractorización de código
+- Reducido tamaño de la imagen de las flechas de 1K a 0.4K
 1.4.0
 - Cambiada la flecha de cierre a una al estilo Material Designs (MD)
 - El contenido interno del layer ya no aparece/desaparece repentinamente al abrir/cerrar el layer
 - Aplicado easing a la animación de apertura/cierre
+- Layer ahora carga su contenido ANTES de la animación de apertura (eventos permanecen igual)
 1.3.2
 - Añadido onLimit
 - Pequeños ajustes varios
