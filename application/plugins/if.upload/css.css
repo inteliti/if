@@ -27,3 +27,12 @@
 	height: 64px;
 	margin: 26px;
 }
+.if-upload .texts,
+.if-upload .texts > *{
+	margin:0; padding: 0;
+	list-style: square;
+}
+.if-upload .texts{
+	margin: 5px 0 0 12px;
+	font-size: 12px;
+}

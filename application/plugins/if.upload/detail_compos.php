@@ -23,7 +23,10 @@
 				 alt="" border="0" />
 			 <?php endforeach ?>
 	</div>
-	<p class="text-muted msg-del"></p>
+	<ul class="text-muted texts">
+		<li class="text-zoom"></li>
+		<li class="text-del"></li>
+	</ul>
 </div>
 <script>
 	var <?= $NOMBRE_OBJETO ?> = new IF_UPLOAD({
@@ -32,13 +35,19 @@
 		plg_url: '<?= addslashes($PLG_URL) ?>',
 		namespace: '#<?= $NAMESPACE; ?>',
 		upload_files_types: <?= json_encode($CONFIG->FILE_TYPE) ?>,
-		upload_file_size_max: <?= $CONFIG->FILE_SIZE_MAX ?>
+		upload_file_size_max: <?= $CONFIG->FILE_SIZE_MAX ?>,
+		file_count: <?= $CONFIG->FILE_COUNT ?>
 	});
 
 	//Cambiar el mensaje en mobiles
-	$("#<?= $NAMESPACE; ?> .msg-del").html(
+	$("#<?= $NAMESPACE; ?> .text-zoom").html(
 		IF_MAIN.IS_MOBILE ?
-		IF_UPLOAD.L10N.VIEW_MSG_DELETE_FILE_MOBILE :
-		IF_UPLOAD.L10N.VIEW_MSG_DELETE_FILE_DESKTOP
+		IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_MOBILE :
+		IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_DESKTOP
+		);
+	$("#<?= $NAMESPACE; ?> .text-del").html(
+		IF_MAIN.IS_MOBILE ?
+		IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_MOBILE :
+		IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_DESKTOP
 		);
 </script>
