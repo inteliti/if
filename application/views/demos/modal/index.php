@@ -1,6 +1,6 @@
 <?php if_plugin('toastr'); ?>
 <h1>
-	if.modal 2.0
+	if.modal
 </h1>
 <hr />
 
@@ -44,7 +44,7 @@
 			controller: 'demos/ajax_data/2',
 			callback: function ()
 			{
-				alert('Contenido cargado (callback)');
+				toastr.info('Callback');
 			},
 			btns: {
 				'Ok': function ()

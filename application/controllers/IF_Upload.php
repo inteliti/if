@@ -1,4 +1,7 @@
 <?php
+/**
+ * 3.1.1
+ */
 
 if(!defined('BASEPATH'))
 	exit('No direct script access allowed');
@@ -20,6 +23,11 @@ class IF_Upload extends IF_Controller
 
 		//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
+		if(empty($this->CONFIG->FILE_COUNT))
+		{
+			//Cantidad de archivos permitidos para subir. -1 para infinitos.
+			$this->CONFIG->FILE_COUNT = -1;
+		}
 		if(empty($this->CONFIG->FILE_SIZE_MAX))
 		{
 			$this->CONFIG->FILE_SIZE_MAX = 10000000;
@@ -30,9 +38,14 @@ class IF_Upload extends IF_Controller
 				'application/pdf', 'image/jpeg', 'image/png'
 			);
 		}
+		if(empty($this->CONFIG->IMAGE_SIZE_MAX))
+		{
+			//Formato: array(ancho,alto) en px
+			$this->CONFIG->IMAGE_SIZE_MAX = NULL;
+		}
 
-		$this->upload_path_client = IF_PATH_ASSETS_CLIENT . $upload_dir . '/';
-		$this->upload_path_server = IF_PATH_ASSETS_SERVER . $upload_dir .
+		$this->upload_path_client = ASSETS_URL . $upload_dir . '/';
+		$this->upload_path_server = ASSETS_PATH . $upload_dir .
 			DIRECTORY_SEPARATOR
 		;
 
@@ -52,8 +65,8 @@ class IF_Upload extends IF_Controller
 		$D->ID = $id;
 		$D->FILES = array();
 		$D->CONFIG = $this->CONFIG;
-		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.upload/';
-		$D->CONTROLLER = IF_PATH_INDEX_CLIENT . get_class($this) . '/ajax_save';
+		$D->PLG_URL = PLUGINS_URL . 'if.upload/';
+		$D->CONTROLLER = INDEX_URL . get_class($this) . '/ajax_save';
 		$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
 
 		//busca archivos ya subidos para este id
@@ -62,6 +75,7 @@ class IF_Upload extends IF_Controller
 		{
 			unset($files[array_search('.', $files)]);
 			unset($files[array_search('..', $files)]);
+			unset($files[array_search('index.html', $files)]);
 			$D->FILES = $files;
 		}
 
@@ -73,6 +87,11 @@ class IF_Upload extends IF_Controller
 	{
 		$D = (object) $_POST;
 
+		$RESPONSE = (object) array(
+				'error'=>0,
+				'id'=>$D->id,
+		);
+
 		//carpeta especifica
 		$upload_dir = $this->upload_path_server . $D->id . DIRECTORY_SEPARATOR;
 
@@ -81,6 +100,24 @@ class IF_Upload extends IF_Controller
 			//Subir archivos
 			foreach($_FILES as $i=> $v)
 			{
+				//verificar dimensiones de imagenes
+				if(
+					is_array($this->CONFIG->IMAGE_SIZE_MAX) &&
+					$size = getimagesize($v["tmp_name"])
+				)
+				{
+					$ancho = $size[0];
+					$alto = $size[1];
+					$anchoMax = $this->CONFIG->IMAGE_SIZE_MAX[0];
+					$altoMax = $this->CONFIG->IMAGE_SIZE_MAX[1];
+
+					if($ancho > $anchoMax || $alto > $altoMax)
+					{
+						$RESPONSE->error = 2; //Wrong image size
+						continue;
+					}
+				}
+
 				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
 				$dbCol = 'file' . ($i + 1);
 				$D->$dbCol = $file_name = md5(mt_rand()) . ".{$ext}";
@@ -97,13 +134,18 @@ class IF_Upload extends IF_Controller
 				}
 				@unlink($upload_dir . $v);
 			}
+
+			if(empty($RESPONSE->error))
+			{
+				$RESPONSE->error = 0; //No error code
+			}
 		}
 		else
 		{
-			die('1'); //Cod Error 1: No se pudo crear el directorio
+			$RESPONSE->error = 1; //Cod Error 1: No se pudo crear el directorio
 		}
 
-		echo 0; //No error code
+		echo json_encode($RESPONSE);
 	}
 
 	//Crea un directorio temporal para alojar archivos, ideal para
@@ -114,23 +156,28 @@ class IF_Upload extends IF_Controller
 		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 
 		$tempName = 'iftemp-' . md5(time());
-		mkdir(IF_PATH_ASSETS_SERVER . $upload_dir .
-			$tempName . DIRECTORY_SEPARATOR
-			, 0777);
+		$dir = ASSETS_PATH . $upload_dir . $tempName . DIRECTORY_SEPARATOR;
+		mkdir($dir, 0777);
+
+		//crear index.html vacio
+		fclose(fopen($dir . "index.html", "w+"));
+
 		return $tempName;
 	}
 
 	//Renombra una carpeta temporal con su ID definitivo
 	static function renameTempFolder($upload_dir, $tempName, $elementId)
 	{
-		//Asegurarse que terminan en /
-		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
-		$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
+		if(strpos($tempName, 'iftemp-') >= 0)
+		{
+			//Asegurarse que terminan en /
+			$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
+			$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
 
-		@rename(IF_PATH_ASSETS_SERVER . $upload_dir . $tempName,
-				IF_PATH_ASSETS_SERVER . $upload_dir . $elementId
-				. DIRECTORY_SEPARATOR
-		);
+			@rename(ASSETS_PATH . $upload_dir . $tempName,
+					ASSETS_PATH . $upload_dir . $elementId . DIRECTORY_SEPARATOR
+			);
+		}
 	}
 
 	//Elimina carpetas temporales que no se hayan usado en algun tiempo

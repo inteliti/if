@@ -1,6 +1,7 @@
+2.0.2
+- Bugfix: se repetía el mensaje de error en campos que usan .input-group
 2.0.1
-- Bugfix, la comprobación se estaba aplicando a input[type=hidden],
-esto fue removido
+- Bugfix: la comprobación se estaba aplicando a input[type=hidden], esto fue removido
 2.0.0
 - Cambiado el nombre del plugin a if.html5constraints
 1.0.0

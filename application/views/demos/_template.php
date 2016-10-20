@@ -7,7 +7,6 @@
 
 		<?php include APPPATH . 'core/If_Loader.php'; ?>
 
-		<link rel='stylesheet' type='text/css' href='<?= TMPL_URL ?>css/app.css' />
 	</head>
 	<body>
 		

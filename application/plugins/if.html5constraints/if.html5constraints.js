@@ -1,5 +1,5 @@
 /****************************************
- * V2.0.1
+ * V2.0.2
  * Por Gregorio Bolivar para Intelliti Framework
  * 
  * Validador de formularios que hace uso de los parametros 
@@ -41,11 +41,15 @@ $.fn.ifValidate = function ()
 					, validityObj = this.validity
 					;
 
-				$parent
-					.removeClass('has-error')
-					.find('small.help-block.error')
-					.remove()
-					;
+				$parent.removeClass('has-error');
+
+				if ($parent.is('.input-group'))
+				{
+					$parent.siblings('small.help-block.error').remove();
+				} else
+				{
+					$parent.find('small.help-block.error').remove();
+				}
 
 				if (!validityObj.valid)
 				{

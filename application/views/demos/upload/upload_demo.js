@@ -23,15 +23,15 @@ var UPLOAD_DEMO = {
 		
 		
 		//Llamamos a nuestro objeto IF_UPLOAD
-		mi_nombre_objeto.upload(function (errorCode)
+		mi_nombre_objeto.upload(function (response)
 		{
-			if(!errorCode)
+			if(response.error==IF_UPLOAD.ERROR_NONE)
 			{
 				toastr.success('Archivos cargados exitosamente.');
 			}
 			else
 			{
-				toastr.error('Error, codigo: '+errorCode);
+				toastr.error('Error, codigo: '+response.error);
 			}
 		});
 		

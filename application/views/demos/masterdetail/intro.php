@@ -15,16 +15,3 @@
 
 
 
-<script>
-	IF_LAYER.init({
-		container: '#if-md-detail',
-		animation: 'right',
-		limit: '5'
-	});
-	function openLayer()
-	{
-		IF_LAYER.open({
-			controller:'demos/if_layer_compos'
-		});
-	}
-</script>

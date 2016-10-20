@@ -45,7 +45,7 @@ class Demos extends IF_Controller
 	function if_layer_compos($layerNo="?")
 	{
 		$D = new stdClass();
-		$this->view('demos/if_layer/compos', $D);
+		$this->load->view('demos/if_layer/compos', $D);
 	}
 	
 	function if_avatar()
@@ -66,7 +66,7 @@ class Demos extends IF_Controller
 		echo "Cargado dinámicamente con AJAX: ".date('d/m/Y');
 	}
 	
-	protected function view($view)
+	protected function view($view, $data=NULL, $returnHtml = false)
 	{
 		$D = new stdClass();
 		$D->VIEW = $view;

@@ -1,3 +1,9 @@
+3.1.1
+- Añadido soporte para tamaño máximo de imagen ($this->CONFIG->IMAGE_SIZE_MAX)
+- Creadas las constantes de error IF_UPLOAD.ERROR_NONE, IF_UPLOAD.ERROR_FILE_NOT_CREATED, IF_UPLOAD.ERROR_IMAGE_WRONG_SIZE, usar estas constantes para comparar la respuesta del servidor al subir ficheros.
+3.1.0
+- Añadido configuracion FILE_COUNT
+- Añadido opción de Zoom al hacer click/touch una imagen (solo imagenes)
 3.0.0
 - Reescrito todo el plugin
 - Removida dependencia con BD

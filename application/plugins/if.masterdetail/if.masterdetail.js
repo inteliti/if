@@ -1,6 +1,6 @@
 /*****************************************************
  * Clase JavaScript de Maestro Detalle
- * v1.2.2 (detalles en changelog)
+ * v1.2.3
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 
@@ -107,6 +107,8 @@ var IF_MASTERDETAIL = {
 	//recibe los mismos parametros. Ver docs de IF_MAIN.loadCompos
 	, loadDetail: function (detailCnf)
 	{
+		IF_MASTERDETAIL.LAST_DETAIL_CNF = detailCnf;
+		
 		IF_MAIN.confirmUnsavedData(function ()
 		{
 			if (!detailCnf)
@@ -123,6 +125,15 @@ var IF_MASTERDETAIL = {
 	, reloadMT: function ()
 	{
 		$("#if-md #if-grid").bootgrid('reload');
+	}
+	
+	//Recarga el detail con la ultima configuracion con que se cargó
+	,reloadDetail: function ()
+	{
+		if(IF_MASTERDETAIL.LAST_DETAIL_CNF)
+		{
+			IF_MASTERDETAIL.loadDetail(IF_MASTERDETAIL.LAST_DETAIL_CNF);
+		}
 	}
 
 	//Llamar a esto desde save() en las clases especificas
