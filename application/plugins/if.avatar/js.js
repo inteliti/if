@@ -26,7 +26,7 @@ var IF_AVATAR = {
 	{
 		IF_MODAL.show({
 			title: CNF.title || 'Avatar',
-			controller: CNF.controller + '/detail_compos/'
+			controller: CNF.controller + '/detail_avatar/'
 				+ CNF.id + '/' + (IF_MAIN.IS_MOBILE ? '1' : '0'),
 			btns: {
 				'Borrar Avatar': function ()
@@ -36,6 +36,7 @@ var IF_AVATAR = {
 				, 'Cerrar': function ()
 				{
 					IF_MODAL.close();
+					IF_AVATAR.stopWebCam();
 				}
 			}
 		});
@@ -63,7 +64,7 @@ var IF_AVATAR = {
 
 				IF_MODAL.show({
 					hideTitle: true,
-					controller: controller + '/delete/' + id,
+					controller: controller + '/delete_avatar/' + id,
 					callback: IF_AVATAR.callbackDelete,
 					timeout: 2500
 				});
@@ -158,6 +159,9 @@ var IF_AVATAR = {
 
 	, stopWebCam: function ()
 	{
-		IF_AVATAR.localstream.getTracks()[0].stop();
+		if(IF_AVATAR.localstream)
+		{
+			IF_AVATAR.localstream.getTracks()[0].stop();
+		}
 	}
 };

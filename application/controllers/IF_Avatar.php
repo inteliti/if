@@ -39,7 +39,7 @@ class IF_Avatar extends IF_Controller
 		);
 	}
 
-	public function detail_compos($id = -1, $isMobile = false)
+	public function detail_avatar($id = -1, $isMobile = false)
 	{
 		$D = new stdClass();
 		$D->UPLOAD_PATH = $this->upload_path_server;
@@ -55,7 +55,7 @@ class IF_Avatar extends IF_Controller
 		$this->load->view("../plugins/if.avatar/{$vista}.php", $D);
 	}
 
-	public function delete($id)
+	public function delete_avatar($id)
 	{
 		$filename = 'p' . $id . '.jpg';
 		@unlink($this->upload_path_server . $filename);

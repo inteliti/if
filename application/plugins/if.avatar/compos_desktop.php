@@ -1,12 +1,12 @@
 <div id="ifAvatar">
 	<ul class="nav nav-tabs">
 		<li class="active cam">
-			<a href="javascript:ifAvatarCam()" data-toggle="tab">
+			<a href="#" onclick="ifAvatarCam()" data-toggle="tab">
 				Usar WebCam
 			</a>
 		</li>
 		<li class="upl">
-			<a href="javascript:ifAvatarUpl()" data-toggle="tab">
+			<a href="#" onclick="ifAvatarUpl()" data-toggle="tab">
 				Subir Imagen
 			</a>
 		</li>

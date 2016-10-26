@@ -1,9 +1,13 @@
 <?php
 if_plugin(array('if.modal', 'if.avatar', 'toastr'));
 
-$filename = 'avatar/p10.jpg';
+$filename = 'avatar/p10';
 $avatar = ASSETS_URL . (
-	file_exists(ASSETS_PATH . $filename) ? $filename : 'avatar/none.jpg'
+	file_exists(ASSETS_PATH . $filename.'.jpg') 
+		? $filename.'.jpg' 
+		: file_exists(ASSETS_PATH . $filename.'.png') 
+			? $filename.'.png' 
+			: 'avatar/none.jpg'
 	);
 ?>
 
