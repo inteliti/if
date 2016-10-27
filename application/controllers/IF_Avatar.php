@@ -39,7 +39,7 @@ class IF_Avatar extends IF_Controller
 		);
 	}
 
-	public function detail_avatar($id = -1, $isMobile = false)
+	public function load_avatar($id = -1, $isMobile = false)
 	{
 		$D = new stdClass();
 		$D->UPLOAD_PATH = $this->upload_path_server;

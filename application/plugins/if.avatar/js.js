@@ -26,7 +26,7 @@ var IF_AVATAR = {
 	{
 		IF_MODAL.show({
 			title: CNF.title || 'Avatar',
-			controller: CNF.controller + '/detail_avatar/'
+			controller: CNF.controller + '/load_avatar/'
 				+ CNF.id + '/' + (IF_MAIN.IS_MOBILE ? '1' : '0'),
 			btns: {
 				'Borrar Avatar': function ()
