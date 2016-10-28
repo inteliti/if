@@ -40,7 +40,7 @@ var IF_MODAL = {
 	 */
 	show: function (cnf)
 	{
-		var $modal = $('#ifModal'),
+		var $modal = $modal = !cnf.modal ? $('#ifModal') : $('#' + cnf.modal),
 			$title = $modal.find('.if_modal_title'),
 			$content = $modal.find('.if_modal_content').empty(),
 			$btns = $modal.find('.if_modal_btns').empty()
@@ -169,11 +169,13 @@ var IF_MODAL = {
 
 	, close: function ()
 	{
-		$('#ifModal')
+		var $modal = !cnf.modal ? $('#ifModal') : $('#' + cnf.modal);
+		
+		$modal
 			.fadeOut('normal', function ()
 			{
 				//liberar memoria
-				$('#ifModal').find('.if_modal_content').empty();
+				$(this).find('.if_modal_content').empty();
 			})
 			;
 	}
