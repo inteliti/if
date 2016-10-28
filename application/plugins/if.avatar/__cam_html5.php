@@ -52,7 +52,10 @@ if(empty($FILE_NAME))
 			}
 
 			IF_AVATAR.localstream = stream;
-			video.play();
+					
+			setTimeout(function(){      
+			   video.play();
+			}, 200);
 		},
 			function (err)
 			{

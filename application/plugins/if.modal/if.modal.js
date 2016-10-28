@@ -40,7 +40,7 @@ var IF_MODAL = {
 	 */
 	show: function (cnf)
 	{
-		var $modal = $modal = !cnf.modal ? $('#ifModal') : $('#' + cnf.modal),
+		var $modal = !cnf.modal ? $('#ifModal') : $(cnf.modal),
 			$title = $modal.find('.if_modal_title'),
 			$content = $modal.find('.if_modal_content').empty(),
 			$btns = $modal.find('.if_modal_btns').empty()
@@ -97,7 +97,15 @@ var IF_MODAL = {
 		window.clearTimeout(IF_MODAL.TIMEOUT);
 		if (cnf.timeout >= 0)
 		{
-			IF_MODAL.TIMEOUT = window.setTimeout(IF_MODAL.close, cnf.timeout);
+			IF_MODAL.TIMEOUT = window.setTimeout(
+					function()
+					{
+						IF_MODAL.close({
+							modal: $modal
+						});
+					}, 
+					cnf.timeout
+			);
 		}
 
 		//mostrar
@@ -167,9 +175,12 @@ var IF_MODAL = {
 		IF_MODAL.show(cnf);
 	}
 
-	, close: function ()
-	{
-		var $modal = !cnf.modal ? $('#ifModal') : $('#' + cnf.modal);
+	, close: function (cnf)
+	{	
+		var $modal = $('#ifModal');
+		
+		if(cnf && cnf.modal)
+			$modal = $(cnf.modal);
 		
 		$modal
 			.fadeOut('normal', function ()
@@ -178,6 +189,30 @@ var IF_MODAL = {
 				$(this).find('.if_modal_content').empty();
 			})
 			;
+	}
+
+	/*
+	 * ajaxCntrllr
+	 * 
+	 * It displays a modal with returnee from the controller view 
+	 * using ajax
+	 * 
+	 * @param objetc cnf			objeto para configuracion del modal
+	 *		
+	 *		cnf.controller			controller
+	 * 		cnf.data				data for the controller
+	 *		cnf.title				modal title 
+	 */
+	, ajaxCntrllr: function (cnf)
+	{
+		IF_MAIN.loadCompos({
+			controller: cnf.controller,
+			data: cnf.data,
+			target: '.if_modal_content', 
+			callback: cnf.callback
+		});
+		
+		IF_MODAL.show(cnf);
 	}
 
 	, TIMEOUT: null
