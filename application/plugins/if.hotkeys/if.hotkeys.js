@@ -70,7 +70,7 @@ var IF_HOTKEY =
 		key = (key+'').toUpperCase();
 		var cur = IF_HOTKEY._processKey(key);
 		cur.callback = cb;
-		REPO[ key ] = cur
+		REPO[ key ] = cur;
 		IF_HOTKEY._processAll();
 	}
 	
@@ -154,11 +154,19 @@ var IF_HOTKEY =
 		if( cur=IF_HOTKEY.ALL[input] )
 		{
 			if(
-				(type=='text'||type=='textarea'||type=='password')
+				(	type==='text'
+					|| type==='textarea'
+					|| type==='password'
+					|| type==='number'
+					|| type==='email'
+				)
 				&& !IF_HOTKEY.SPECIAL_KEYS[k]
 			) return true;
 			
-			cur.callback();
+			if(cur.callback && typeof cur.callback === 'function')
+				cur.callback();
+			else
+				$.noop();
 			
 			e.preventDefault();
 			e.stopPropagation();
