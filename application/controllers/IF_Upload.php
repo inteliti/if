@@ -1,11 +1,8 @@
 <?php
+
 /**
- * 3.1.1
+ * 3.2.0
  */
-
-if(!defined('BASEPATH'))
-	exit('No direct script access allowed');
-
 include_once APPPATH . 'core/IF_Controller.php';
 
 /**
@@ -17,7 +14,7 @@ class IF_Upload extends IF_Controller
 	public function __construct($upload_dir = 'uploads/', $config = NULL)
 	{
 		parent::__construct();
-
+		
 		//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/');
 
@@ -30,10 +27,12 @@ class IF_Upload extends IF_Controller
 		}
 		if(empty($this->CONFIG->FILE_SIZE_MAX))
 		{
+			//Tamaño en BYTES permitido
 			$this->CONFIG->FILE_SIZE_MAX = 10000000;
 		}
 		if(empty($this->CONFIG->FILE_TYPE))
 		{
+			//Tipos de archivo permitidos
 			$this->CONFIG->FILE_TYPE = array(
 				'application/pdf', 'image/jpeg', 'image/png'
 			);
@@ -42,6 +41,20 @@ class IF_Upload extends IF_Controller
 		{
 			//Formato: array(ancho,alto) en px
 			$this->CONFIG->IMAGE_SIZE_MAX = NULL;
+		}
+		if(empty($this->CONFIG->IMAGE_COPIES))
+		{
+			//Generar copias de las imagenes automaticamente, ej de config:
+			/**
+			 * Esto generará dos copias de la imagen a 50% y 25% del tamaño
+			 * original (porcentajes para mantener relación de aspecto),
+			 * también colocará un sufijo al nombre de cada copia:
+			 * array(
+				array('dimensions'=>'0.50', 'suffix'=>'-mobile'),
+				array('dimensions'=>'0.25', 'suffix'=>'-thumbnail'),
+			)
+			 */
+			$this->CONFIG->IMAGE_COPIES = NULL;
 		}
 
 		$this->upload_path_client = ASSETS_URL . $upload_dir . '/';
@@ -58,6 +71,9 @@ class IF_Upload extends IF_Controller
 		{
 			die('Se requiere la extensión PHP fileinfo.');
 		}
+
+
+		//d('EL ID ES; '.$id);
 
 		$D = new stdClass();
 		$D->FILES_URL = $this->upload_path_client . $id . '/';
@@ -87,9 +103,18 @@ class IF_Upload extends IF_Controller
 	{
 		$D = (object) $_POST;
 
+		//automatically creates temp folder
+		if($D->id <= 0)
+		{
+			//d('CREANDO ARCHIVO TEMPORTAL');
+			$D->id = $this->createTempFolder($this->upload_path_server);
+			//d($D->id);
+		}
+
 		$RESPONSE = (object) array(
 				'error'=>0,
 				'id'=>$D->id,
+				'folder_provisional'=>$D->id <= 0,
 		);
 
 		//carpeta especifica
@@ -100,28 +125,57 @@ class IF_Upload extends IF_Controller
 			//Subir archivos
 			foreach($_FILES as $i=> $v)
 			{
-				//verificar dimensiones de imagenes
-				if(
-					is_array($this->CONFIG->IMAGE_SIZE_MAX) &&
-					$size = getimagesize($v["tmp_name"])
-				)
+				$file_name = md5(mt_rand());
+				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
+				$dbCol = 'file' . ($i + 1);
+				$D->$dbCol = $file_name . ".{$ext}";
+				
+				//Imagenes
+				if($size = getimagesize($v["tmp_name"]))
 				{
 					$ancho = $size[0];
 					$alto = $size[1];
-					$anchoMax = $this->CONFIG->IMAGE_SIZE_MAX[0];
-					$altoMax = $this->CONFIG->IMAGE_SIZE_MAX[1];
 
-					if($ancho > $anchoMax || $alto > $altoMax)
+					//Dimensiones
+					if(is_array($this->CONFIG->IMAGE_SIZE_MAX))
 					{
-						$RESPONSE->error = 2; //Wrong image size
-						continue;
+						$anchoMax = $this->CONFIG->IMAGE_SIZE_MAX[0];
+						$altoMax = $this->CONFIG->IMAGE_SIZE_MAX[1];
+
+						if($ancho > $anchoMax || $alto > $altoMax)
+						{
+							$RESPONSE->error = 2; //Wrong image size
+							continue;
+						}
+					}
+
+					//Copia
+					if(is_array($this->CONFIG->IMAGE_COPIES))
+					{
+						foreach($this->CONFIG->IMAGE_COPIES as &$copy)
+						{
+							$newAncho = $ancho * $copy['dimensions'];
+							$newAlto = $alto * $copy['dimensions'];
+
+							$dest = imagecreatetruecolor($newAncho, $newAlto);
+							$source = imagecreatefromjpeg($v["tmp_name"]);
+							$destFile = imagecopyresized(
+								$dest, $source, 0, 0, 0, 0
+								, $newAncho, $newAlto, $ancho, $alto
+							);
+
+							imagejpeg(
+								$dest
+								, $upload_dir . $file_name 
+								. $copy['suffix'] . ".{$ext}"
+							);
+						}
 					}
 				}
 
-				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
-				$dbCol = 'file' . ($i + 1);
-				$D->$dbCol = $file_name = md5(mt_rand()) . ".{$ext}";
-				move_uploaded_file($v["tmp_name"], $upload_dir . $file_name);
+				move_uploaded_file(
+					$v["tmp_name"], $upload_dir . $file_name . ".{$ext}"
+				);
 			}
 
 			//Remover archivos remotos
@@ -155,7 +209,7 @@ class IF_Upload extends IF_Controller
 		//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 
-		$tempName = 'iftemp-' . md5(time());
+		$tempName = 'iftemp-' . md5(rand());
 		$dir = ASSETS_PATH . $upload_dir . $tempName . DIRECTORY_SEPARATOR;
 		mkdir($dir, 0777);
 
