@@ -74,45 +74,33 @@ class IF_Avatar extends IF_Controller
 	public function file_upload()
 	{
 		$D = (object) $_POST;
-		
-		//trabajamos la data
-		list($type, $data) = explode(';', $D->img_data);
-		list(, $data) = explode(',', $data);
-		$data = base64_decode($data);
-
-		$this->storeImg($D->id, $data);
+		$this->blobToImg($D->id, $D->img_data);
 	}
 
 	public function crop_upload()
 	{
 		$D = (object) $_POST;
-
-		//trabajamos la data
-		list($type, $data) = explode(';', $D->img_data);
-		list(, $data) = explode(',', $data);
-		$data = base64_decode($data);
-
-		$this->storeImg($D->id, $data);
+		$this->blobToImg($D->id, $D->img_data);
 	}
 
 	public function cam_upload()
 	{
 		$D = (object) $_POST;
-
-		//trabajamos la data
-		$data = str_replace(' ', '+', $D->img_data);
-		$data = base64_decode($data);
-
-		$this->storeImg($D->id, $data);
+		$this->blobToImg($D->id, $D->img_data);
 	}
 
-	private function storeImg($id, $imgData)
+	private function blobToImg($id, $blob)
 	{
+		//Trabajamos el blob
+		list($type, $data) = explode(';', $blob);
+		list(, $data) = explode(',', $data);
+		$data = base64_decode($data);
+		
 		$filename = "p{$id}.jpg";
 		$pathServer = $this->upload_path_server . $filename;
 		$pathClient = $this->upload_path_client . $filename;
 
-		file_put_contents($pathServer, $imgData);
+		file_put_contents($pathServer, $data);
 
 		//Forzar resize
 		list($ancho, $alto) = getimagesize($pathServer);

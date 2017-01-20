@@ -36,11 +36,14 @@ $avatar = ASSETS_URL . (
 	{
 		IF_AVATAR.open({
 			title: 'Cambia tu avatar',
-			controller: 'IF_Avatar', //DEBERIA ser un controlador que HEREDE de
-			//IF_Avatar, lo hago asi por cuestiones
-			//de DEMO
-			id: '10', //ID unico que identifica al objeto dueño del avatar.
+			
+			//DEBERIA ser un controlador que HEREDE de IF_Avatar,
+			//lo hago asi por cuestiones de DEMO
+			controller: 'IF_Avatar', 
+			
+			//ID unico que identifica al objeto dueño del avatar.
 			//El avatar será renombrado con este ID (ej: 10.jpg)
+			id: '10', 
 
 			//Establecer para habilitar corte de imagen (desabilitado 
 			//por defecto). Recibe la misma config de cropper, ver:
@@ -49,6 +52,8 @@ $avatar = ASSETS_URL . (
 			crop: {
 				aspectRatio: 1 / 1 //1/1, 4/3, 16/9, etc
 			},
+			
+			//Callbacks
 			onUpload: function (imgPath, type)
 			{
 				updImg(imgPath);

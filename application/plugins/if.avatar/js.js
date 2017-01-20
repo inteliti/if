@@ -14,17 +14,16 @@ var IF_AVATAR = {
 	 * Configuración:
 	 * - controller: controlador CODEIGNITER que procesara la imagen
 	 * (el cual debe heredar de controlador IF_Avatar.php) 
-	 * - id: id NUMERICO de la persona duena del avatar
+	 * - id: id NUMERICO del objeto dueño del avatar
 	 * - crop (obj | opcional): habilita crop (desabilitado por defecto)
 	 * - title (opcional): título del modal
 	 * - onUpload (opcional): se ejecuta al subir el avatar. Recibe dos
 	 * parametros:
 	 *		1- el path absoluto a la imagen que se acaba de subir o la
 	 *		constante ERROR en error
-	 *		2- string que indica el tipo de subida "webcam" o "file"
+	 *		2- string que indica el tipo de subida: "webcam" o "file"
 	 * - onDelete (opcional): se ejecuta al borrar el avatar. Recibe las
 	 * constantes SUCCESS en exito o ERROR en error 
-	 * eliminar el avatar exitosamente
 	 */
 	open: function (CNF)
 	{
@@ -128,7 +127,7 @@ IF_AVATAR.FILE = {
 			return;
 		}
 
-		if (IF_AVATAR.CNF.crop)
+		if (CNF.crop)
 		{
 			IF_AVATAR.CROP.init(file, 'file');
 		} else
@@ -238,26 +237,39 @@ IF_AVATAR.CAM = {
 
 		canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 
-		var head = /^data:image\/(png|jpeg);base64,/;
+		var data = canvas.toDataURL('image/jpeg', 0.9);
 
-		data = canvas.toDataURL('image/jpeg', 0.9).replace(head, '');
-
-		$.ajax({
-			url: uploadPath,
-			type: 'POST',
-			data: {
-				id: CNF.id,
-				img_data: data
-			},
-			success: function (e)
-			{
-				CNF.onUpload(e, 'webcam');
-			},
-			error: function (e)
-			{
-				CNF.onUpload(IF_AVATAR.ERROR, 'webcam');
+		if (CNF.crop)
+		{
+			function dataURItoBlob(dataURI) {
+				var binary = atob(dataURI.split(',')[1]);
+				var array = [];
+				for (var i = 0; i < binary.length; i++) {
+					array.push(binary.charCodeAt(i));
+				}
+				return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
 			}
-		});
+
+			IF_AVATAR.CROP.init(dataURItoBlob(data), 'webcam');
+		} else
+		{
+			$.ajax({
+				url: uploadPath,
+				type: 'POST',
+				data: {
+					id: CNF.id,
+					img_data: data
+				},
+				success: function (e)
+				{
+					CNF.onUpload(e, 'webcam');
+				},
+				error: function (e)
+				{
+					CNF.onUpload(IF_AVATAR.ERROR, 'webcam');
+				}
+			});
+		}
 	}
 
 	, stopWebCam: function ()
