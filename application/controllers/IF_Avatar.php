@@ -10,25 +10,36 @@ include_once APPPATH . 'core/IF_Controller.php';
  */
 class IF_Avatar extends IF_Controller
 {
-
+	
+	public static $ERROR = 0;
+	public static $SUCCESS = 1;
+	
 	public function __construct($upload_dir = 'avatar/', $config = NULL)
 	{
 		parent::__construct();
 
-//Asegurarse que $upload_dir termina en /
+		//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/');
 
-//Default Config
+		//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
 		if(empty($this->CONFIG->FILE_SIZE_MAX))
 		{
 			$this->CONFIG->FILE_SIZE_MAX = 10000000;
 		}
+
+		//Formatos permitidos
 		if(empty($this->CONFIG->FILE_TYPE))
 		{
 			$this->CONFIG->FILE_TYPE = array(
 				'image/jpeg', 'image/png'
 			);
+		}
+
+		//Si se establece, fuerza el tamaño del avatar a este tamaño
+		if(empty($this->CONFIG->RESIZE))
+		{
+			$this->CONFIG->RESIZE = array(200, 200);
 		}
 
 		$this->upload_path_server = str_replace(
@@ -55,11 +66,85 @@ class IF_Avatar extends IF_Controller
 		$this->load->view("../plugins/if.avatar/{$vista}.php", $D);
 	}
 
+	public function crop_load()
+	{
+		$this->load->view("../plugins/if.avatar/compos_crop.html");
+	}
+	
+	public function file_upload()
+	{
+		$D = (object) $_POST;
+		
+		//trabajamos la data
+		list($type, $data) = explode(';', $D->img_data);
+		list(, $data) = explode(',', $data);
+		$data = base64_decode($data);
+
+		$this->storeImg($D->id, $data);
+	}
+
+	public function crop_upload()
+	{
+		$D = (object) $_POST;
+
+		//trabajamos la data
+		list($type, $data) = explode(';', $D->img_data);
+		list(, $data) = explode(',', $data);
+		$data = base64_decode($data);
+
+		$this->storeImg($D->id, $data);
+	}
+
+	public function cam_upload()
+	{
+		$D = (object) $_POST;
+
+		//trabajamos la data
+		$data = str_replace(' ', '+', $D->img_data);
+		$data = base64_decode($data);
+
+		$this->storeImg($D->id, $data);
+	}
+
+	private function storeImg($id, $imgData)
+	{
+		$filename = "p{$id}.jpg";
+		$pathServer = $this->upload_path_server . $filename;
+		$pathClient = $this->upload_path_client . $filename;
+
+		file_put_contents($pathServer, $imgData);
+
+		//Forzar resize
+		list($ancho, $alto) = getimagesize($pathServer);
+		$nuevo_ancho = $this->CONFIG->RESIZE[0];
+		$nuevo_alto = $this->CONFIG->RESIZE[1];
+
+		$newImg = imagecreatetruecolor($nuevo_ancho, $nuevo_alto);
+		
+		if (exif_imagetype($pathServer) ===IMAGETYPE_PNG )
+		{
+			$imagen = imagecreatefrompng($pathServer);
+		}
+		else
+		{
+			$imagen = imagecreatefromjpeg($pathServer);
+		}
+		
+		imagecopyresampled(
+			$newImg, $imagen, 0, 0, 0, 0
+			, $nuevo_ancho, $nuevo_alto, $ancho, $alto
+		);
+		
+		imagejpeg($newImg, $pathServer);
+
+		echo $pathClient;
+	}
+
 	public function delete_avatar($id)
 	{
-		$filename = 'p' . $id . '.jpg';
-		@unlink($this->upload_path_server . $filename);
-		echo "<i class='fa fa-check'></i> Eliminado satisfactoriamente.";
+		$filename = 'p' . $id;
+		@unlink($this->upload_path_server . $filename . '.jpg');
+		echo IF_Avatar::$SUCCESS;
 	}
 
 }

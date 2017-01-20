@@ -14,12 +14,12 @@
 	<div class="tab-content">
 		<div class="active" id="cam">
 
-			<?php include $PLG_PATH . "__cam_html5.php"; ?>
+			<?php include $PLG_PATH . "compos_cam.php"; ?>
 
 		</div>
 		<div id="upl">
 
-			<?php include $PLG_PATH . "__upload.php"; ?>
+			<?php include $PLG_PATH . "compos_file.php"; ?>
 
 		</div>
 	</div>

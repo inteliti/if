@@ -72,3 +72,10 @@ MOBILE
 	position: absolute;
 	top: -100px; left: -100px;
 }
+
+/*************************************
+CROP
+*************************************/
+#ifAvatar #crop{
+	width: 100%;
+}

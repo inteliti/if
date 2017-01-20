@@ -293,3 +293,10 @@ Date.prototype.toISO8601 = function ()
 		+ '-' + mon + '-' + day + ' ' + hour + ':' + minute + ':' + second
 		;
 };
+
+
+//debug
+function d(a)
+{
+	console.debug(a);
+}

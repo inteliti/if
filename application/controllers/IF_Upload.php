@@ -72,7 +72,6 @@ class IF_Upload extends IF_Controller
 			die('Se requiere la extensión PHP fileinfo.');
 		}
 
-
 		//d('EL ID ES; '.$id);
 
 		$D = new stdClass();

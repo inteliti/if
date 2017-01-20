@@ -1,13 +1,9 @@
 <?php
 if_plugin(array('if.modal', 'if.avatar', 'toastr'));
 
-$filename = 'avatar/p10';
+$filename = 'avatar/p10.jpg';
 $avatar = ASSETS_URL . (
-	file_exists(ASSETS_PATH . $filename.'.jpg') 
-		? $filename.'.jpg' 
-		: file_exists(ASSETS_PATH . $filename.'.png') 
-			? $filename.'.png' 
-			: 'avatar/none.jpg'
+	file_exists(ASSETS_PATH . $filename) ? $filename : 'avatar/none.jpg'
 	);
 ?>
 
@@ -27,10 +23,10 @@ $avatar = ASSETS_URL . (
 	Cambiar avatar
 </button>
 <script>
-	function updImg()
+	function updImg(imgPath)
 	{
-		var rand = Math.random();
-		$("#img").attr('src', '<?= ASSETS_URL ?>avatar/p10.jpg?' + rand);
+		var rand = Math.random(); //forzar recarga de imagen
+		$("#img").attr('src', imgPath + '?' + rand);
 	}
 	function noneImg()
 	{
@@ -40,21 +36,25 @@ $avatar = ASSETS_URL . (
 	{
 		IF_AVATAR.open({
 			title: 'Cambia tu avatar',
-			controller: 'IF_Avatar',//DEBERIA ser un controlador que HEREDE de
-									//IF_Avatar, lo hago asi por cuestiones
-									//de DEMO
-			id: '10',
-			callbackWebcam: function ()
-			{
-				updImg();
-				toastr.success('Callback: carga con WEBCAM');
+			controller: 'IF_Avatar', //DEBERIA ser un controlador que HEREDE de
+			//IF_Avatar, lo hago asi por cuestiones
+			//de DEMO
+			id: '10', //ID unico que identifica al objeto dueño del avatar.
+			//El avatar será renombrado con este ID (ej: 10.jpg)
+
+			//Establecer para habilitar corte de imagen (desabilitado 
+			//por defecto). Recibe la misma config de cropper, ver:
+			//https://github.com/fengyuanchen/cropper/blob/master/README.md
+			//
+			crop: {
+				aspectRatio: 1 / 1 //1/1, 4/3, 16/9, etc
 			},
-			callbackUpload: function ()
+			onUpload: function (imgPath, type)
 			{
-				updImg();
-				toastr.success('Callback: carga con UPLOAD');
+				updImg(imgPath);
+				toastr.success('Callback: avatar SUBIDO. TIPO = ' + type);
 			},
-			callbackDelete: function ()
+			onDelete: function (response)
 			{
 				noneImg();
 				toastr.success('Callback: avatar ELIMINADO');
