@@ -7,10 +7,13 @@
 #ifAvatar #error{
 	margin-top: 10px;
 }
+#ifAvatar .btn-block{
+	margin: 10px 0 0 0;
+}
 
-#ifModal{
+#ifAvatar{
+	max-height: 420px;
 	overflow: auto;
-	max-height: 450px;
 }
 
 /*************************************
@@ -82,4 +85,9 @@ CROP
 *************************************/
 #ifAvatar #crop{
 	width: 100%;
+	overflow: hidden;
+}
+#ifAvatar #crop #crop_img{
+	margin: 10px 0;
+	height: 100px;
 }

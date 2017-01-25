@@ -1,7 +1,9 @@
 /****************************************
+ * v2.0.1
+ * 
  * DEPENDENCIAS
  * - if.main 1.2+
- * - if.modal 2.0+
+ * - if.modal 2.1+
  ****************************************/
 
 var IF_AVATAR = {
@@ -281,6 +283,7 @@ IF_AVATAR.CAM = {
 	}
 };
 
+//Plugin usado: https://fengyuanchen.github.io/cropper/
 IF_AVATAR.CROP = {
 	TYPE: ''
 	, init: function (file, type)
