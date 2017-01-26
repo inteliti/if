@@ -1,6 +1,6 @@
 /*****************************************************
  * Clase JavaScript para la carga de archivos IF.UPLOAD
- * v3.1.1
+ * v3.2.1
  * Derechos Reservados (c) 2014 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 

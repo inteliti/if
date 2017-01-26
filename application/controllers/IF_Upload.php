@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 3.2.0
+ * 3.2.1
  */
 include_once APPPATH . 'core/IF_Controller.php';
 
@@ -14,7 +14,7 @@ class IF_Upload extends IF_Controller
 	public function __construct($upload_dir = 'uploads/', $config = NULL)
 	{
 		parent::__construct();
-		
+
 		//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/');
 
@@ -50,15 +50,15 @@ class IF_Upload extends IF_Controller
 			 * original (porcentajes para mantener relación de aspecto),
 			 * también colocará un sufijo al nombre de cada copia:
 			 * array(
-				array('dimensions'=>'0.50', 'suffix'=>'-mobile'),
-				array('dimensions'=>'0.25', 'suffix'=>'-thumbnail'),
-			)
+			  array('dimensions'=>'0.50', 'suffix'=>'-mobile'),
+			  array('dimensions'=>'0.25', 'suffix'=>'-thumbnail'),
+			  )
 			 */
 			$this->CONFIG->IMAGE_COPIES = NULL;
 		}
 
-		$this->upload_path_client = ASSETS_URL . $upload_dir . '/';
-		$this->upload_path_server = ASSETS_PATH . $upload_dir .
+		$this->upload_path_client = IF_PATH_ASSETS_CLIENT . $upload_dir . '/';
+		$this->upload_path_server = IF_PATH_ASSETS_SERVER . $upload_dir .
 			DIRECTORY_SEPARATOR
 		;
 
@@ -80,8 +80,8 @@ class IF_Upload extends IF_Controller
 		$D->ID = $id;
 		$D->FILES = array();
 		$D->CONFIG = $this->CONFIG;
-		$D->PLG_URL = PLUGINS_URL . 'if.upload/';
-		$D->CONTROLLER = INDEX_URL . get_class($this) . '/ajax_save';
+		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.upload/';
+		$D->CONTROLLER = IF_PATH_INDEX_CLIENT . get_class($this) . '/ajax_save';
 		$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
 
 		//busca archivos ya subidos para este id
@@ -128,7 +128,7 @@ class IF_Upload extends IF_Controller
 				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
 				$dbCol = 'file' . ($i + 1);
 				$D->$dbCol = $file_name . ".{$ext}";
-				
+
 				//Imagenes
 				if($size = getimagesize($v["tmp_name"]))
 				{
@@ -165,7 +165,7 @@ class IF_Upload extends IF_Controller
 
 							imagejpeg(
 								$dest
-								, $upload_dir . $file_name 
+								, $upload_dir . $file_name
 								. $copy['suffix'] . ".{$ext}"
 							);
 						}
@@ -209,7 +209,8 @@ class IF_Upload extends IF_Controller
 		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 
 		$tempName = 'iftemp-' . md5(rand());
-		$dir = ASSETS_PATH . $upload_dir . $tempName . DIRECTORY_SEPARATOR;
+		$dir = IF_PATH_ASSETS_SERVER . $upload_dir . $tempName
+			. DIRECTORY_SEPARATOR;
 		mkdir($dir, 0777);
 
 		//crear index.html vacio
@@ -227,8 +228,9 @@ class IF_Upload extends IF_Controller
 			$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 			$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
 
-			@rename(ASSETS_PATH . $upload_dir . $tempName,
-					ASSETS_PATH . $upload_dir . $elementId . DIRECTORY_SEPARATOR
+			@rename(IF_PATH_ASSETS_SERVER . $upload_dir . $tempName,
+					IF_PATH_ASSETS_SERVER . $upload_dir . $elementId
+					. DIRECTORY_SEPARATOR
 			);
 		}
 	}
