@@ -40,14 +40,20 @@
 		image_size_max: <?= json_encode($CONFIG->IMAGE_SIZE_MAX) ?>
 	};
 	var <?= $NOMBRE_OBJETO ?> = new IF_UPLOAD(cnf);
-
+	
+	//Mensaje de integridad
+	if(!IF_UPLOAD.L10N)
+	{
+		alert('IF_UPLOAD: Archivo de localización NO encontrado.');
+	}
+	
 	//Cambiar el mensaje en mobiles
 	$("#<?= $NAMESPACE; ?> .text-zoom").html(
 		IF_MAIN.IS_MOBILE ?
 		IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_MOBILE :
 		IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_DESKTOP
 		);
-
+	
 	$("#<?= $NAMESPACE; ?> .text-del").html(
 		IF_MAIN.IS_MOBILE ?
 		IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_MOBILE :
