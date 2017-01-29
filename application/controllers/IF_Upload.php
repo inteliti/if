@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 3.2.1
+ * 3.2.2
  */
 include_once APPPATH . 'core/IF_Controller.php';
 
@@ -50,8 +50,8 @@ class IF_Upload extends IF_Controller
 			 * original (porcentajes para mantener relación de aspecto),
 			 * también colocará un sufijo al nombre de cada copia:
 			 * array(
-			  array('dimensions'=>'0.50', 'suffix'=>'-mobile'),
-			  array('dimensions'=>'0.25', 'suffix'=>'-thumbnail'),
+			  array('resize'=>0.50, 'suffix'=>'-mobile'),
+			  array('resize'=>0.25, 'suffix'=>'-thumbnail'),
 			  )
 			 */
 			$this->CONFIG->IMAGE_COPIES = NULL;
@@ -81,7 +81,9 @@ class IF_Upload extends IF_Controller
 		$D->FILES = array();
 		$D->CONFIG = $this->CONFIG;
 		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.upload/';
-		$D->CONTROLLER = IF_PATH_INDEX_CLIENT . get_class($this) . '/ajax_save';
+		$D->CONTROLLER = IF_PATH_INDEX_CLIENT . $this->CONFIG->CONTROLLER
+			. '/ajax_save/';
+		;
 		$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
 
 		//busca archivos ya subidos para este id
@@ -119,15 +121,25 @@ class IF_Upload extends IF_Controller
 		//carpeta especifica
 		$upload_dir = $this->upload_path_server . $D->id . DIRECTORY_SEPARATOR;
 
+		//Remover archivos remotos
+		$elim = explode(',', $D->remove_remote_files);
+		foreach($elim as $v)
+		{
+			if(empty($v))
+			{
+				continue;
+			}
+			@unlink($upload_dir . $v);
+		}
+
+		//Subir nuevos archivos
 		if(file_exists($upload_dir) || mkdir($upload_dir))
 		{
 			//Subir archivos
 			foreach($_FILES as $i=> $v)
 			{
-				$file_name = md5(mt_rand());
+				$file_name = ($i);
 				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
-				$dbCol = 'file' . ($i + 1);
-				$D->$dbCol = $file_name . ".{$ext}";
 
 				//Imagenes
 				if($size = getimagesize($v["tmp_name"]))
@@ -153,8 +165,8 @@ class IF_Upload extends IF_Controller
 					{
 						foreach($this->CONFIG->IMAGE_COPIES as &$copy)
 						{
-							$newAncho = $ancho * $copy['dimensions'];
-							$newAlto = $alto * $copy['dimensions'];
+							$newAncho = $ancho * $copy['resize'];
+							$newAlto = $alto * $copy['resize'];
 
 							$dest = imagecreatetruecolor($newAncho, $newAlto);
 							$source = imagecreatefromjpeg($v["tmp_name"]);
@@ -175,17 +187,6 @@ class IF_Upload extends IF_Controller
 				move_uploaded_file(
 					$v["tmp_name"], $upload_dir . $file_name . ".{$ext}"
 				);
-			}
-
-			//Remover archivos remotos
-			$elim = explode(',', $D->remove_remote_files);
-			foreach($elim as $v)
-			{
-				if(empty($v))
-				{
-					continue;
-				}
-				@unlink($upload_dir . $v);
 			}
 
 			if(empty($RESPONSE->error))
