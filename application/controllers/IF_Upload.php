@@ -207,11 +207,11 @@ class IF_Upload extends IF_Controller
 	static function createTempFolder($upload_dir)
 	{
 		//Asegurarse que $upload_dir termina en /
-		$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
+		$upload_dir = trim($upload_dir, '/\\') . DIRECTORY_SEPARATOR;
 
 		$tempName = 'iftemp-' . md5(rand());
-		$dir = IF_PATH_ASSETS_SERVER . $upload_dir . $tempName
-			. DIRECTORY_SEPARATOR;
+		$dir = $upload_dir . $tempName	. DIRECTORY_SEPARATOR;
+		
 		mkdir($dir, 0777);
 
 		//crear index.html vacio
