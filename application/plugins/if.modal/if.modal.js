@@ -1,7 +1,7 @@
 /******************************************************************
  * 
  * Clase JavaScript para utilizar ventanas modales
- * v2.1.0
+ * v2.1.1
  * 
  * NO RETRO-COMPATIBLE, usar if.modal.1 para proyectos antiguos
  * 
@@ -192,6 +192,12 @@ var IF_MODAL = {
 	}
 
 	/*
+	 * **************************************************************
+	 * DEPRECATED!!!!
+	 * Usar IF_MODAL.show pasando url para carga AJAX
+	 * (ver docs de IF_MODAL.show)
+	 * **************************************************************
+	 * 
 	 * ajaxCntrllr
 	 * 
 	 * It displays a modal with returnee from the controller view 
@@ -202,7 +208,7 @@ var IF_MODAL = {
 	 *		cnf.controller			controller
 	 * 		cnf.data				data for the controller
 	 *		cnf.title				modal title 
-	 */
+	 
 	, ajaxCntrllr: function (cnf)
 	{
 		IF_MAIN.loadCompos({
@@ -214,6 +220,7 @@ var IF_MODAL = {
 		
 		IF_MODAL.show(cnf);
 	}
+	*/
 
 	, TIMEOUT: null
 };

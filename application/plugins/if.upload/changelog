@@ -1,3 +1,7 @@
+3.2.2
+- Bugfix en controlador
+3.2.1
+- Reemplazadas las constantes deprecadas
 3.2.0
 - Añadida característica para copiar una imagen automaticamente con dimensiones y calidad distinta.
 - Optimizaciones pequeñas en IF_UPLOAD controller
