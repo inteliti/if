@@ -1,6 +1,6 @@
 /*****************************************************
  * Clase JavaScript para la carga de archivos IF.UPLOAD
- * v3.2.2
+ * v3.2.3
  * Derechos Reservados (c) 2014 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 
@@ -23,7 +23,7 @@ var IF_UPLOAD = function (cnf)
 	this.IMAGE_SIZE_MAX = cnf.image_size_max;
 	this.DELETE_CONFIRMATION = cnf.delete_confirmation;
 	this.THUMBS = $(this.NAMESPACE + '.thumbs');
-	
+
 	//Revisa si el navegador soporta todas las caracteristicas de File API
 	if (
 		!window.File || !window.FileReader || !window.FileList ||
@@ -254,6 +254,7 @@ IF_UPLOAD.prototype = {
 	//si se necesita continuar el flujo LUEGO de que se hallan subido.
 	, upload: function (callback)
 	{
+		var that = this;
 		var $fileBtn = $(this.NAMESPACE + '.add_file').hide();
 
 		var formData = new FormData();
@@ -262,9 +263,9 @@ IF_UPLOAD.prototype = {
 			$(this.NAMESPACE + '.remove_remote_files').val()
 			);
 
-		var files = $(this.NAMESPACE + 'input[type=file]').each(function (i)
+		$(this.NAMESPACE + 'input[type=file]').each(function (i)
 		{
-			var file = this.files[0]
+			var file = this.files[0];
 			if (file)
 			{
 				formData.append("file" + i, file);
@@ -277,6 +278,10 @@ IF_UPLOAD.prototype = {
 			dataType: 'JSON',
 			success: function (r)
 			{
+				//Bugfix: remover inputs ya que si el usuario llama a
+				//upload() se vuelven a cargar las mismas imagenes
+				that.THUMBS.find('.hide').remove();
+
 				$fileBtn.show();
 				(callback || $.noop)(r);
 			},

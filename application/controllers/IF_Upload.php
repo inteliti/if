@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 3.2.2
+ * 3.2.3
  */
 include_once APPPATH . 'core/IF_Controller.php';
 
@@ -20,6 +20,7 @@ class IF_Upload extends IF_Controller
 
 		//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
+		$this->CONFIG->CONTROLLER = 'IF_Upload';
 		if(empty($this->CONFIG->FILE_COUNT))
 		{
 			//Cantidad de archivos permitidos para subir. -1 para infinitos.
@@ -135,10 +136,17 @@ class IF_Upload extends IF_Controller
 		//Subir nuevos archivos
 		if(file_exists($upload_dir) || mkdir($upload_dir))
 		{
+			//Determinar siguiente en la secuencia
+			$time = time();
+			$i = 0;
+			
 			//Subir archivos
-			foreach($_FILES as $i=> $v)
+			foreach($_FILES as $v)
 			{
-				$file_name = ($i);
+				//No usar time() poruqe al subir varios archivos a la vez
+				//algunos podrian terminar con el mismo timestamp.
+				$file_name = str_replace(".","",microtime(TRUE));
+				
 				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
 
 				//Imagenes

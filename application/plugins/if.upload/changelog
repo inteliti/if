@@ -1,3 +1,6 @@
+3.2.3
+- Bugfix: no se llevaba la secuencia de archivos ya cargadas para nombrar nuevos archivos. Se solucionó usando timestamps para los nombres ahora
+- Bugfix: si se llamaba de nuevo a upload() sin recargar la pagina, volvia a subir el mismo archivo repetido.
 3.2.2
 - Bugfix en controlador
 3.2.1
