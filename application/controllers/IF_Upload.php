@@ -20,30 +20,36 @@ class IF_Upload extends IF_Controller
 
 		//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
-		$this->CONFIG->CONTROLLER = 'IF_Upload';
-		if(empty($this->CONFIG->FILE_COUNT))
+		$this->CONFIG->CONTROLLER = !isset($this->CONFIG->CONTROLLER) ? 'IF_Upload' : $this->CONFIG->CONTROLLER;
+		if (empty($this->CONFIG->FILE_COUNT))
 		{
 			//Cantidad de archivos permitidos para subir. -1 para infinitos.
 			$this->CONFIG->FILE_COUNT = -1;
 		}
-		if(empty($this->CONFIG->FILE_SIZE_MAX))
+		if (empty($this->CONFIG->FILE_SIZE_MAX))
 		{
 			//Tamaño en BYTES permitido
 			$this->CONFIG->FILE_SIZE_MAX = 10000000;
 		}
-		if(empty($this->CONFIG->FILE_TYPE))
+		if (empty($this->CONFIG->FILE_TYPE))
 		{
 			//Tipos de archivo permitidos
 			$this->CONFIG->FILE_TYPE = array(
-				'application/pdf', 'image/jpeg', 'image/png'
+				'application/pdf', 'image/jpeg', 'image/png',
+				'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+				'application/msword', 'application/vnd.ms-excel',
+				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				'application/vnd.ms-powerpoint',
+				'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+				'audio/mpeg' . 'video/mpeg'
 			);
 		}
-		if(empty($this->CONFIG->IMAGE_SIZE_MAX))
+		if (empty($this->CONFIG->IMAGE_SIZE_MAX))
 		{
 			//Formato: array(ancho,alto) en px
 			$this->CONFIG->IMAGE_SIZE_MAX = NULL;
 		}
-		if(empty($this->CONFIG->IMAGE_COPIES))
+		if (empty($this->CONFIG->IMAGE_COPIES))
 		{
 			//Generar copias de las imagenes automaticamente, ej de config:
 			/**
@@ -60,7 +66,7 @@ class IF_Upload extends IF_Controller
 
 		$this->upload_path_client = IF_PATH_ASSETS_CLIENT . $upload_dir . '/';
 		$this->upload_path_server = IF_PATH_ASSETS_SERVER . $upload_dir .
-			DIRECTORY_SEPARATOR
+				DIRECTORY_SEPARATOR
 		;
 
 		$this->garbageCollect();
@@ -68,7 +74,7 @@ class IF_Upload extends IF_Controller
 
 	public function detail_compos($id = -1, $nombre_objeto = 'IF_UPLOADER')
 	{
-		if(!extension_loaded('fileinfo'))
+		if (!extension_loaded('fileinfo'))
 		{
 			die('Se requiere la extensión PHP fileinfo.');
 		}
@@ -83,13 +89,13 @@ class IF_Upload extends IF_Controller
 		$D->CONFIG = $this->CONFIG;
 		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.upload/';
 		$D->CONTROLLER = IF_PATH_INDEX_CLIENT . $this->CONFIG->CONTROLLER
-			. '/ajax_save/';
-		;
+				. '/ajax_save/';
+
 		$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
 
 		//busca archivos ya subidos para este id
 		$dir = $this->upload_path_server . $id . DIRECTORY_SEPARATOR;
-		if(is_dir($dir) && ($files = scandir($dir)))
+		if (is_dir($dir) && ($files = scandir($dir)))
 		{
 			unset($files[array_search('.', $files)]);
 			unset($files[array_search('..', $files)]);
@@ -106,7 +112,7 @@ class IF_Upload extends IF_Controller
 		$D = (object) $_POST;
 
 		//automatically creates temp folder
-		if($D->id <= 0)
+		if ($D->id <= 0)
 		{
 			//d('CREANDO ARCHIVO TEMPORTAL');
 			$D->id = $this->createTempFolder($this->upload_path_server);
@@ -114,9 +120,9 @@ class IF_Upload extends IF_Controller
 		}
 
 		$RESPONSE = (object) array(
-				'error'=>0,
-				'id'=>$D->id,
-				'folder_provisional'=>$D->id <= 0,
+					'error' => 0,
+					'id' => $D->id,
+					'folder_provisional' => $D->id <= 0,
 		);
 
 		//carpeta especifica
@@ -124,9 +130,9 @@ class IF_Upload extends IF_Controller
 
 		//Remover archivos remotos
 		$elim = explode(',', $D->remove_remote_files);
-		foreach($elim as $v)
+		foreach ($elim as $v)
 		{
-			if(empty($v))
+			if (empty($v))
 			{
 				continue;
 			}
@@ -134,34 +140,34 @@ class IF_Upload extends IF_Controller
 		}
 
 		//Subir nuevos archivos
-		if(file_exists($upload_dir) || mkdir($upload_dir))
+		if (file_exists($upload_dir) || mkdir($upload_dir))
 		{
 			//Determinar siguiente en la secuencia
 			$time = time();
 			$i = 0;
-			
+
 			//Subir archivos
-			foreach($_FILES as $v)
+			foreach ($_FILES as $v)
 			{
 				//No usar time() poruqe al subir varios archivos a la vez
 				//algunos podrian terminar con el mismo timestamp.
-				$file_name = str_replace(".","",microtime(TRUE));
-				
+				$file_name = str_replace(".", "", microtime(TRUE));
+
 				$ext = pathinfo($v['name'], PATHINFO_EXTENSION);
 
 				//Imagenes
-				if($size = getimagesize($v["tmp_name"]))
+				if ($size = getimagesize($v["tmp_name"]))
 				{
 					$ancho = $size[0];
 					$alto = $size[1];
 
 					//Dimensiones
-					if(is_array($this->CONFIG->IMAGE_SIZE_MAX))
+					if (is_array($this->CONFIG->IMAGE_SIZE_MAX))
 					{
 						$anchoMax = $this->CONFIG->IMAGE_SIZE_MAX[0];
 						$altoMax = $this->CONFIG->IMAGE_SIZE_MAX[1];
 
-						if($ancho > $anchoMax || $alto > $altoMax)
+						if ($ancho > $anchoMax || $alto > $altoMax)
 						{
 							$RESPONSE->error = 2; //Wrong image size
 							continue;
@@ -169,9 +175,9 @@ class IF_Upload extends IF_Controller
 					}
 
 					//Copia
-					if(is_array($this->CONFIG->IMAGE_COPIES))
+					if (is_array($this->CONFIG->IMAGE_COPIES))
 					{
-						foreach($this->CONFIG->IMAGE_COPIES as &$copy)
+						foreach ($this->CONFIG->IMAGE_COPIES as &$copy)
 						{
 							$newAncho = $ancho * $copy['resize'];
 							$newAlto = $alto * $copy['resize'];
@@ -179,25 +185,25 @@ class IF_Upload extends IF_Controller
 							$dest = imagecreatetruecolor($newAncho, $newAlto);
 							$source = imagecreatefromjpeg($v["tmp_name"]);
 							$destFile = imagecopyresized(
-								$dest, $source, 0, 0, 0, 0
-								, $newAncho, $newAlto, $ancho, $alto
+									$dest, $source, 0, 0, 0, 0
+									, $newAncho, $newAlto, $ancho, $alto
 							);
 
 							imagejpeg(
-								$dest
-								, $upload_dir . $file_name
-								. $copy['suffix'] . ".{$ext}"
+									$dest
+									, $upload_dir . $file_name
+									. $copy['suffix'] . ".{$ext}"
 							);
 						}
 					}
 				}
 
 				move_uploaded_file(
-					$v["tmp_name"], $upload_dir . $file_name . ".{$ext}"
+						$v["tmp_name"], $upload_dir . $file_name . ".{$ext}"
 				);
 			}
 
-			if(empty($RESPONSE->error))
+			if (empty($RESPONSE->error))
 			{
 				$RESPONSE->error = 0; //No error code
 			}
@@ -218,8 +224,8 @@ class IF_Upload extends IF_Controller
 		$upload_dir = trim($upload_dir, '/\\') . DIRECTORY_SEPARATOR;
 
 		$tempName = 'iftemp-' . md5(rand());
-		$dir = $upload_dir . $tempName	. DIRECTORY_SEPARATOR;
-		
+		$dir = $upload_dir . $tempName . DIRECTORY_SEPARATOR;
+
 		mkdir($dir, 0777);
 
 		//crear index.html vacio
@@ -231,15 +237,15 @@ class IF_Upload extends IF_Controller
 	//Renombra una carpeta temporal con su ID definitivo
 	static function renameTempFolder($upload_dir, $tempName, $elementId)
 	{
-		if(strpos($tempName, 'iftemp-') >= 0)
+		if (strpos($tempName, 'iftemp-') >= 0)
 		{
 			//Asegurarse que terminan en /
 			$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
 			$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
 
 			@rename(IF_PATH_ASSETS_SERVER . $upload_dir . $tempName,
-					IF_PATH_ASSETS_SERVER . $upload_dir . $elementId
-					. DIRECTORY_SEPARATOR
+		   IF_PATH_ASSETS_SERVER . $upload_dir . $elementId
+							. DIRECTORY_SEPARATOR
 			);
 		}
 	}
@@ -248,22 +254,52 @@ class IF_Upload extends IF_Controller
 	private function garbageCollect()
 	{
 		$dir = $this->upload_path_server;
-		if(is_dir($dir) && ($files = scandir($dir)))
+		if (is_dir($dir) && ($files = scandir($dir)))
 		{
 			unset($files[array_search('.', $files)]);
 			unset($files[array_search('..', $files)]);
-			foreach($files as $v)
+			foreach ($files as $v)
 			{
 				//Borrar carpetas temp con 30mins de creada
-				if(
-					strpos(strtolower($v), 'iftemp-') !== FALSE &&
-					(time() - filectime($dir . $v . DIRECTORY_SEPARATOR) > 1000)
+				if (
+						strpos(strtolower($v), 'iftemp-') !== FALSE &&
+						(time() - filectime($dir . $v . DIRECTORY_SEPARATOR) > 1000)
 				)
 				{
 					@unlink($dir . $v . DIRECTORY_SEPARATOR);
 				}
 			}
 		}
+	}
+
+	public function secure_download($id)
+	{
+		/*
+		if (!isset($_SESSION['authenticated']))
+		{
+			exit;
+		}*/
+		
+		
+		$file_name = '14908937357376.JPG';
+		
+		$file = $this->upload_path_server . $id . DIRECTORY_SEPARATOR . $file_name;
+		
+		d($file);
+		
+		
+		header('Content-Description: File Transfer');
+		header('Content-Type: image/jpeg');
+		header('Content-Disposition: attachment; filename=' . basename($file));
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($file));
+		ob_clean();
+		flush();
+		readfile($file);
+		exit;/**/
 	}
 
 }

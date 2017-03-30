@@ -12,6 +12,7 @@ $id = isset($id) ? $id : NULL;
 		</h1>
 	</div>
 	<div id="upload-detail"></div>
+	<div id="upload-detail-2"></div>
 	<hr />
 	<button type="button" class="btn" onclick="UPLOAD_DEMO.save()">
 		Guardar
