@@ -272,34 +272,6 @@ class IF_Upload extends IF_Controller
 		}
 	}
 
-	public function secure_download($id)
-	{
-		/*
-		if (!isset($_SESSION['authenticated']))
-		{
-			exit;
-		}*/
-		
-		
-		$file_name = '14908937357376.JPG';
-		
-		$file = $this->upload_path_server . $id . DIRECTORY_SEPARATOR . $file_name;
-		
-		d($file);
-		
-		
-		header('Content-Description: File Transfer');
-		header('Content-Type: image/jpeg');
-		header('Content-Disposition: attachment; filename=' . basename($file));
-		header('Content-Transfer-Encoding: binary');
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: public');
-		header('Content-Length: ' . filesize($file));
-		ob_clean();
-		flush();
-		readfile($file);
-		exit;/**/
-	}
+
 
 }
