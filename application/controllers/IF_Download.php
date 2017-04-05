@@ -4,13 +4,12 @@ if (!defined('BASEPATH'))
 
 /*********************************************************
  * 
- * Class _If_Controller
+ * Class IF_Download
  * 
- * Funciones compartidas entre todos los controladores.
- *		En los controladores se encuentran los puntos de acceso a la aplicacion,
- *		por lo tanto hay que ser muy cuidados de los metodos que aqui se definen.
+ * Clase utilizada para manejar la descarga de archivos.
+ * Fascilita la protección de archivos para descarga.
  * 
- * Derechos Reservados (c) 2014 INTELITI SOLUCIONES, C.A.
+ * Derechos Reservados (c) 2017 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
  * 
  *********************************************************/
