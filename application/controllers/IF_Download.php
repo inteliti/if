@@ -1,9 +1,22 @@
 <?php
-
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
 
+/*********************************************************
+ * 
+ * Class _If_Controller
+ * 
+ * Funciones compartidas entre todos los controladores.
+ *		En los controladores se encuentran los puntos de acceso a la aplicacion,
+ *		por lo tanto hay que ser muy cuidados de los metodos que aqui se definen.
+ * 
+ * Derechos Reservados (c) 2014 INTELITI SOLUCIONES, C.A.
+ * Para su uso sólo con autorización.
+ * 
+ *********************************************************/
+
 /**
+ * Required ZipArchive Class
  * http://php.net/manual/en/zip.installation.php
  */
 
@@ -36,10 +49,16 @@ abstract class IF_Download extends IF_Controller
 		;
 	}
 
+	/**
+	 * Abstract function, must be implemented to athorize the download
+	 * 
+	 * @param type $id
+	 */
 	abstract protected function auth_download($id);
 	
 	/**
 	 * Wrapper used if not authoriztion is required
+	 * 
 	 * @param type $id
 	 */
 	public function download($id)
@@ -60,10 +79,13 @@ abstract class IF_Download extends IF_Controller
 	 * to download acording to buissness logic or to any wraper download function
 	 * 
 	 * @param type $id
+	 * @param type $AUTHORIZED 
 	 */
 	protected function _init_download($id,$AUTHORIZED = TRUE)
 	{
-		if(($AUTHORIZED && $this->CONFIG->AUTHORIZATION_REQUIRED) || !$this->CONFIG->AUTHORIZATION_REQUIRED)
+		//test if can download...
+		if(($AUTHORIZED && $this->CONFIG->AUTHORIZATION_REQUIRED) || 
+				!$this->CONFIG->AUTHORIZATION_REQUIRED)
 		{
 			$file = $this->_get_zipped_folder($id);
 			$this->_send_to_user($file,TRUE);
@@ -76,11 +98,19 @@ abstract class IF_Download extends IF_Controller
 
 	}
 
+	/**
+	 * Function used to start the download of the file
+	 * 
+	 * @param type $file
+	 * @param type $delete_after_download
+	 */
 	private function _send_to_user($file,$delete_after_download = FALSE)
 	{
+		//get mime
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
 		$mime_type = finfo_file($finfo, $file);
 		
+		//set header
 		header('Content-Description: File Transfer');
 		header('Content-Type: ' . $mime_type);
 		header('Content-Disposition: attachment; filename=' . basename($file));
@@ -90,11 +120,12 @@ abstract class IF_Download extends IF_Controller
 		header('Pragma: public');
 		header('Content-Length: ' . filesize($file));
 		
+		//output file
 		ob_clean();
 		flush();
-		
 		readfile($file);
 		
+		//delete file if needed
 		if($delete_after_download)
 		{
 			@unlink($file);
@@ -103,6 +134,12 @@ abstract class IF_Download extends IF_Controller
 		exit;
 	}
 
+	/**
+	 * Get list of files from a folder
+	 * 
+	 * @param type $id
+	 * @return type
+	 */
 	private function _get_files($id)
 	{
 		$dir = $this->download_path_server . $id . DIRECTORY_SEPARATOR;
@@ -119,6 +156,12 @@ abstract class IF_Download extends IF_Controller
 		return $files;
 	}
 
+	/**
+	 * Create a zipped folder for the download (it must be deleted after download)
+	 * 
+	 * @param type $id
+	 * @return string
+	 */
 	private function _get_zipped_folder($id)
 	{
 		$dir = $zip_path = $this->download_path_server . 'tmp_downloads' . DIRECTORY_SEPARATOR;
@@ -151,6 +194,18 @@ abstract class IF_Download extends IF_Controller
 		$zip->close();
 
 		return $zip_path;
+	}
+	
+	
+	/**
+	 * Get hash to mask the link
+	 * 
+	 * @param type $id
+	 * @return type
+	 */
+	protected function _get_hash($id)
+	{
+		return md5($id . '39c8942e1038872a822c0dc75eedbde3');
 	}
 	
 }
