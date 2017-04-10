@@ -1,5 +1,5 @@
 <?php
-$PATH = PLUGINS_URL . 'if.layer/';
+$PATH = IF_PATH_PLUGINS_CLIENT . 'if.layer/';
 ?>
 <script type="text/javascript" src="<?= $PATH; ?>js.js"></script>
 <script type="text/javascript" 
