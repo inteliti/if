@@ -192,7 +192,10 @@ var IF_LAYER = {
 					IF_LAYER._restoreContainer();
 				}
 
-				afterClose(INDEX);
+				if(typeof afterClose === "function")
+				{
+					afterClose(INDEX);
+				}
 			}
 		};
 
