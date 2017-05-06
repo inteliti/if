@@ -103,6 +103,19 @@ class IF_Upload extends IF_Controller
 			unset($files[array_search('.', $files)]);
 			unset($files[array_search('..', $files)]);
 			unset($files[array_search('index.html', $files)]);
+			
+			foreach($files as $k=>$v)
+			{
+				if(
+					preg_match("/-mobile/", $v) === 1 ||
+					preg_match("/-thumbnail/", $v) === 1
+				)
+				{
+					//echo $v.'<br />';
+					unset($files[$k]);
+				}
+			}
+			
 			$D->FILES = $files;
 		}
 
