@@ -42,7 +42,7 @@ $.fn.ifValidate = function ()
 					;
 
 				$parent.removeClass('has-error');
-
+				
 				if ($parent.is('.input-group'))
 				{
 					$parent.siblings('small.help-block.error').remove();
@@ -50,7 +50,7 @@ $.fn.ifValidate = function ()
 				{
 					$parent.find('small.help-block.error').remove();
 				}
-
+				if(i===0) $this.focus();
 				if (!validityObj.valid)
 				{
 					var errMsg = '<small class="help-block error">'
