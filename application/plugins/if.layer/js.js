@@ -2,7 +2,7 @@
  * Singleton para la generación de layers
  * 
  * @namespace IF_LAYER
- * @version 1.4.1
+ * @version 1.4.2
  * @requires if.main 1.2+
  * @author Gregorio Bolivar
  * @copyright 2016 INTELITI SOLUCIONES, C.A.
@@ -47,7 +47,7 @@ var IF_LAYER = {
 		{
 			var nodos = record.addedNodes;
 			var nodoNuevo = $(record.addedNodes[0]);
-			if (nodos.length > 1 && !nodoNuevo.hasClass('if_layer'))
+			if (nodos.length >= 1 && !nodoNuevo.hasClass('if_layer'))
 			{
 				IF_LAYER._restoreContainer();
 			}
@@ -192,7 +192,10 @@ var IF_LAYER = {
 					IF_LAYER._restoreContainer();
 				}
 
-				afterClose(INDEX);
+				if(typeof afterClose === "function")
+				{
+					afterClose(INDEX);
+				}
 			}
 		};
 

@@ -15,6 +15,9 @@ class IF_Upload extends IF_Controller
 	{
 		parent::__construct();
 
+		//to avoid unwanted warnings
+		ini_set("gd.jpeg_ignore_warning", 1);
+
 		//Asegurarse que $upload_dir termina en /
 		$upload_dir = trim($upload_dir, '/');
 
@@ -183,17 +186,59 @@ class IF_Upload extends IF_Controller
 							$newAlto = $alto * $copy['resize'];
 
 							$dest = imagecreatetruecolor($newAncho, $newAlto);
-							$source = imagecreatefromjpeg($v["tmp_name"]);
+
+							//Let's check allowed $ext, we use PHP SWITCH statement here
+							switch (strtolower($ext))
+							{
+								case 'png':
+									//Create a new image from file 
+									$source = imagecreatefrompng($v["tmp_name"]);
+									break;
+								case 'gif':
+									$source = imagecreatefromgif($v["tmp_name"]);
+									break;
+								case 'jpg':
+								case 'jpeg':
+									$source = imagecreatefromjpeg($v["tmp_name"]);
+									break;
+								default:
+									$RESPONSE->error = 1;
+							}
+
+
 							$destFile = imagecopyresized(
 									$dest, $source, 0, 0, 0, 0
 									, $newAncho, $newAlto, $ancho, $alto
 							);
-
-							imagejpeg(
-									$dest
-									, $upload_dir . $file_name
-									. $copy['suffix'] . ".{$ext}"
-							);
+							
+							switch (strtolower($ext))
+							{
+								case 'png':
+									//Create a new image from file 
+									imagepng(
+											$dest
+											, $upload_dir . $file_name
+											. $copy['suffix'] . ".png"
+									);
+									break;
+								case 'gif':
+									imagejpeg(
+											$dest
+											, $upload_dir . $file_name
+											. $copy['suffix'] . ".gif"
+									);
+									break;
+								case 'jpg':
+								case 'jpeg':
+									imagejpeg(
+											$dest
+											, $upload_dir . $file_name
+											. $copy['suffix'] . ".jpg"
+									);
+									break;
+								default:
+									$RESPONSE->error = 1;
+							}
 						}
 					}
 				}
@@ -271,7 +316,5 @@ class IF_Upload extends IF_Controller
 			}
 		}
 	}
-
-
 
 }
