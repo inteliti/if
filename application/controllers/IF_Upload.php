@@ -19,7 +19,7 @@ class IF_Upload extends IF_Controller
 		ini_set("gd.jpeg_ignore_warning", 1);
 
 		//Asegurarse que $upload_dir termina en /
-		$upload_dir = trim($upload_dir, '/');
+		$upload_dir = rtrim($upload_dir, '/');
 
 		//Default Config
 		$this->CONFIG = (object) (empty($config) ? array() : $config);
@@ -279,7 +279,7 @@ class IF_Upload extends IF_Controller
 	static function createTempFolder($upload_dir)
 	{
 		//Asegurarse que $upload_dir termina en /
-		$upload_dir = trim($upload_dir, '/\\') . DIRECTORY_SEPARATOR;
+		$upload_dir = rtrim($upload_dir, '/\\') . DIRECTORY_SEPARATOR;
 
 		$tempName = 'iftemp-' . md5(rand());
 		$dir = $upload_dir . $tempName . DIRECTORY_SEPARATOR;
@@ -298,8 +298,8 @@ class IF_Upload extends IF_Controller
 		if (strpos($tempName, 'iftemp-') >= 0)
 		{
 			//Asegurarse que terminan en /
-			$upload_dir = trim($upload_dir, '/') . DIRECTORY_SEPARATOR;
-			$tempName = trim($tempName, '/') . DIRECTORY_SEPARATOR;
+			$upload_dir = rtrim($upload_dir, '/') . DIRECTORY_SEPARATOR;
+			$tempName = rtrim($tempName, '/') . DIRECTORY_SEPARATOR;
 
 			@rename(IF_PATH_ASSETS_SERVER . $upload_dir . $tempName,
 		   IF_PATH_ASSETS_SERVER . $upload_dir . $elementId
