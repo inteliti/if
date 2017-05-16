@@ -44,7 +44,8 @@ class IF_Upload extends IF_Controller
 				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 				'application/vnd.ms-powerpoint',
 				'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-				'audio/mpeg' . 'video/mpeg'
+				'audio/mpeg' . 'video/mpeg','application/x-rar-compressed', 'application/octet-stream',
+				'application/zip', 'application/octet-stream'
 			);
 		}
 		if (empty($this->CONFIG->IMAGE_SIZE_MAX))
