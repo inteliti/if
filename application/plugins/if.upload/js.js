@@ -83,6 +83,15 @@ IF_UPLOAD.prototype = {
 				ftype_flag = false;
 				break;
 			}
+			//si es permitido los archivos .rar hay   que evaluar por la extension del archivo
+			if(this.UPLOAD_FILE_TYPES[i] === 'application/x-rar-compressed')
+			{
+				if(file.name.indexOf('.rar') !== -1)
+				{
+					ftype_flag = false;
+					break;
+				}
+			}
 		}
 		if (ftype_flag)
 		{
