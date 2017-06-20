@@ -80,13 +80,13 @@ abstract class IF_Download extends IF_Controller
 	 * @param type $id
 	 * @param type $AUTHORIZED 
 	 */
-	protected function _init_download($id,$AUTHORIZED = TRUE)
+	protected function _init_download($id,$AUTHORIZED = TRUE,$NAME_OF_FILE=NULL)
 	{
 		//test if can download...
 		if(($AUTHORIZED && $this->CONFIG->AUTHORIZATION_REQUIRED) || 
 				!$this->CONFIG->AUTHORIZATION_REQUIRED)
 		{
-			$file = $this->_get_zipped_folder($id);
+			$file = $this->_get_zipped_folder($id,$NAME_OF_FILE);
 			$this->_send_to_user($file,TRUE);
 		}
 		else
@@ -161,7 +161,7 @@ abstract class IF_Download extends IF_Controller
 	 * @param type $id
 	 * @return string
 	 */
-	private function _get_zipped_folder($id)
+	private function _get_zipped_folder($id,$NAME_OF_FILE=NULL)
 	{
 		$dir = $zip_path = $this->download_path_server . 'tmp_downloads' . DIRECTORY_SEPARATOR;
 		$files = $this->_get_files($id);
@@ -176,7 +176,10 @@ abstract class IF_Download extends IF_Controller
 			//echo 'no existe la clase<br>';
 		}
 		
-		$tempName = 'iftemp-' . md5(rand()) .'.zip';
+		$tempName = !empty($NAME_OF_FILE) ?
+							str_replace(' ', '-', strtolower($NAME_OF_FILE)) . '-' . md5(rand()) .'.zip' :
+							'iftemp-' . md5(rand()) .'.zip';
+		
 		$zip_path = $dir . $tempName;
 		$zip = new ZipArchive;
 		$zip->open($zip_path, ZIPARCHIVE::CREATE);
