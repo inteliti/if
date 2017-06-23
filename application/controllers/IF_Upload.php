@@ -87,15 +87,17 @@ class IF_Upload extends IF_Controller
 
 		$D = new stdClass();
 
-		//$D->NOMBRE_OBJETO = $nombre_objeto;
-		//$D->ID = $id;
 		$D->FILES = array();
 		$D->FILES_URL = $this->upload_path_client . $id . '/';
-		$D->CONFIG = $this->CONFIG;
 		$D->PLG_URL = IF_PATH_PLUGINS_CLIENT . 'if.upload/';
-		//$D->CONTROLLER = IF_PATH_INDEX_CLIENT . $this->CONFIG->CONTROLLER
-		//. '/ajax_save/';
-		//$D->NAMESPACE = 'if-upload-' . strtolower($nombre_objeto);
+
+		//Config (JS no necesita toda la config, discriminar)
+		$D->CONFIG = array(
+			'FILE_COUNT'=>$this->CONFIG->FILE_COUNT,
+			'FILE_TYPE'=>$this->CONFIG->FILE_TYPE,
+			'FILE_SIZE_MAX'=>$this->CONFIG->FILE_SIZE_MAX
+		);
+
 		//busca archivos ya subidos para este id
 		$dir = $this->upload_path_server . $id . DIRECTORY_SEPARATOR;
 		if(is_dir($dir) && ($files = scandir($dir)))

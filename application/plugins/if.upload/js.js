@@ -18,8 +18,6 @@ var IF_UPLOAD = function (cnf)
 	this.CONTROLLER = cnf.controller + "/";
 	this.LAST_UPLOAD_RESPONSE = null;
 
-	//Needed: FILE_COUNT, UPLOAD_FILE_TYPES, UPLOAD_FILE_SIZE_MAX
-
 	//Revisa si el navegador soporta todas las caracteristicas de File API
 	if (
 		!window.File || !window.FileReader || !window.FileList ||
