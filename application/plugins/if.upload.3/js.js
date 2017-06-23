@@ -1,5 +1,6 @@
 /*****************************************************
  * Clase JavaScript para la carga de archivos IF.UPLOAD
+ * v3.3.0
  * Derechos Reservados (c) 2014 INTELITI SOLUCIONES C.A.
  * Para su uso sólo con autorización.
  * 
@@ -12,13 +13,18 @@
 var IF_UPLOAD = function (cnf)
 {
 	this.CNF = cnf;
-	this.ID = cnf.id || -1;
-	this.NAMESPACE = cnf.target + " ";
-	this.$NAMESPACE = $(this.NAMESPACE);
-	this.CONTROLLER = cnf.controller + "/";
-	this.LAST_UPLOAD_RESPONSE = null;
-
-	//Needed: FILE_COUNT, UPLOAD_FILE_TYPES, UPLOAD_FILE_SIZE_MAX
+	this.ID = cnf.id;
+	this.NAMESPACE = cnf.target;
+	this.CONTROLLER = cnf.controller;
+	//this.UPLOAD_URL = cnf.upload_url;
+	//this.PLG_URL = cnf.plg_url;
+	//this.NAMESPACE = cnf.namespace + " ";
+	//this.FILE_COUNT = cnf.file_count;
+	//this.UPLOAD_FILE_TYPES = cnf.upload_files_types;
+	//this.UPLOAD_FILE_SIZE_MAX = cnf.upload_file_size_max;
+	//this.IMAGE_SIZE_MAX = cnf.image_size_max;
+	//this.DELETE_CONFIRMATION = cnf.delete_confirmation;
+	//this.THUMBS = $(this.NAMESPACE + '.thumbs');
 
 	//Revisa si el navegador soporta todas las caracteristicas de File API
 	if (
@@ -30,63 +36,43 @@ var IF_UPLOAD = function (cnf)
 		return false;
 	}
 
-	$(this.NAMESPACE).addClass("if-upload");
+	var that = this;
+
+	//Procesa fotos que ya han sido cargadas
+	this.THUMBS.find('img[data-remote]')
+		.on(IF_MAIN.IS_MOBILE ? 'tap' : 'click', function ()
+		{
+			var img = this;
+			that._emulateClickAndDoubleClick(that, function ()
+			{
+				window.open($(img).attr('src'));
+			}, function ()
+			{
+				that._removeRemoteFile(img);
+			});
+		})
+		.on("dblclick", function (e) {
+			e.preventDefault();  //cancel system double-click event
+		})
+		;
+
+	//Activa la carga de nuevos archivos
+	this._addUploadBtn();
+
 };
 IF_UPLOAD.prototype = {
+	
+	
 	//Carga el composite con los archivos en target.
 	//Pasar -1 en ID para un objeto nuevo que aun no tiene id
 	loadComposite: function (callback)
 	{
-		var that = this;
-
 		IF_MAIN.loadCompos({
 			target: this.NAMESPACE,
-			controller: this.CONTROLLER + 'detail_compos/' + this.ID,
-			callback: function ()
-			{
-				that._composLoaded.call(that);
-				(callback || $.noop)(that);
-			}
+			controller: this.CONTROLLER + 'detail_compos/'
+				+ id + '/' + nombre_objeto,
+			callback: callback || $.noop
 		});
-	}
-
-	, _composLoaded: function ()
-	{
-		var $plgUrl = this.$NAMESPACE.find("[name=PLG_URL]");
-		this.PLG_URL = $plgUrl.val();
-		$plgUrl.remove();
-
-		var $config = this.$NAMESPACE.find("[name=CONFIG]");
-		this.CONFIG = JSON.parse($config.val());
-		$config.remove();
-		console.debug(this.CONFIG);
-
-		this.$THUMBS = this.$NAMESPACE.find('.thumbs');
-
-		//Procesa fotos que ya han sido cargadas
-		var that = this;
-		this.$THUMBS.find('img[data-remote]')
-			.on(IF_MAIN.IS_MOBILE ? 'tap' : 'click', function ()
-			{
-				var img = this;
-				that._emulateClickAndDoubleClick(that, function ()
-				{
-					window.open($(img).attr('src'));
-				}, function ()
-				{
-					that._removeRemoteFile(img);
-				});
-			})
-			.on("dblclick", function (e) {
-				e.preventDefault();  //cancel system double-click event
-			})
-			;
-
-		//Activa la carga de nuevos archivos
-		this._addUploadBtn();
-
-		//Strings
-		this._setStrings();
 	}
 
 	//Llamar al momento de guardar el formulario para subir las imagenes.
@@ -113,13 +99,16 @@ IF_UPLOAD.prototype = {
 		});
 
 		$.ajax({
-			url: IF_MAIN.CI_INDEX + this.CONTROLLER + "ajax_save",
+			url: this.UPLOAD_URL,
 			type: 'POST',
 			dataType: 'JSON',
 			success: function (r)
 			{
-				that.LAST_UPLOAD_RESPONSE = r;
-				that.loadComposite();
+				//Bugfix: remover inputs ya que si el usuario llama a
+				//upload() se vuelven a cargar las mismas imagenes
+				that.THUMBS.find('.hide').remove();
+
+				$fileBtn.show();
 				(callback || $.noop)(r);
 			},
 			data: formData,
@@ -128,30 +117,9 @@ IF_UPLOAD.prototype = {
 			processData: false
 		});
 	}
-
-	, setId: function (newId, callback)
-	{
-		if (!this.LAST_UPLOAD_RESPONSE) {
-			return;
-		}
-
-		this.ID = newId;
-
-		var that = this;
-		$.ajax({
-			url: IF_MAIN.CI_INDEX + this.CONTROLLER + "ajax_rename_folder/"
-				+ newId + "/" + this.LAST_UPLOAD_RESPONSE.id,
-			success: function (r)
-			{
-				that.loadComposite();
-				(callback || $.noop)(that);
-			}
-		}
-		);
-	}
-
+	
 	//Anade un archivo nuevo al formulario, hace algunas comprobaciones
-	, _addFile: function (input)
+	,_addFile: function (input)
 	{
 		var $input = $(input), that = this;
 
@@ -167,9 +135,9 @@ IF_UPLOAD.prototype = {
 
 		//Solo tipos permitidos
 		var ftype_flag = true;
-		for (var i = 0; i < this.CONFIG.FILE_TYPE.length; i++)
+		for (var i = 0; i < this.UPLOAD_FILE_TYPES.length; i++)
 		{
-			if (ftype == this.CONFIG.FILE_TYPE[i])
+			if (ftype == this.UPLOAD_FILE_TYPES[i])
 			{
 				ftype_flag = false;
 				break;
@@ -177,7 +145,7 @@ IF_UPLOAD.prototype = {
 
 			//si es permitido los archivos .rar hay   
 			//que evaluar por la extension del archivo
-			if (this.CONFIG.FILE_TYPE[i] === 'application/x-rar-compressed')
+			if (this.UPLOAD_FILE_TYPES[i] === 'application/x-rar-compressed')
 			{
 				if (file.name.indexOf('.rar') !== -1)
 				{
@@ -203,7 +171,7 @@ IF_UPLOAD.prototype = {
 		};
 
 		//Verifica Tamaño del archivo
-		if (fsize > this.CONFIG.FILE_SIZE_MAX)
+		if (fsize > this.UPLOAD_FILE_SIZE_MAX)
 		{
 			this._showMsg(IF_UPLOAD.L10N.INVALID_FILE_SIZE);
 			return false;
@@ -247,7 +215,7 @@ IF_UPLOAD.prototype = {
 			.on("dblclick", function (e) {
 				e.preventDefault();  //cancel system double-click event
 			})
-			.prependTo(this.$THUMBS)
+			.prependTo(this.THUMBS)
 			;
 	}
 
@@ -265,20 +233,19 @@ IF_UPLOAD.prototype = {
 			{
 				that._removeFile(this);
 			})
-			.prependTo(this.$THUMBS)
+			.prependTo(this.THUMBS)
 			;
 	}
 
 	, _countFiles: function ()
 	{
-		return this.$THUMBS.children('img').length;
+		return this.THUMBS.children('img').length;
 	}
 
 	, _addUploadBtn: function ()
 	{
 		//No añadir el boton de carga si ya se excede FILE_COUNT
-		if (this.CONFIG.FILE_COUNT >= 0 &&
-			this._countFiles() >= this.CONFIG.FILE_COUNT)
+		if (this.FILE_COUNT >= 0 && this._countFiles() >= this.FILE_COUNT)
 		{
 			return;
 		}
@@ -295,7 +262,7 @@ IF_UPLOAD.prototype = {
 			+ '<input type="file" />'
 			+ '</div>'
 			)
-			.appendTo(this.$THUMBS)
+			.appendTo(this.THUMBS)
 			;
 		btn.find('input').on('change', function () {
 			that._addFile(this);
@@ -318,7 +285,7 @@ IF_UPLOAD.prototype = {
 				return;
 			}
 
-			that.$THUMBS.find("[name='" + file.name + "']").remove();
+			that.THUMBS.find("[name='" + file.name + "']").remove();
 
 			that._addUploadBtn();
 		});
@@ -408,19 +375,7 @@ IF_UPLOAD.prototype = {
 		return s;
 	}
 
-	, _setStrings: function ()
-	{
-		this.$NAMESPACE.find('.text-zoom').html(
-			IF_MAIN.IS_MOBILE ?
-			IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_MOBILE :
-			IF_UPLOAD.L10N.VIEW_TEXT_CLICK_TO_ZOOM_DESKTOP
-			);
-		this.$NAMESPACE.find('.text-del').html(
-			IF_MAIN.IS_MOBILE ?
-			IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_MOBILE :
-			IF_UPLOAD.L10N.VIEW_TEXT_DELETE_FILE_DESKTOP
-			);
-	}
+
 
 
 
@@ -430,23 +385,18 @@ IF_UPLOAD.prototype = {
 //Posibles respuestas de error que nos lanza IF_Upload
 //----------------------------------------------
 /**
- * Ningún error, archivo se subió y almacenó correctamente.
+ * Ningún error, la imagen se subió y almacenó correctamente.
  * @type Number
  */
-IF_UPLOAD.STATUS_OK = 0;
+IF_UPLOAD.ERROR_NONE = 0;
 /**
  * El servidor no pudo guardar el archivo (no pudo crear directorio,
  * posibles errores de permisologías/acceso de directorio, etc)
  * @type Number
  */
-IF_UPLOAD.STATUS_FILE_NOT_CREATED = 1;
+IF_UPLOAD.ERROR_FILE_NOT_CREATED = 1;
 /**
  * La imagen excede las dimensiones permitidas
  * @type Number
  */
-IF_UPLOAD.STATUS_IMAGE_WRONG_SIZE = 2;
-/**
- * Constante de conveniencia para legibilidad. Usar al crear una instancia de IF_UPLOAD para un objeto que aun no tiene ID
- * @type Number
- */
-IF_UPLOAD.NEW_OBJECT = -1;
+IF_UPLOAD.ERROR_IMAGE_WRONG_SIZE = 2;

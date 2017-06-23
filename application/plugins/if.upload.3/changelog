@@ -1,8 +1,6 @@
-4.0.0
-- Reescrita la forma como se instancia y se usa el plugin.
-- Ahora "multi-instancia-friendly".
-- Documentación añadida.
-- Ahora eliminar un archivo elimina sus copias que if.upload creo automaticamente
+3.3.0
+- Ahora eliminar un archivo se eliminan sus copias que if.upload creo automaticamente
+- Bugfix: si se añadía un archivo, se guardaba y luego se intentaba eliminar sin recargar la página/composite, no se eliminaba
 3.2.3
 - Bugfix: no se llevaba la secuencia de archivos ya cargadas para nombrar nuevos archivos. Se solucionó usando timestamps para los nombres ahora
 - Bugfix: si se llamaba de nuevo a upload() sin recargar la pagina, volvia a subir el mismo archivo repetido.

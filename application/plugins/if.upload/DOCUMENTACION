@@ -1,0 +1,55 @@
+===========================
+DEMO
+===========================
+Hay demo funcional en if, verlo para complementar esta documentación.
+
+===========================
+LOCALIZACION
+===========================
+if.upload no carga localización por defecto, debe cargarse manualmente, en orden (primero el plugin, luego el archivo l10n). Ejemplo:
+
+<?php include APPPATH . "plugins/if.upload/_loader.php"; ?>
+<script src='<?= PLUGINS_URL; ?>if.upload/l10n.es.js'></script>
+
+===========================
+COMO USAR
+===========================
+
+INSTANCIACION
+-------------
+Instanciar IF_UPLOAD con los sgtes parametros obligatorios:
+- id: ID del objeto dueño de los archivos (-1 si es un objeto nuevo, también se puede usar IF_UPLOAD.NEW_OBJECT para mayor legibilidad).
+- target: Selector jQuery donde se cargará el composite
+- controller: Controlador que debe heredar de IF_Upload.php
+
+Ejmeplo:
+var miObjeto = new IF_UPLOAD({
+	id: 89,
+	target: '#upload-detail',
+	controller: 'My_Upload' //Hereda de IF_Upload.php
+});
+
+CARGAR EL COMPOSITE
+-------------------
+miObjeto.loadComposite(callback);
+
+<callback> es opcional, se dispara después de cargar el composite (asíncrono).
+
+SUBIR LOS ARCHIVOS
+------------------
+miObjeto.upload(callback);
+
+<callback> es opcional, se dispara después de que se hayan subido los archivos (asíncrono). Recibe como único parámetro un objeto con estos atributos:
+- id: ID del objeto dueno de los archivos. Si el objeto es nuevo (es decir, se estableció durante instanciación con ID = -1 o IF_UPLOAD.NEW_OBJECT), entonces en este atributo se tendrá el nombre del directorio temporal donde se han subido los archivos. Este directorio debe renombrarse luego usando el método de setId().
+- status: indicador de estatus de la subida. Uno de estos valores:
+	- IF_UPLOAD.STATUS_OK
+	- IF_UPLOAD.STATUS_FILE_NOT_CREATED
+	- IF_UPLOAD.STATUS_IMAGE_WRONG_SIZE
+- folder_provisional: booleano. Será TRUE si se ha creado un directorio temporal para almacenar los archivos (en cuyo caso, el nombre de este directorio estará en el atributo id). FALSE en caso contrario.
+
+Aunque <callback> es opcional, se tiene que usar cuando se están subiendo archivos para un objeto nuevo (sin ID) para luego re-setear su ID. Ejemplo:
+
+miObjeto.upload(function(response){
+	miObjeto.setId(<NUEVO_ID>);
+});
+
