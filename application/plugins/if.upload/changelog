@@ -3,6 +3,7 @@
 - Ahora "multi-instancia-friendly".
 - Documentación añadida.
 - Ahora eliminar un archivo elimina sus copias que if.upload creo automaticamente
+- Renombradas las constantes de status (IF_UPLOAD.STATUS_OK, IF_UPLOAD.STATUS_FILE_NOT_CREATED y IF_UPLOAD.STATUS_IMAGE_WRONG_SIZE)
 3.2.3
 - Bugfix: no se llevaba la secuencia de archivos ya cargadas para nombrar nuevos archivos. Se solucionó usando timestamps para los nombres ahora
 - Bugfix: si se llamaba de nuevo a upload() sin recargar la pagina, volvia a subir el mismo archivo repetido.

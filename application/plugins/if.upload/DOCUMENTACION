@@ -50,6 +50,12 @@ miObjeto.upload(callback);
 Aunque <callback> es opcional, se tiene que usar cuando se están subiendo archivos para un objeto nuevo (sin ID) para luego re-setear su ID. Ejemplo:
 
 miObjeto.upload(function(response){
-	miObjeto.setId(<NUEVO_ID>);
+
+	//En este punto los archivos se encuentran en un directorio temporal mientras se asigna un ID al objeto nuevo
+
+	//....guardamos otra data del objeto (nombre, cedula, etc) y obtenemos su ID
+
+	//Ya con el ID real llamamos a esta funcion (ASINCRONA) que renombrara el directorio temporal con el nuevo id
+	miObjeto.setId(<NUEVO_ID>, <CALLBACK>);
 });
 
