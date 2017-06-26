@@ -143,14 +143,14 @@ class IF_Upload extends IF_Controller
 
 		//carpeta especifica
 		$upload_dir = $this->upload_path_server . $D->id . DIRECTORY_SEPARATOR;
-
-		//Remover archivos remotos
-		$elim = explode(',', $D->remove_remote_files);
-		$this->deleteRemoteFiles($elim, $upload_dir);
-
+		
 		//Subir nuevos archivos
 		if(file_exists($upload_dir) || mkdir($upload_dir))
 		{
+			//Remover archivos remotos
+			$elim = explode(',', $D->remove_remote_files);
+			$this->deleteRemoteFiles($elim, $upload_dir);
+			
 			//Determinar siguiente en la secuencia
 			$time = time();
 			$i = 0;
