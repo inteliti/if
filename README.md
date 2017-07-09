@@ -23,4 +23,16 @@ A continuación explicaremos brevemente como hacer uso del framework:
 	 - dist: en este directorio se ubica el codigo que se debe utilizar para empezar un nuevo proyecto y/o actualizar la versión de if que esté utilizando un proyecto
 	 - db: en este directorio encontramos los scripts de BD tanto para correr el proyecto demo y para utilizar en dist.
 
- 
+
+----------
+
+
+Hoja de Ruta
+-------------
+
+Nos planteamos los siguientes hitos próximoas a ser desarrollados:
+
+ - Poder visualizar los nombres de los archivos en el plugin de if.upload
+ - Funcionalidad para optimizar la carga de recursos CSS y JS (minificación y carga asincrona)
+ - Mejorar documentación en el uso del framewrok y los distintos plugin.
+
