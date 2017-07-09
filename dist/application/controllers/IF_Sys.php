@@ -38,9 +38,6 @@ class IF_Sys extends IF_Controller {
 	 */
 	public function index()
 	{
-		header("Location: ".INDEX_URL."demos/");
-		return; 
-		
 		//si esta logueado
 		if($this->session->userdata('auth'))
 		{
