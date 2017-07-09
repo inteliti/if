@@ -1,0 +1,25 @@
+1.2.4 [01/08/16]
+- Añadido soporte para minifacion de vistas (ENABLE_MOBILE_VIEWS)
+1.2.3 [18/07/16]
+- Cambiadas las constantes en core/IF_Constants con mejor notación y para
+mayor claridad de código (se mantienen constantes LEGACY).
+1.2.2 [03/03/16]
+- Agregada posbilidad a metodo store en IF_Model que permite guardar array de fillas que pertence a una tabla relacion. Relaciones 1 a N.
+1.2.1 [03/03/16]
+- Agregada libreria para implementación de Servicios REST (https://github.com/chriskacerguis/codeigniter-restserver). Controladores REST deben ir dentro del directorio API, los cuales deben heredar de IF_API_Controller que esta en core
+1.2.0 [24/02/16]
+- Fraccionado helpers/if_util_helper en varios helpers, dejando solo los helpers base en if_core_helper. Por defecto solo se carga if_core_helper.
+- Añadido biblioteca core jquery.easing
+- if.modal actualizado a 2.0 (ver changelog)
+- Nueva plantilla por defecto para IF basada en Google Material Designs
+- Nueva fuente por defecto: Roboto
+- Actualizado Bootstrap a 3.3.6
+- Añadida biblioteca font-awesome
+- Ahora las plantillas deben tener un archivo _loader.php que se encargará de cargar todos los recursos que la plantilla necesita.
+1.1.1 [23/02/16]
+- if.main movido a su propio plugin.
+- Refactorizacion y reubicacion de bibliotecas consideradas base de IF a la carpeta libraries (ej: sin estos archivos IF no funciona), la mayoría de estos archivos estaban en templates/_shared y fueron sacados de allí.
+- Removidos IF_JS_Loader y IF_CSS_Loaders y fusionadas ambas en IF_Loader (aligera dos includes extras al servidor).
+- Actualizada biblioteca core jQuery a 2.2.1
+- Añadida biblioteca core jquery.mobile-events
+- Añadido plugin opcional Toastr

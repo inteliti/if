@@ -1,0 +1,21 @@
+1.2.3
+- Añadido reloadDetail()
+1.2.2
+- Bugfix: detalle se estaba abriendo cuando la resolucion era exactamente 768px
+- Bugfix: disparaba _mtSelected() cuando se ordenaba por columna
+- Actualizado a Bootgrid 1.3.1
+1.2.1
+- Añadidos nuevo easing para transiciones del detalle para moviles
+- Bugfixes varios en transiciones de detalle para moviles
+1.2.0
+- Soporte multi-idiomas, por defecto estará en inglés. Para establecer otro idioma se debe incluir MANUALMENTE alguno de los paquetes l10n.xx.js ANTES de llamar init().
+- Mejorada la experiencia movil permitiendo que el detalle esté inicialmente invisible y sólo se muestre a pantalla completa al seleccionar un elemento de la MT 
+- Auto-detección en tiempo real de la resolución del dispositivo y cambio automático entre modos móvil y no-móvil
+- Añadido método hideDetail()
+- Añadido método detailClosed()
+1.1.0
+- Añadido soporte para Data Formatters de Bootgrid
+- Añadido método save()
+- Añadido método detailLoaded()
+1.0.0
+- Inicial

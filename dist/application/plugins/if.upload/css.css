@@ -1,0 +1,38 @@
+.if-upload .thumbs > *{
+	border: 1px solid #E7E7E7;
+	display: inline-block;
+	padding: 5px;
+	position: relative;
+}
+.if-upload .thumbs img{
+	height: 128px;
+	margin: 5px 5px 0 0;
+}
+.if-upload .hide{
+	visibility:hidden;
+	width:1px;
+	height: 1px;
+	position:absolute;
+	top:-1000;
+}
+.if-upload .add_file{
+	display: inline-block;
+	position: relative;
+	top: 2px;
+}
+.if-upload .add_file input{
+	display:none;
+}
+.if-upload .add_file img{
+	height: 64px;
+	margin: 26px;
+}
+.if-upload .texts,
+.if-upload .texts > *{
+	margin:0; padding: 0;
+	list-style: square;
+}
+.if-upload .texts{
+	margin: 5px 0 0 12px;
+	font-size: 12px;
+}

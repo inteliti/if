@@ -1,0 +1,93 @@
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover{
+	background-color: #fafafa;
+}
+#ifAvatar #msg,
+#ifAvatar #error{
+	margin-top: 10px;
+}
+#ifAvatar .btn-block{
+	margin: 10px 0 0 0;
+}
+
+#ifAvatar{
+	max-height: 420px;
+	overflow: auto;
+}
+
+/*************************************
+UPLOAD
+*************************************/
+#ifAvatar #upl{
+	display: none;
+	width: 410px;
+}
+#ifAvatar #upl input{
+	border: 1px solid #e0e0e3;
+	color: #fff;
+}
+#ifAvatar #upl .avatar img{
+	background: #fff;
+	border: 1px solid #e0e0e3;
+	float: left;
+	padding: 2px;
+	margin: 0 10px 0 0;
+	width: 150px; height: 150px;
+}
+
+/*************************************
+CAM HTML5
+*************************************/
+#ifAvatar #html5Cam{
+	margin: 10px 0 0 0;
+}
+
+#ifAvatar #html5Cam .foto{
+	border: 1px solid #e0e0e3;
+	padding: 2px;
+	margin: 0 10px 0 0;
+}
+#ifAvatar #html5Cam #canvas{
+	height: 150px;
+	border: 1px solid #e0e0e3;
+	padding: 2px;
+}
+
+#ifAvatar #html5Cam .mark{
+	width: 150px;
+	height: 150px;
+	position: absolute;
+	left: 75px;
+	background-color: transparent;
+	border-left: white dashed 1px;
+	border-right: white dashed 1px;
+}
+
+/*************************************
+MOBILE
+*************************************/
+#ifAvatar .add_file{
+	text-align: center;
+}
+#ifAvatar .add_file .fa{
+	font-size: 3em;
+}
+#ifAvatar .add_file input{
+	width: 1px; height: 1px;
+	visibility: hidden;
+	position: absolute;
+	top: -100px; left: -100px;
+}
+
+/*************************************
+CROP
+*************************************/
+#ifAvatar #crop{
+	width: 100%;
+	overflow: hidden;
+}
+#ifAvatar #crop #crop_img{
+	margin: 10px 0;
+	height: 100px;
+}
