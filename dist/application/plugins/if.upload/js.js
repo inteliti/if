@@ -69,7 +69,9 @@ IF_UPLOAD.prototype = {
 				var img = this;
 				that._emulateClickAndDoubleClick(that, function ()
 				{
-					window.open($(img).attr('src'));
+					var filePath = $(img).data('is-img')===1 ? $(img).attr('src') : $(img).data('remote-path');
+					window.open(filePath);
+					
 				}, function ()
 				{
 					that._removeRemoteFile(img);

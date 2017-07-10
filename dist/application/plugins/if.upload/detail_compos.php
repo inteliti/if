@@ -14,13 +14,16 @@
 		)
 		{
 			$src = $FILES_URL . $v;
+			$is_img = 1;
 		}
 		else
 		{
 			$src = $PLG_URL . "img/filetype/{$ext}.png";
+			$is_img = 0;
 		}
 		?>
 		<img src="<?= $src ?>" data-remote="<?= $v ?>"
+			 data-remote-path="<?= $FILES_URL . $v ?>" data-is-img="<?= $is_img ?>"
 			 alt="" border="0" />
 		 <?php endforeach ?>
 </div>
