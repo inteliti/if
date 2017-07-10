@@ -1,0 +1,76 @@
+<div id="crop">
+	<h4>Ajustar imagen</h4>
+	<div class="controls">
+		<button type="button" class="btn btn-default"
+				onclick='cropZoom(0.1)'
+				>
+			&#x2b;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropZoom(-0.1)'
+				>
+			&#x2212;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropMove(-10, 0)'
+				>
+			&#x2190;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropMove(10, 0)'
+				>
+			&#x2192;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropMove(0, -10)'
+				>
+			&#x2191;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropMove(0, 10)'
+				>
+			&#x2193;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropRotate(-45)'
+				>
+			&#x27F2;
+		</button>
+		<button type="button" class="btn btn-default"
+				onclick='cropRotate(45)'
+				>
+			&#x27F3;
+		</button>
+	</div>
+
+	<img src="" id=crop_img />
+
+	<button type="button" class="btn btn-primary btn-block"
+			onclick='cropSave()'
+			>
+		Guardar imagen ajustada
+	</button>
+
+</div>
+<script>
+	var $CROP_IMG = $("#crop #crop_img");
+	function cropZoom(z)
+	{
+		$CROP_IMG.cropper("zoom", z)
+	}
+	function cropMove(x, y)
+	{
+		$CROP_IMG.cropper("move", x, y);
+	}
+	function cropRotate(deg)
+	{
+		$CROP_IMG.cropper("rotate", deg);
+	}
+	function cropSave()
+	{
+		var canvas = $CROP_IMG.cropper("getCroppedCanvas");
+		var image = new Image();
+		image.src = canvas.toDataURL();
+		IF_AVATAR.CROP.upload(image);
+	}
+</script>

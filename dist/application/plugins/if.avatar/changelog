@@ -1,0 +1,10 @@
+2.0.1
+- Bugfixing para pantallas pequeñas
+2.0.0
+- Añadido opción de cropping
+- Refactorización y reescritura del controlador para manejar ahora en un mismo sitio todas las formas de subida (webcam, upload, con o sin crop).
+1.2.0
+- Adaptaciones generales para IF.
+- Añadido controllers/IF_Avatar.php
+- Versión movil.
+- Refractorización y liempiza de código.

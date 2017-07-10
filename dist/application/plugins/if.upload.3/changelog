@@ -1,0 +1,23 @@
+3.3.0
+- Ahora eliminar un archivo se eliminan sus copias que if.upload creo automaticamente
+- Bugfix: si se añadía un archivo, se guardaba y luego se intentaba eliminar sin recargar la página/composite, no se eliminaba
+3.2.3
+- Bugfix: no se llevaba la secuencia de archivos ya cargadas para nombrar nuevos archivos. Se solucionó usando timestamps para los nombres ahora
+- Bugfix: si se llamaba de nuevo a upload() sin recargar la pagina, volvia a subir el mismo archivo repetido.
+3.2.2
+- Bugfix en controlador
+3.2.1
+- Reemplazadas las constantes deprecadas
+3.2.0
+- Añadida característica para copiar una imagen automaticamente con dimensiones y calidad distinta.
+- Optimizaciones pequeñas en IF_UPLOAD controller
+3.1.1
+- Añadido soporte para tamaño máximo de imagen ($this->CONFIG->IMAGE_SIZE_MAX)
+- Creadas las constantes de error IF_UPLOAD.ERROR_NONE, IF_UPLOAD.ERROR_FILE_NOT_CREATED, IF_UPLOAD.ERROR_IMAGE_WRONG_SIZE, usar estas constantes para comparar la respuesta del servidor al subir ficheros.
+3.1.0
+- Añadido configuracion FILE_COUNT
+- Añadido opción de Zoom al hacer click/touch una imagen (solo imagenes)
+3.0.0
+- Reescrito todo el plugin
+- Removida dependencia con BD
+- Anadido soporte de localización (ingles y español)

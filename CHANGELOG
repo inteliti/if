@@ -1,0 +1,1 @@
+09-07-2017: Cambiada estructura del proyecto para mejorar su entendimiento por terceros. se ubicó en directoriso separados el codigo necesario para entender como funcionan y ejecutar los distintos plugin del framewrok. Se creó un directorio llamado dist con la base de código listas para inciar y/o actualizar un proyecto basado en IF
