@@ -2,6 +2,6 @@
 - Ahora VIEWPORT y IS_MOBILE se actualizan de inmediato para mejorar el soporte móvil en dispositivos que pueden cambiar entre estados móvil/no-móvil de inmediato (p.e. tabletas que se giran en modo landscape y portrait).
 - Añadido evento customizado de jQuery "resizeEnd".
 1.1.0
-- Movido IF_MAIN a su propio plugin
+- Movido IF_MAIN a su propio puglin
 - Reemplazado DATEPICKER_FORMAT por DATEPICKER_CONFIG
 - Añadidos VIEWPORT y IS_MOBILE. Se establecen automaticamente. IS_MOBILE es true si la pantalla del usuario < 768px

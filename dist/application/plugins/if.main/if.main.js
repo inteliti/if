@@ -1,10 +1,10 @@
 /******************************************************************
  * Clase JavaScript MAIN basado en cwf.main
- * v1.3.0
+ * v1.2.0
  * 
  * Clase principal JavaScript del framework if.
  * 
- * Dependencias: jquery
+ * Dependencias: jquery, jquery.validation
  * 
  * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
  * Para su uso sólo con autorización.
@@ -46,14 +46,14 @@ var IF_MAIN = {
 		//Listener para modo móvil/no-móvil. Es necesario para algunos
 		//dispositivos que se pueden rotar y cambiar de modo "en vivo"
 		var $win = $(window);
-		$win.on('resizeEnd', function ()
+		$win.resize(function ()
 		{
 			IF_MAIN.VIEWPORT = {
 				width: $win.width(),
 				height: $win.height()
 			};
-			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width <= 768;
-		}).trigger('resizeEnd');
+			IF_MAIN.IS_MOBILE = IF_MAIN.VIEWPORT.width < 768;
+		}).resize();
 	}
 
 	//-----------------------------------------------------------------
@@ -71,11 +71,16 @@ var IF_MAIN = {
 	, ajax: function (cnf)
 	{
 		cnf.type = 'POST';
-		cnf.dataType = cnf.dataType || 'json';
-		cnf.data = cnf.data || {};
+
+		if (!cnf.dataType)
+		{
+			cnf.dataType = 'json';
+		}
 
 		if (IF_MAIN.CSFR_NAME.length > 0)
 		{
+			if (!cnf.data)
+				cnf.data = {};
 			cnf.data[IF_MAIN.CSFR_NAME] = IF_MAIN.CSFR_TOKEN;
 		}
 
@@ -103,19 +108,57 @@ var IF_MAIN = {
 	 */
 	, loadCompos: function (cnf)
 	{
-		$(cnf.target)
-			.empty()
-			.addClass('loading')
-			.load(
-				cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
-				cnf.data || null,
-				function (r)
-				{
-					(cnf.callback || $.noop)(r);
-					$(this).removeClass('loading');
-				}
-			)
-			;
+		if (!cnf.fadeAnimation)
+		{
+			cnf.fadeAnimation = false;
+		}
+
+		if (cnf.fadeAnimation)
+		{
+			$(cnf.target).fadeOut(400).promise().done(function () {
+				$(cnf.target)
+					.empty()
+					.addClass('loading')
+					.show()
+					.load(
+						cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
+						cnf.data || null,
+						function (r)
+						{
+							if (cnf.callback)
+							{
+								cnf.callback(r);
+							}
+							$(this).hide();
+							$(this).removeClass('loading');
+							$(this).fadeIn(800);
+						}
+					)
+
+					;
+				return 1;
+			});
+		} else
+		{
+			$(cnf.target)
+				.empty()
+				.addClass('loading')
+				.load(
+					cnf.url || IF_MAIN.CI_INDEX + cnf.controller,
+					cnf.data || null,
+					function (r)
+					{
+						if (cnf.callback)
+						{
+							cnf.callback(r);
+						}
+
+						$(this).removeClass('loading');
+					}
+				)
+				;
+			return 1;
+		}
 	}
 
 	//-----------------------------------------------------------------
@@ -146,6 +189,12 @@ var IF_MAIN = {
 
 		IF_MAIN.loadCompos(cnf);
 
+		//limpia pasadas hotkeys al actualizar canvas
+		if (typeof IF_HOTKEY != 'undefined')
+		{
+			IF_HOTKEY.clearTempAll();
+		}
+
 		//cierra dialogo si se encuentra abierto
 		if (typeof IF_MODAL != 'undefined')
 		{
@@ -162,6 +211,8 @@ var IF_MAIN = {
 		IF_MAIN.CANVAS_LOCK++;
 	}
 
+	//-----------------------------------------------------------------
+
 	, canvasUnlock: function ()
 	{
 		IF_MAIN.CANVAS_LOCK--;
@@ -169,20 +220,23 @@ var IF_MAIN = {
 			IF_MAIN.CANVAS_LOCK = 0;
 	}
 
+	//-----------------------------------------------------------------
+
 	, canvasLocked: function ()
 	{
 		return IF_MAIN.CANVAS_LOCK > 0;
 	}
 
+	//-----------------------------------------------------------------
+
 	, canvasShowLoading: function ()
 	{
 		$(IF_MAIN.CANVAS_SELECTOR).empty()
-			.append('<div class="cwfComposLoaderL"></div>');
+			.append('<div class="cwfComposLoaderL"></div>')
 	}
 
 	//-----------------------------------------------------------------
 
-	//Escucha cambios en los formularios de sel
 	, prepareFormForUnsavedData: function (sel)
 	{
 		$(sel + ' input,' + sel + ' textarea')
@@ -230,12 +284,95 @@ var IF_MAIN = {
 			var status = true;
 		IF_MAIN.UNSAVED_DATA = status;
 	}
+
+	, serialize: function (selector, returnAsStr, valueSeparator, pairSeparator)
+	{
+		if (!valueSeparator)
+			valueSeparator = '=';
+		if (!pairSeparator)
+			pairSeparator = '&';
+
+		var obj = {}, str = [], arr;
+
+		arr = $(selector + ' input,' + selector + ' select,' + selector + ' textarea')
+			.toArray()
+			;
+		for (var i = 0, name, value, curr, $curr, l = arr.length; i < l; i++)
+		{
+			curr = arr[i];
+			$curr = $(curr);
+
+			//console.log($(curr));
+
+			if ($(curr).hasClass('exclude'))
+			{
+				continue;
+			}
+
+			//just ignore not checked radios and checkboxes
+			if ((curr.type == 'radio' || curr.type == 'checkbox') && !curr.checked)
+			{
+				continue;
+			}
+
+			if (curr.name == 'success')
+			{
+				continue;
+			}
+
+			name = curr.name;
+
+			//jquery ui datepicker?
+			if ($curr.hasClass('hasDatepicker'))
+			{
+				value = $curr.datepicker("getDate");
+				value = value ? value.toISO8601() : '';
+			} else
+			{
+				value = $(curr).val();
+				var xtype = curr.getAttribute('xtype');
+
+				if (xtype == 'numeric')
+				{
+					value = CWF_L10N.number2Float(value);
+				}
+				if (xtype == 'currency')
+				{
+					value = CWF_L10N.currency2Float(value);
+				}
+			}
+			obj[name] = value;
+			str.push(name + valueSeparator + (value));
+		}
+
+		return returnAsStr ? str.join(pairSeparator) : obj;
+	}
+
+	//-----------------------------------------------------------------
+	//VALIDACION DE FORMULARIOS
+	//-----------------------------------------------------------------	
+
+	/*
+	 * _form_validate
+	 * 
+	 * Establece validacion de un formulario.
+	 * 
+	 * @param string form	identificador de formulario a validar
+	 * @param objetc cnf	varible de configuracion jquery.validation
+	 */
+	, _form_validate: function (form, cnf)
+	{
+		//trabajando...
+		cnf.errorClass = 'invalid';
+
+		$(form).validate(cnf);
+	}
+
 };
 
 //===============================================
 //FUNCIONES DE UTILIDAD
 //===============================================
-//Serialización de Formulario como JSON
 $.fn.serializeObject = function ()
 {
 	var o = {};
@@ -253,8 +390,7 @@ $.fn.serializeObject = function ()
 	return o;
 };
 
-//resizeEnd: Custom event para ejecutar algo al final de un resize
-//(mejora rendimiento, especialmente en movil).
+//Custom event para ejecutar algo al final de un resize
 $(window).resize(function ()
 {
 	if (this.resizeTO)
@@ -267,17 +403,11 @@ $(window).resize(function ()
 	}, 250);
 });
 
-//Parsing de fecha a ISO 8601
-Date.prototype.toISO8601 = function ()
+Date.prototype.toISO8601 = function()
 {
-	var
-		day = this.getDate(),
-		mon = this.getMonth() + 1,
-		hour = this.getHours(),
-		minute = this.getMinutes(),
-		second = this.getSeconds()
-		;
-
+	console.log(this);
+	
+	var day = this.getDate(), mon = this.getMonth() + 1, hour =  this.getHours(), minute = this.getMinutes(), second = this.getSeconds();
 	if (day < 10)
 		day = '0' + day;
 	if (mon < 10)
@@ -288,15 +418,6 @@ Date.prototype.toISO8601 = function ()
 		minute = '0' + minute;
 	if (second < 10)
 		second = '0' + second;
-
-	return this.getFullYear()
-		+ '-' + mon + '-' + day + ' ' + hour + ':' + minute + ':' + second
-		;
+	
+	return this.getFullYear() + '-' + mon + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 };
-
-
-//debug
-function d(a)
-{
-	console.debug(a);
-}
