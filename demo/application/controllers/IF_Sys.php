@@ -1,36 +1,42 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/******************************************************************
+<?php
+
+if(!defined('BASEPATH'))
+	exit('No direct script access allowed');
+/* * ****************************************************************
  * 
  * Clase IF_Sys
  * 
  * Clase que define funciones de sistema como: autenticacion 
- * de usuarios (Login), registro de usuarios (SignIn), gestion 
+ * de usuarios (Login), registro de usuarios (SignIn), gestión 
  * de variables de configuración y mas.
  * 
  * Dependecias: Clase IF_Controller.
  * 
- * Derechos Reservados (c) 2015 INTELITI SOLUCIONES, C.A.
+ * Derechos Reservados (c) 2017 INTELITI SOLUCIONES, C.A.
  * Para su uso solo con autorizacion.
  *
- *****************************************************************/
+ * *************************************************************** */
 
 include APPPATH . 'core/IF_Controller.php';
 
-class IF_Sys extends IF_Controller {
+class IF_Sys extends IF_Controller
+{
 
 	public function __construct()
 	{
-		parent::__construct();
-		
-		$this->_is_browser_compatible();
+		parent::__construct(FALSE);
+
+		//TODO: crear archivo de configuracion que llame 
+		//a esta funcion dependiendo de la configuracion
+		//$this->_is_browser_compatible();	
 	}
-	
+
 	//-----------------------------------------------------------------
-	
+
 	/*
 	 * index
 	 * 
-	 * Funcion principal (main) desde donde se carga la vista inicial. 
+	 * Función principal (main) desde donde se carga la vista inicial. 
 	 * Ej.: si el sistema requiere autenticación se llama a la funcion 
 	 * publica login (definida en esta clase) sino se llama a la 
 	 * vista correspondiente a traves de la funcion tmpl de la clase 
@@ -49,20 +55,19 @@ class IF_Sys extends IF_Controller {
 		{
 			$this->login();
 		}
-		
-		
-		
 	}
-	
+
 	public function home()
 	{
-		$this->tmpl('home');
+		//Enviar a Controller method que manejara el home del sistema
+		$this->load->helper("url");
+		redirect('Demos/index');	//TODO: Manejar a traves de archivo de configuracion
 	}
-	
+
 	//-----------------------------------------------------------------
 	//LOGIN
 	//-----------------------------------------------------------------
-	
+
 	/*
 	 * login
 	 * 
@@ -78,32 +83,36 @@ class IF_Sys extends IF_Controller {
 			$this->_login();
 			return;
 		}
-		
-		$D = new stdClass();
 
-		//Nombre de usuario invalido redirige a login
-		/*if(
-			$this->input->post('is_valid') !== NULL
-				&& !$this->input->post('is_valid')
-		)
-		{
-			$D->error = 'Usuario inválido.';
-			$this->_login($D);
-			return;
-		}*/
+		$D = new stdClass();
 		
-		$this->_validar($D);
-		$this->_login($D, TRUE);
+		$error = $this->_validar($D);
+
+		if(empty($error))
+		{
+			$this->home();
+		}
+		else
+		{
+			$this->_login(array(
+				'SYSMSG'=>$error
+			));
+		}
 	}
-	
+
+	/**
+	 * logout
+	 * 
+	 * Fncion para cerrar sesion
+	 */
 	public function logout()
 	{
 		$this->_destroy_session();
 		$this->login();
 	}
-	
+
 	//-----------------------------------------------------------------
-	
+
 	/*
 	 * _login
 	 * 
@@ -116,18 +125,17 @@ class IF_Sys extends IF_Controller {
 	private function _login($D = NULL, $ONLY_FORM = FALSE)
 	{
 		$view = '/login';
-		
+
 		if($ONLY_FORM)
 		{
 			$view = '/partial/login_form';
 		}
-		
-		$this->load->view(
-			'../templates/'.$this->config->item('tmpl').$view, 
-			(object) $D
+
+		$this->view(
+			'../templates/' . $this->config->item('tmpl') . $view, (object) $D
 		);
 	}
-	
+
 	//-----------------------------------------------------------------
 
 	/*
@@ -141,137 +149,91 @@ class IF_Sys extends IF_Controller {
 	 */
 	private function _validar(&$D)
 	{
-		$this->load->model('Usuario_Model', 'USUARIO');
+		$this->load->model('Usuario_model', 'USUARIO');
 		$in = &$this->input;
 		
-		$ONLY_NAME_USER = count($in->post()) === 1 
-							&& !empty($in->post('usuario'));
+		$D = new stdClass();
+
+		$usuario = $this->USUARIO->validar(
+			$in->post('usuario'), $in->post('md5')
+		);
 		
-		//solo nombre de usuario fue pasado por parametro
-		if($ONLY_NAME_USER)
+		if($usuario === FALSE) //usuario invalido
 		{
-			$D->usuario = $in->post('usuario');
-			
-			$r = $this->USUARIO->validar($D->usuario);
-			
-			if($r === FALSE)	//nombre de usuario invalido
-			{
-				$D->is_valid = FALSE;
-				//$D->enable_captcha = TRUE;
-			}
-			else				//nombre de usuario valido
-			{
-				$D->is_valid = TRUE;
-				//$D->enable_captcha = $this->_is_max_acceso_invalid(
-				//							(int) $r->acceso_invalid);
-			}
+			return 'INVALID_LOGIN';
 		}
-		else	//validar nombre de usuario y clave
+		else
 		{
-			$D	= new stdClass();
-			
-			$usuario = $this->USUARIO->validar(
-					$in->post('usuario'), 
-					$in->post('md5')
-				);
-			
-			if($usuario === FALSE)	//usuario invalido
+			//usuario bloqueado??
+			if($usuario->estado==1)
 			{
-				$D->success = FALSE;
-				$D->msg = 'Autenticación fallida';
+				return 'BLOCKED_USER';
 			}
-			else				//usuario valido
-			{
-				$D->success = TRUE;
-				$D->msg = 'Autenticación exitosa';
-				$this->_set_session($usuario);
-			}
+			
+			//DESTRUIR CLAVE DEL OBJ
+			$usuario->clave = NULL;
+
+			$this->_set_session($usuario);
+			return NULL;
 		}
 	}
 	
-	//-----------------------------------------------------------------
-	
-	/*
-	 * _is_max_acceso_invalid
+	/**
 	 * 
-	 * Determina si el numero de acceso invalidos es mayor al 
-	 * maximo permitido
-	 * 
-	 * @param int $accesos_invalid numero de accesos invalidos
-	 * @return boolean
+	 * @param type $usuario
 	 */
-	private function _is_max_acceso_invalid($accesos_invalid)
-	{
-		//LLAMAR FUNCION QUE RETORNA VALOR MAX
-		return $accesos_invalid >= 3 ? TRUE : FALSE;
-	}
-	
 	private function _set_session($usuario)
-	{	
+	{
 		$this->load->library('session');
-		
+
 		$this->session->set_userdata(array(
-			'auth'				=> TRUE,
-			'id'				=> $usuario->id,
-			'usuario'			=> $usuario->usuario,
-			'rol_id'			=> $usuario->rol_id,
-			'ultima_actividad'	=> time()
+			'auth'=>TRUE,
+			'id'=>$usuario->id,
+			'usuario'=>$usuario->usuario,
+			'rol_id'=>$usuario->rol_id,
+			'ultima_actividad'=>time()
 		));
-		
 	}
-	
+
+	/**
+	 * Destruye los datos de la sesion
+	 */
 	private function _destroy_session()
 	{
 		$this->session->sess_destroy();
 	}
 	
-	/** demos **/
-	public function avatar()
-	{
-		$this->tmpl('demos/avatar');
-	}
-	
-	public function masterDetail()
-	{
-		$this->tmpl('demos/masterdetail');
-	}
-	
-	
 	//-----------------------------------------------------------------
 	//BROWSER
 	//-----------------------------------------------------------------
-	
+
 	/*
 	 * is_browser_compatible
 	 * 
 	 * Funcion que obtiene datos del navegador (cliente) y realiza 
 	 * las instrucciones correspondientes  entre los diferentes tipos 
 	 * y plataformas.
-	 
+
 	 * Ver: http://www.codeigniter.com/user_guide/libraries/user_agent.html
 	 */
 	private function _is_browser_compatible()
 	{
 		$this->load->library('user_agent');
-		
+
 		//solo firefox o chrome
-		if (
-			$this->agent->is_browser() 
-			&& !($this->agent->browser() === 'Firefox'
-			|| $this->agent->browser() === 'Chrome')
+		if(
+			$this->agent->is_browser() && !($this->agent->browser() === 'Firefox' || $this->agent->browser() === 'Chrome')
 		)
 		{
 			show_error(
-				'EL navegador '.
-				$this->agent->browser().' '.
-				$this->agent->version().
+				'EL navegador ' .
+				$this->agent->browser() . ' ' .
+				$this->agent->version() .
 				' no es compatible con esta aplicación.'
 			);
-			
-			return FALSE;
-		}		
-	}
-	
-	
-}
 
+			return FALSE;
+		}
+	}
+
+}

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 09-07-2017 a las 21:17:12
+-- Tiempo de generación: 11-07-2017 a las 16:31:06
 -- Versión del servidor: 1.0.122
 -- Versión de PHP: 5.5.38-1~dotdeb+7.1
 
@@ -24,7 +24,13 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-$$
+CREATE DEFINER=`jtorres`@`%` PROCEDURE `sp_login`(IN u VARCHAR(25), IN c VARCHAR(32))
+BEGIN
+	SELECT usuario, rol_id 
+    FROM if_usuarios 
+    WHERE usuario = u 
+	AND clave = c;
+END$$
 
 DELIMITER ;
 
@@ -40,18 +46,6 @@ CREATE TABLE IF NOT EXISTS `if_acciones` (
   `accion` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `if_config`
---
-
-CREATE TABLE IF NOT EXISTS `if_config` (
-  `name` varchar(50) NOT NULL,
-  `value` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -97,23 +91,6 @@ CREATE TABLE IF NOT EXISTS `if_sessions` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `if_uploads`
---
-
-CREATE TABLE IF NOT EXISTS `if_uploads` (
-  `id` smallint(6) NOT NULL AUTO_INCREMENT,
-  `file1` varchar(45) NOT NULL,
-  `file2` varchar(45) NOT NULL,
-  `file3` varchar(45) NOT NULL,
-  `file4` varchar(45) NOT NULL,
-  `file5` varchar(45) NOT NULL,
-  `file6` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `if_usuarios`
 --
 
@@ -122,8 +99,7 @@ CREATE TABLE IF NOT EXISTS `if_usuarios` (
   `usuario` varchar(25) NOT NULL,
   `clave` varchar(32) NOT NULL,
   `rol_id` mediumint(8) unsigned NOT NULL,
-  `acceso_invalid` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `bloqueado` tinyint(1) unsigned DEFAULT NULL COMMENT 'NULL=no, 1=si',
+  `estado` tinyint(1) unsigned DEFAULT NULL COMMENT 'NULL=no, 1=si',
   PRIMARY KEY (`id`),
   UNIQUE KEY `usuario_UNIQUE` (`usuario`),
   KEY `fk_rol_idx` (`rol_id`)
