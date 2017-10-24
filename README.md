@@ -6,7 +6,7 @@ Hola, nos alegra compartir contigo este framework desarrollado en inteliti para 
  - **Maestro - Detalle:** Permite implementar de una manera el componente de interfaz de usuario compuesto por una tabla de datos acompañado con un espacio para mostrar mas detalles de los datos de la tabla. Ideal para módulos de trabajo que requieren que el usuario interactúe con muchos datos. [wiki](https://en.wikipedia.org/wiki/Master%E2%80%93detail_interface)
  - **Layer:** Con este componente podemos agregar un nuevo elemento al Maestro - Detalle, permitiendo la apertura de capas para extender la visualización de datos en la interfaz de usuario.
  - **Avatar:** ofrece la posibilidad de ubicar un componente de interfaz de usuario para la carga de una imagen que pueda ser utilizada como un avatar de un usuario. Puede funcionar tomando una foto desde la webcam del equipo o permite subir una imagen del sistema de archivos.
- - Upload: con este componente se puede ubicar en cualquier espacio la opción para permitir la carga de archivos asociados a una entidad. Por ejemplo la carga de archivos asociados al expediente de un cliente.
+ - **Upload:** con este componente se puede ubicar en cualquier espacio la opción para permitir la carga de archivos asociados a una entidad. Por ejemplo la carga de archivos asociados al expediente de un cliente.
  - **Download:** con este componente se puede administrar la descarga de archivos desde el servidor y da la opción de restringir la descarga basado en la autenticación del usuario que realiza la descarga,
  - **Modal:** este componente controla la aparición de ventanas modales de una manera bastante sencilla.
 
